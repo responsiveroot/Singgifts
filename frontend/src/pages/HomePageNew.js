@@ -20,7 +20,7 @@ function HomePageNew({ user }) {
     try {
       const [categoriesRes, productsRes, dealsRes] = await Promise.all([
         axios.get(`${API}/categories`),
-        axios.get(`${API}/products?limit=100`),
+        axios.get(`${API}/products?limit=200`),
         axios.get(`${API}/deals`)
       ]);
       
