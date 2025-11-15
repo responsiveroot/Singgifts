@@ -364,9 +364,84 @@ function HomePage({ user }) {
         </div>
       </section>
 
+      {/* Dynamic Promotional Banner */}
+      <section className="py-0 bg-gradient-to-br from-primary via-red-700 to-blue-600 relative overflow-hidden">
+        <motion.div 
+          className="absolute inset-0"
+          animate={{
+            background: [
+              "linear-gradient(45deg, #E31837 0%, #C4122F 50%, #1E88E5 100%)",
+              "linear-gradient(90deg, #1E88E5 0%, #E31837 50%, #C4122F 100%)",
+              "linear-gradient(135deg, #C4122F 0%, #1E88E5 50%, #E31837 100%)",
+              "linear-gradient(45deg, #E31837 0%, #C4122F 50%, #1E88E5 100%)",
+            ]
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
+        
+        <div className="container mx-auto px-4 py-20 relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="text-white"
+            >
+              <motion.h2 
+                className="text-5xl font-playfair font-bold mb-6"
+                animate={{ scale: [1, 1.02, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                Singapore's Finest<br />Gifts & Souvenirs
+              </motion.h2>
+              <p className="text-xl mb-8 text-white/90 font-inter leading-relaxed">
+                From iconic Merlion keepsakes to premium local delicacies, discover authentic Singapore products that tell our nation's story.
+              </p>
+              <Link to="/products" className="bg-white text-primary px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-all inline-flex items-center shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 font-inter">
+                Discover All Products
+                <ArrowRight size={20} className="ml-2" />
+              </Link>
+            </motion.div>
+
+            <motion.div 
+              className="grid grid-cols-2 gap-4"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              {[
+                { icon: Gift, title: "Authentic", desc: "100% SG Made" },
+                { icon: Zap, title: "Fast Delivery", desc: "Same Day" },
+                { icon: Award, title: "Quality", desc: "Premium Only" },
+                { icon: Shield, title: "Secure", desc: "Safe Payment" }
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl border border-white/20"
+                  whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.2)" }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <item.icon className="text-white mb-3" size={32} />
+                  <h3 className="text-xl font-bold text-white font-inter">{item.title}</h3>
+                  <p className="text-white/80 text-sm font-inter">{item.desc}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Flash Deals Preview */}
       {deals.length > 0 && (
-        <section className="py-16 bg-gradient-to-r from-red-600 to-red-700 text-white" data-testid="deals-preview-section">
+        <section className="py-16 bg-gradient-to-r from-amber-500 via-red-600 to-red-700 text-white relative overflow-hidden" data-testid="deals-preview-section">
+          <motion.div
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)'
+            }}
+            animate={{ x: [0, 40] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          />
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="mb-6 md:mb-0">
