@@ -54,9 +54,9 @@ function HomePageNew({ user }) {
   }
 
   return (
-    <div className=\"homepage-new bg-gray-50\">
+    <div className="homepage-new bg-gray-50">
       {/* Hero Banner */}
-      <section className=\"bg-gradient-to-r from-primary via-red-600 to-blue-600 py-16 text-white\" data-testid=\"hero-banner\">
+      <section className="bg-gradient-to-r from-primary via-red-600 to-blue-600 py-16 text-white" data-testid="hero-banner">
         <div className=\"container mx-auto px-4\">
           <div className=\"grid md:grid-cols-2 gap-8 items-center\">
             <div>
