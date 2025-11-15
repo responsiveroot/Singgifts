@@ -1,15 +1,17 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Cookie
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
-import uuid
-from datetime import datetime, timezone
+from typing import List, Optional
+from datetime import datetime, timedelta, timezone
+from emergentintegrations.llm.chat import LlmChat, UserMessage
 
+from models import *
+from auth import get_current_user, get_current_admin_user, get_password_hash, verify_password, create_access_token
+from utils import slugify, generate_sku, generate_otp
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -19,52 +21,553 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
+# LLM API Key
+EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
+
+# Create the main app
 app = FastAPI()
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# ============== AUTHENTICATION ROUTES ==============
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
+@api_router.post("/auth/register")
+async def register(email: str, password: str, name: str):
+    """Register new user with email/password"""
+    existing_user = await db.users.find_one({"email": email})
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
     
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    otp = generate_otp()
+    await db.otps.insert_one({
+        "email": email,
+        "otp": otp,
+        "password_hash": get_password_hash(password),
+        "name": name,
+        "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"message": "OTP sent to email", "otp": otp}
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+@api_router.post("/auth/verify-otp")
+async def verify_otp(email: str, otp: str, response: Response):
+    """Verify OTP and create user"""
+    otp_doc = await db.otps.find_one({"email": email, "otp": otp})
+    if not otp_doc:
+        raise HTTPException(status_code=400, detail="Invalid OTP")
+    
+    expires_at = datetime.fromisoformat(otp_doc['expires_at'])
+    if expires_at < datetime.now(timezone.utc):
+        raise HTTPException(status_code=400, detail="OTP expired")
+    
+    user = User(
+        email=email,
+        name=otp_doc['name'],
+        password_hash=otp_doc['password_hash']
+    )
+    
+    user_dict = user.model_dump()
+    user_dict['created_at'] = user_dict['created_at'].isoformat()
+    await db.users.insert_one(user_dict)
+    
+    session_token = create_access_token({"sub": user.id})
+    session = UserSession(
+        user_id=user.id,
+        session_token=session_token,
+        expires_at=datetime.now(timezone.utc) + timedelta(days=7)
+    )
+    
+    session_dict = session.model_dump()
+    session_dict['created_at'] = session_dict['created_at'].isoformat()
+    session_dict['expires_at'] = session_dict['expires_at'].isoformat()
+    await db.user_sessions.insert_one(session_dict)
+    
+    await db.otps.delete_one({"email": email})
+    
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        max_age=7*24*60*60
+    )
+    
+    return {"message": "Registration successful", "session_token": session_token, "user": user}
 
-# Add your routes to the router instead of directly to app
-@api_router.get("/")
-async def root():
-    return {"message": "Hello World"}
+@api_router.post("/auth/login")
+async def login(email: str, password: str, response: Response):
+    """Login with email/password"""
+    user = await db.users.find_one({"email": email}, {"_id": 0})
+    if not user or not user.get('password_hash'):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if not verify_password(password, user['password_hash']):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    otp = generate_otp()
+    await db.login_otps.insert_one({
+        "email": email,
+        "otp": otp,
+        "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"message": "OTP sent to email", "otp": otp}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
+@api_router.post("/auth/verify-login-otp")
+async def verify_login_otp(email: str, otp: str, response: Response):
+    """Verify login OTP and create session"""
+    otp_doc = await db.login_otps.find_one({"email": email, "otp": otp})
+    if not otp_doc:
+        raise HTTPException(status_code=400, detail="Invalid OTP")
     
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
+    expires_at = datetime.fromisoformat(otp_doc['expires_at'])
+    if expires_at < datetime.now(timezone.utc):
+        raise HTTPException(status_code=400, detail="OTP expired")
     
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
+    user = await db.users.find_one({"email": email}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    session_token = create_access_token({"sub": user['id']})
+    session = UserSession(
+        user_id=user['id'],
+        session_token=session_token,
+        expires_at=datetime.now(timezone.utc) + timedelta(days=7)
+    )
+    
+    session_dict = session.model_dump()
+    session_dict['created_at'] = session_dict['created_at'].isoformat()
+    session_dict['expires_at'] = session_dict['expires_at'].isoformat()
+    await db.user_sessions.insert_one(session_dict)
+    
+    await db.login_otps.delete_one({"email": email})
+    
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        max_age=7*24*60*60
+    )
+    
+    return {"message": "Login successful", "session_token": session_token, "user": user}
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
+@api_router.get("/auth/session-data")
+async def get_session_data(request: Request):
+    """Process Emergent Auth session_id"""
+    session_id = request.headers.get('X-Session-ID')
+    if not session_id:
+        raise HTTPException(status_code=400, detail="Session ID required")
     
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
+    import aiohttp
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            'https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data',
+            headers={'X-Session-ID': session_id}
+        ) as resp:
+            if resp.status != 200:
+                raise HTTPException(status_code=401, detail="Invalid session")
+            data = await resp.json()
     
-    return status_checks
+    user = await db.users.find_one({"email": data['email']}, {"_id": 0})
+    if not user:
+        user = User(
+            email=data['email'],
+            name=data['name'],
+            picture=data['picture']
+        )
+        user_dict = user.model_dump()
+        user_dict['created_at'] = user_dict['created_at'].isoformat()
+        await db.users.insert_one(user_dict)
+    else:
+        user = User(**user)
+    
+    session = UserSession(
+        user_id=user.id,
+        session_token=data['session_token'],
+        expires_at=datetime.now(timezone.utc) + timedelta(days=7)
+    )
+    
+    session_dict = session.model_dump()
+    session_dict['created_at'] = session_dict['created_at'].isoformat()
+    session_dict['expires_at'] = session_dict['expires_at'].isoformat()
+    await db.user_sessions.insert_one(session_dict)
+    
+    return {
+        "id": user.id,
+        "email": user.email,
+        "name": user.name,
+        "picture": user.picture,
+        "session_token": data['session_token']
+    }
+
+@api_router.get("/auth/me")
+async def get_me(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get current user"""
+    user = await get_current_user(request, db, session_token)
+    return user
+
+@api_router.post("/auth/logout")
+async def logout(request: Request, response: Response, session_token: Optional[str] = Cookie(None)):
+    """Logout user"""
+    token = session_token or request.headers.get('Authorization', '').replace('Bearer ', '')
+    if token:
+        await db.user_sessions.delete_one({"session_token": token})
+    response.delete_cookie("session_token")
+    return {"message": "Logged out successfully"}
+
+# ============== CATEGORY ROUTES ==============
+
+@api_router.get("/categories", response_model=List[Category])
+async def get_categories():
+    """Get all categories"""
+    categories = await db.categories.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+    return categories
+
+@api_router.get("/categories/{category_id}", response_model=Category)
+async def get_category(category_id: str):
+    """Get single category"""
+    category = await db.categories.find_one({"id": category_id}, {"_id": 0})
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return category
+
+@api_router.post("/categories", response_model=Category)
+async def create_category(category_data: CategoryCreate, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Create new category (Admin only)"""
+    await get_current_admin_user(request, db, session_token)
+    
+    category = Category(
+        name=category_data.name,
+        slug=slugify(category_data.name),
+        description=category_data.description,
+        image_url=category_data.image_url,
+        subcategories=category_data.subcategories
+    )
+    
+    category_dict = category.model_dump()
+    category_dict['created_at'] = category_dict['created_at'].isoformat()
+    await db.categories.insert_one(category_dict)
+    
+    return category
+
+# ============== PRODUCT ROUTES ==============
+
+@api_router.get("/products", response_model=List[Product])
+async def get_products(
+    category_id: Optional[str] = None,
+    is_featured: Optional[bool] = None,
+    is_bestseller: Optional[bool] = None,
+    search: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50
+):
+    """Get products with filters"""
+    query = {}
+    if category_id:
+        query['category_id'] = category_id
+    if is_featured is not None:
+        query['is_featured'] = is_featured
+    if is_bestseller is not None:
+        query['is_bestseller'] = is_bestseller
+    if search:
+        query['$or'] = [
+            {'name': {'$regex': search, '$options': 'i'}},
+            {'description': {'$regex': search, '$options': 'i'}},
+            {'tags': {'$regex': search, '$options': 'i'}}
+        ]
+    
+    products = await db.products.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    return products
+
+@api_router.get("/products/{product_id}", response_model=Product)
+async def get_product(product_id: str):
+    """Get single product"""
+    product = await db.products.find_one({"id": product_id}, {"_id": 0})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
+
+@api_router.post("/products", response_model=Product)
+async def create_product(product_data: ProductCreate, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Create new product (Admin only)"""
+    await get_current_admin_user(request, db, session_token)
+    
+    product = Product(
+        name=product_data.name,
+        slug=slugify(product_data.name),
+        description=product_data.description,
+        long_description=product_data.long_description,
+        category_id=product_data.category_id,
+        subcategory=product_data.subcategory,
+        price=product_data.price,
+        sale_price=product_data.sale_price,
+        images=product_data.images,
+        stock=product_data.stock,
+        sku=generate_sku(),
+        tags=product_data.tags
+    )
+    
+    product_dict = product.model_dump()
+    product_dict['created_at'] = product_dict['created_at'].isoformat()
+    await db.products.insert_one(product_dict)
+    
+    return product
+
+@api_router.put("/products/{product_id}", response_model=Product)
+async def update_product(product_id: str, product_data: ProductCreate, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Update product (Admin only)"""
+    await get_current_admin_user(request, db, session_token)
+    
+    existing = await db.products.find_one({"id": product_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    update_data = product_data.model_dump()
+    update_data['slug'] = slugify(product_data.name)
+    
+    await db.products.update_one({"id": product_id}, {"$set": update_data})
+    
+    updated_product = await db.products.find_one({"id": product_id}, {"_id": 0})
+    return updated_product
+
+# ============== CART ROUTES ==============
+
+@api_router.get("/cart", response_model=List[dict])
+async def get_cart(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get user's cart"""
+    user = await get_current_user(request, db, session_token)
+    
+    cart_items = await db.cart_items.find({"user_id": user['id']}, {"_id": 0}).to_list(100)
+    
+    result = []
+    for item in cart_items:
+        product = await db.products.find_one({"id": item['product_id']}, {"_id": 0})
+        if product:
+            result.append({
+                "cart_item": item,
+                "product": product
+            })
+    
+    return result
+
+@api_router.post("/cart")
+async def add_to_cart(cart_data: CartItemCreate, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Add item to cart"""
+    user = await get_current_user(request, db, session_token)
+    
+    existing = await db.cart_items.find_one({
+        "user_id": user['id'],
+        "product_id": cart_data.product_id
+    })
+    
+    if existing:
+        new_quantity = existing['quantity'] + cart_data.quantity
+        await db.cart_items.update_one(
+            {"id": existing['id']},
+            {"$set": {"quantity": new_quantity}}
+        )
+        return {"message": "Cart updated"}
+    else:
+        cart_item = CartItem(
+            user_id=user['id'],
+            product_id=cart_data.product_id,
+            quantity=cart_data.quantity
+        )
+        
+        cart_dict = cart_item.model_dump()
+        cart_dict['created_at'] = cart_dict['created_at'].isoformat()
+        await db.cart_items.insert_one(cart_dict)
+        
+        return {"message": "Added to cart"}
+
+@api_router.delete("/cart/{cart_item_id}")
+async def remove_from_cart(cart_item_id: str, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Remove item from cart"""
+    user = await get_current_user(request, db, session_token)
+    
+    result = await db.cart_items.delete_one({"id": cart_item_id, "user_id": user['id']})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Cart item not found")
+    
+    return {"message": "Removed from cart"}
+
+# ============== ORDER ROUTES ==============
+
+@api_router.get("/orders", response_model=List[Order])
+async def get_orders(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get user's orders"""
+    user = await get_current_user(request, db, session_token)
+    orders = await db.orders.find({"user_id": user['id']}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return orders
+
+@api_router.post("/orders", response_model=Order)
+async def create_order(order_data: OrderCreate, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Create new order"""
+    user = await get_current_user(request, db, session_token)
+    
+    order = Order(
+        user_id=user['id'],
+        items=order_data.items,
+        total_amount=order_data.total_amount,
+        shipping_address=order_data.shipping_address,
+        payment_method=order_data.payment_method
+    )
+    
+    order_dict = order.model_dump()
+    order_dict['created_at'] = order_dict['created_at'].isoformat()
+    order_dict['updated_at'] = order_dict['updated_at'].isoformat()
+    await db.orders.insert_one(order_dict)
+    
+    await db.cart_items.delete_many({"user_id": user['id']})
+    
+    return order
+
+# ============== REVIEW ROUTES ==============
+
+@api_router.get("/reviews/{product_id}", response_model=List[Review])
+async def get_product_reviews(product_id: str):
+    """Get product reviews"""
+    reviews = await db.reviews.find({"product_id": product_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return reviews
+
+@api_router.post("/reviews", response_model=Review)
+async def create_review(review_data: ReviewCreate, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Create product review"""
+    user = await get_current_user(request, db, session_token)
+    
+    review = Review(
+        product_id=review_data.product_id,
+        user_id=user['id'],
+        user_name=user['name'],
+        rating=review_data.rating,
+        comment=review_data.comment
+    )
+    
+    review_dict = review.model_dump()
+    review_dict['created_at'] = review_dict['created_at'].isoformat()
+    await db.reviews.insert_one(review_dict)
+    
+    reviews = await db.reviews.find({"product_id": review_data.product_id}, {"_id": 0}).to_list(1000)
+    avg_rating = sum(r['rating'] for r in reviews) / len(reviews)
+    await db.products.update_one(
+        {"id": review_data.product_id},
+        {"$set": {"rating": avg_rating, "review_count": len(reviews)}}
+    )
+    
+    return review
+
+# ============== DEAL ROUTES ==============
+
+@api_router.get("/deals", response_model=List[Deal])
+async def get_deals():
+    """Get active deals"""
+    now = datetime.now(timezone.utc).isoformat()
+    deals = await db.deals.find({
+        "is_active": True,
+        "start_date": {"$lte": now},
+        "end_date": {"$gte": now}
+    }, {"_id": 0}).to_list(100)
+    return deals
+
+@api_router.post("/deals", response_model=Deal)
+async def create_deal(deal_data: DealCreate, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Create deal (Admin only)"""
+    await get_current_admin_user(request, db, session_token)
+    
+    deal = Deal(
+        title=deal_data.title,
+        description=deal_data.description,
+        product_ids=deal_data.product_ids,
+        discount_percentage=deal_data.discount_percentage,
+        banner_image=deal_data.banner_image,
+        start_date=deal_data.start_date,
+        end_date=deal_data.end_date
+    )
+    
+    deal_dict = deal.model_dump()
+    deal_dict['created_at'] = deal_dict['created_at'].isoformat()
+    deal_dict['start_date'] = deal_dict['start_date'].isoformat()
+    deal_dict['end_date'] = deal_dict['end_date'].isoformat()
+    await db.deals.insert_one(deal_dict)
+    
+    return deal
+
+# ============== CMS ROUTES ==============
+
+@api_router.get("/cms/{page}")
+async def get_cms_sections(page: str):
+    """Get CMS sections for a page"""
+    sections = await db.cms_sections.find({"page": page}, {"_id": 0}).sort("order", 1).to_list(100)
+    return sections
+
+@api_router.put("/cms/{section_id}")
+async def update_cms_section(section_id: str, update_data: CMSSectionUpdate, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Update CMS section (Admin only)"""
+    await get_current_admin_user(request, db, session_token)
+    
+    update_dict = update_data.model_dump(exclude_none=True)
+    update_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.cms_sections.update_one({"id": section_id}, {"$set": update_dict})
+    
+    section = await db.cms_sections.find_one({"id": section_id}, {"_id": 0})
+    return section
+
+# ============== AI CHAT ROUTES ==============
+
+@api_router.post("/chat")
+async def chat(chat_data: ChatRequest):
+    """AI Shopping Assistant"""
+    user_msg = ChatMessage(
+        session_id=chat_data.session_id,
+        role="user",
+        message=chat_data.message
+    )
+    user_msg_dict = user_msg.model_dump()
+    user_msg_dict['created_at'] = user_msg_dict['created_at'].isoformat()
+    await db.chat_messages.insert_one(user_msg_dict)
+    
+    chat_client = LlmChat(
+        api_key=EMERGENT_LLM_KEY,
+        session_id=chat_data.session_id,
+        system_message="You are a helpful shopping assistant for SingGifts, a premium Singapore-themed e-commerce store. Help users find products, answer questions about Singapore gifts and souvenirs, and provide recommendations."
+    ).with_model("openai", "gpt-4o")
+    
+    response = await chat_client.send_message(UserMessage(text=chat_data.message))
+    
+    assistant_msg = ChatMessage(
+        session_id=chat_data.session_id,
+        role="assistant",
+        message=response
+    )
+    assistant_msg_dict = assistant_msg.model_dump()
+    assistant_msg_dict['created_at'] = assistant_msg_dict['created_at'].isoformat()
+    await db.chat_messages.insert_one(assistant_msg_dict)
+    
+    return {"message": response}
+
+@api_router.post("/ai/generate-description")
+async def generate_product_description(product_name: str, category: str, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Generate AI product description (Admin only)"""
+    await get_current_admin_user(request, db, session_token)
+    
+    chat_client = LlmChat(
+        api_key=EMERGENT_LLM_KEY,
+        session_id="admin-gen",
+        system_message="You are a product description writer for SingGifts. Generate attractive, SEO-friendly product descriptions."
+    ).with_model("openai", "gpt-4o")
+    
+    prompt = f"Generate a short (2-3 sentences) and long (5-7 sentences) product description for: {product_name} in category {category}. Make it Singapore-themed and appealing. Return in format: SHORT: <short desc>\\nLONG: <long desc>"
+    
+    response = await chat_client.send_message(UserMessage(text=prompt))
+    
+    return {"description": response}
 
 # Include the router in the main app
 app.include_router(api_router)
