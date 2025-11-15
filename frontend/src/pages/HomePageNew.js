@@ -130,102 +130,89 @@ function HomePageNew({ user }) {
         </section>
       )}
 
-      {/* Category Sections - E-Commerce Style */}
+      {/* Category Sections - Horizontal Banners with Unique Designs */}
       <div className="container mx-auto px-4 py-8">
         {categories.map((category, catIndex) => {
           const products = productsByCategory[category.id] || [];
           if (products.length === 0) return null;
 
           return (
-            <section key={category.id} className="mb-8" data-testid={`category-section-${category.slug}`}>
-              {/* Category Header with Banner - Professional Layout */}
-              <div className="bg-white rounded-lg overflow-hidden shadow border border-gray-200">
-                <div className="grid md:grid-cols-4 gap-0">
-                  {/* Category Banner - Left Side (1 column) */}
-                  <div 
-                    className="relative h-72 md:h-auto bg-cover bg-center"
-                    style={{
-                      backgroundImage: `linear-gradient(rgba(227,24,55,0.85), rgba(227,24,55,0.95)), url(${category.image_url})`
-                    }}
+            <section key={category.id} className="mb-10" data-testid={`category-section-${category.slug}`}>
+              {/* Horizontal Category Banner */}
+              <div 
+                className="relative h-48 rounded-xl overflow-hidden shadow-lg mb-6 bg-cover bg-center"
+                style={{
+                  backgroundImage: `linear-gradient(${category.color || '#E31837'}DD, ${category.color || '#E31837'}EE), url(${category.image_url})`
+                }}
+              >
+                <div className="absolute inset-0 flex items-center justify-between px-12">
+                  <div className="text-white max-w-2xl">
+                    <h2 className="text-5xl font-playfair font-black mb-3 tracking-tight drop-shadow-lg">
+                      {category.name}
+                    </h2>
+                    <p className="text-xl font-inter opacity-95 drop-shadow">
+                      {category.description}
+                    </p>
+                  </div>
+                  <Link 
+                    to={`/products?category=${category.id}`}
+                    className="bg-white text-gray-900 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-xl font-inter text-lg flex items-center"
                   >
-                    <div className="absolute inset-0 flex flex-col justify-center p-6 text-white">
-                      <h2 className="text-2xl font-playfair font-bold mb-3 leading-tight">{category.name}</h2>
-                      <p className="text-sm mb-4 opacity-90 font-inter leading-relaxed">{category.description}</p>
-                      <Link 
-                        to={`/products?category=${category.id}`}
-                        className="inline-flex items-center text-white font-bold hover:text-yellow-300 transition-colors font-inter text-sm bg-white/20 px-4 py-2 rounded hover:bg-white/30"
-                      >
-                        View All
-                        <ChevronRight size={18} className="ml-1" />
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* Products Grid - Right Side (3 columns) */}
-                  <div className="md:col-span-3 p-6 bg-gray-50">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {products.map((product) => (
-                        <Link
-                          key={product.id}
-                          to={`/products/${product.id}`}
-                          className="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-primary hover:shadow-md transition-all"
-                          data-testid={`product-${product.slug}`}
-                        >
-                          <div className="aspect-square bg-white relative overflow-hidden border-b border-gray-100">
-                            <img 
-                              src={product.images[0]} 
-                              alt={product.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
-                            {product.sale_price && (
-                              <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md text-xs font-bold shadow">
-                                {Math.round(((product.price - product.sale_price) / product.price) * 100)}% OFF
-                              </div>
-                            )}
-                          </div>
-                          <div className="p-3">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 font-inter group-hover:text-primary transition-colors min-h-[40px]">
-                              {product.name}
-                            </h3>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center bg-green-50 px-2 py-1 rounded">
-                                <Star className="text-green-600 fill-current" size={12} />
-                                <span className="text-xs text-gray-700 ml-1 font-bold font-inter">{product.rating}</span>
-                              </div>
-                              <span className="text-xs text-gray-500 font-inter">({product.review_count})</span>
-                            </div>
-                            <div className="flex items-baseline space-x-2">
-                              {product.sale_price ? (
-                                <>
-                                  <span className="text-xl font-bold text-primary font-inter">
-                                    ${product.sale_price}
-                                  </span>
-                                  <span className="text-xs text-gray-500 line-through font-inter">
-                                    ${product.price}
-                                  </span>
-                                </>
-                              ) : (
-                                <span className="text-xl font-bold text-gray-900 font-inter">
-                                  ${product.price}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                    
-                    <div className="mt-5 text-center border-t border-gray-200 pt-4">
-                      <Link 
-                        to={`/products?category=${category.id}`}
-                        className="inline-flex items-center text-primary font-bold hover:text-red-700 font-inter text-sm bg-primary/5 px-6 py-2 rounded-lg hover:bg-primary/10 transition-colors"
-                      >
-                        See All {category.name}
-                        <ArrowRight size={16} className="ml-2" />
-                      </Link>
-                    </div>
-                  </div>
+                    View All
+                    <ArrowRight size={20} className="ml-2" />
+                  </Link>
                 </div>
+              </div>
+
+              {/* Products Grid - Smaller Images */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {products.map((product) => (
+                  <Link
+                    key={product.id}
+                    to={`/products/${product.id}`}
+                    className="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-primary hover:shadow-lg transition-all"
+                    data-testid={`product-${product.slug}`}
+                  >
+                    <div className="aspect-square bg-gray-50 relative overflow-hidden">
+                      <img 
+                        src={product.images[0]} 
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      {product.sale_price && (
+                        <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold shadow">
+                          -{Math.round(((product.price - product.sale_price) / product.price) * 100)}%
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <h3 className="text-xs font-semibold text-gray-900 mb-2 line-clamp-2 font-inter group-hover:text-primary transition-colors h-8">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-center mb-2">
+                        <Star className="text-yellow-400 fill-current" size={10} />
+                        <span className="text-xs text-gray-600 ml-1 font-inter font-semibold">{product.rating}</span>
+                        <span className="text-xs text-gray-400 ml-1 font-inter">({product.review_count})</span>
+                      </div>
+                      <div className="flex items-baseline space-x-1">
+                        {product.sale_price ? (
+                          <>
+                            <span className="text-base font-bold text-primary font-inter">
+                              ${product.sale_price}
+                            </span>
+                            <span className="text-xs text-gray-400 line-through font-inter">
+                              ${product.price}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-base font-bold text-gray-900 font-inter">
+                            ${product.price}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </section>
           );
