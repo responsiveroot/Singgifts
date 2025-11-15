@@ -442,21 +442,36 @@ function HomePage({ user }) {
             animate={{ x: [0, 40] }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           />
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center justify-between">
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div 
+              className="flex flex-col md:flex-row items-center justify-between"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
               <div className="mb-6 md:mb-0">
-                <h2 className="text-3xl sm:text-4xl font-playfair font-bold mb-2">Flash Deals 🔥</h2>
-                <p className="text-lg opacity-90 font-inter">Up to {deals[0].discount_percentage}% off on selected items</p>
+                <motion.h2 
+                  className="text-4xl sm:text-5xl font-playfair font-bold mb-3"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  🔥 Flash Deals
+                </motion.h2>
+                <p className="text-xl opacity-95 font-inter">
+                  Up to <span className="text-3xl font-bold">{deals[0].discount_percentage}%</span> off on selected items
+                </p>
               </div>
-              <Link 
-                to="/deals" 
-                className="bg-white text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors inline-flex items-center font-inter"
-                data-testid="view-all-deals-btn"
-              >
-                View All Deals
-                <ArrowRight size={20} className="ml-2" />
-              </Link>
-            </div>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link 
+                  to="/deals" 
+                  className="bg-white text-red-600 px-10 py-4 rounded-full font-bold hover:bg-yellow-50 transition-all inline-flex items-center shadow-2xl font-inter text-lg"
+                  data-testid="view-all-deals-btn"
+                >
+                  View All Deals
+                  <ArrowRight size={24} className="ml-2" />
+                </Link>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
       )}
