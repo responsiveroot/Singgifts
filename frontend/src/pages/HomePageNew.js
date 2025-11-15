@@ -145,38 +145,64 @@ function HomePageNew({ user }) {
         </section>
       )}
 
-      {/* Category Sections - Horizontal Banners with Unique Designs */}
+      {/* Category Sections - Colorful Horizontal Banners */}
       <div className="container mx-auto px-4 py-8">
         {categories.map((category, catIndex) => {
           const products = productsByCategory[category.id] || [];
           if (products.length === 0) return null;
 
+          // Define unique colors for each category
+          const categoryColors = {
+            'airline-exclusives': 'from-blue-900 to-blue-700',
+            'beauty': 'from-pink-500 to-rose-500',
+            'electronics': 'from-blue-500 to-cyan-500',
+            'fashion': 'from-purple-600 to-pink-600',
+            'food': 'from-orange-500 to-red-500',
+            'health-wellness': 'from-green-500 to-emerald-500',
+            'home-living': 'from-amber-700 to-orange-700',
+            'kids-babies-toys': 'from-yellow-400 to-orange-400',
+            'sports-fitness': 'from-cyan-500 to-blue-500',
+            'travel-gifts': 'from-slate-600 to-slate-800',
+            'wine-spirits': 'from-red-900 to-amber-900',
+            'writing': 'from-indigo-600 to-purple-600',
+            'pets': 'from-amber-500 to-yellow-500'
+          };
+
+          const gradientClass = categoryColors[category.slug] || 'from-red-600 to-red-800';
+
           return (
             <section key={category.id} className="mb-10" data-testid={`category-section-${category.slug}`}>
-              {/* Horizontal Category Banner */}
+              {/* Colorful Horizontal Category Banner */}
               <div 
-                className="relative h-48 rounded-xl overflow-hidden shadow-lg mb-6 bg-cover bg-center"
-                style={{
-                  backgroundImage: `linear-gradient(${category.color || '#E31837'}DD, ${category.color || '#E31837'}EE), url(${category.image_url})`
-                }}
+                className={`relative h-52 rounded-2xl overflow-hidden shadow-xl mb-6 bg-gradient-to-r ${gradientClass}`}
               >
+                {/* Background Image with Overlay */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center opacity-30"
+                  style={{ backgroundImage: `url(${category.image_url})` }}
+                ></div>
+                
+                {/* Content */}
                 <div className="absolute inset-0 flex items-center justify-between px-12">
-                  <div className="text-white max-w-2xl">
-                    <h2 className="text-5xl font-playfair font-black mb-3 tracking-tight drop-shadow-lg">
+                  <div className="text-white max-w-2xl z-10">
+                    <h2 className="text-6xl font-playfair font-black mb-3 tracking-tight">
                       {category.name}
                     </h2>
-                    <p className="text-xl font-inter opacity-95 drop-shadow">
+                    <p className="text-2xl font-inter">
                       {category.description}
                     </p>
                   </div>
                   <Link 
                     to={`/products?category=${category.id}`}
-                    className="bg-white text-gray-900 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-xl font-inter text-lg flex items-center"
+                    className="bg-white/95 backdrop-blur-sm text-gray-900 px-10 py-4 rounded-xl font-bold hover:bg-white hover:scale-105 transition-all shadow-2xl font-inter text-lg flex items-center z-10"
                   >
                     View All
-                    <ArrowRight size={20} className="ml-2" />
+                    <ArrowRight size={22} className="ml-2" />
                   </Link>
                 </div>
+
+                {/* Decorative Element */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
               </div>
 
               {/* Products Grid - Smaller Images */}
