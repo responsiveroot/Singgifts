@@ -278,34 +278,87 @@ function HomePage({ user }) {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-20 bg-white" data-testid="categories-section">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-playfair font-bold text-gray-900 mb-4">Shop By Category</h2>
-            <p className="text-lg text-gray-600 font-inter">Discover our curated collections of Singapore-inspired products</p>
-          </div>
+      {/* Enhanced Categories Section */}
+      <section className="py-20 bg-white relative overflow-hidden" data-testid="categories-section">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: 'radial-gradient(circle, #E31837 1px, transparent 1px)',
+          backgroundSize: '30px 30px'
+        }}></div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.div
+              className="inline-block mb-4"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <span className="bg-gradient-to-r from-primary/10 to-blue-500/10 text-primary px-6 py-2 rounded-full text-sm font-bold font-inter">
+                ✨ CURATED COLLECTIONS
+              </span>
+            </motion.div>
+            <h2 className="text-4xl sm:text-5xl font-playfair font-bold mb-4">
+              <span className="bg-gradient-to-r from-gray-900 to-primary bg-clip-text text-transparent">
+                Shop By Category
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 font-inter max-w-2xl mx-auto">
+              Discover our curated collections of authentic Singapore-inspired products
+            </p>
+          </motion.div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categories.map((category) => (
-              <Link
+            {categories.map((category, index) => (
+              <motion.div
                 key={category.id}
-                to={`/products?category=${category.id}`}
-                className="category-card group"
-                data-testid={`category-card-${category.slug}`}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
               >
-                <div className="relative h-48 rounded-xl overflow-hidden">
-                  <img 
-                    src={category.image_url} 
-                    alt={category.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white z-10">
-                    <h3 className="font-semibold text-lg font-inter">{category.name}</h3>
-                  </div>
-                </div>
-              </Link>
+                <Link
+                  to={`/products?category=${category.id}`}
+                  className="group block"
+                  data-testid={`category-card-${category.slug}`}
+                >
+                  <motion.div 
+                    className="relative h-56 rounded-2xl overflow-hidden shadow-lg"
+                    whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+                    <img 
+                      src={category.image_url} 
+                      alt={category.name}
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-125 group-hover:rotate-2"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <motion.div 
+                      className="absolute bottom-0 left-0 right-0 p-4 text-white z-20"
+                      initial={{ y: 10 }}
+                      whileHover={{ y: 0 }}
+                    >
+                      <h3 className="font-bold text-lg font-inter mb-1 group-hover:text-accent transition-colors">{category.name}</h3>
+                      <p className="text-xs text-white/80 font-inter line-clamp-2">{category.description}</p>
+                      <motion.div
+                        className="mt-2 text-accent font-semibold text-sm flex items-center opacity-0 group-hover:opacity-100"
+                        transition={{ delay: 0.1 }}
+                      >
+                        Explore <ArrowRight size={14} className="ml-1" />
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Animated Border */}
+                    <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/30 rounded-2xl transition-all duration-300"></div>
+                  </motion.div>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
