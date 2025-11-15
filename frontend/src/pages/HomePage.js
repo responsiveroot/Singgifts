@@ -48,87 +48,233 @@ function HomePage({ user }) {
 
   return (
     <div className="homepage">
-      {/* Hero Section */}
-      <section className="hero-gradient py-20 md:py-32 relative overflow-hidden" data-testid="hero-section">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary rounded-full filter blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary rounded-full filter blur-3xl"></div>
+      {/* Advanced Hero Section with Animations */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-red-50 via-blue-50 to-amber-50" data-testid="hero-section">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div 
+            className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full filter blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 90, 0],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-secondary/20 rounded-full filter blur-3xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              rotate: [0, -90, 0],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute top-1/2 left-1/2 w-64 h-64 bg-accent/10 rounded-full filter blur-2xl"
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -100, 0],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
         </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
+
+        <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8 animate-fadeIn">
-              <div className="inline-block">
-                <span className="bg-white px-6 py-2 rounded-full text-sm font-semibold text-primary shadow-md font-inter">
-                  🇸🇬 Singapore's #1 Gift Store
+            {/* Left Content */}
+            <motion.div 
+              className="space-y-8"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="inline-block"
+              >
+                <span className="bg-gradient-to-r from-primary to-red-700 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg font-inter animate-pulse">
+                  🇸🇬 Singapore's #1 Premium Gift Store
                 </span>
-              </div>
+              </motion.div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-playfair font-bold leading-tight text-gray-900" data-testid="hero-title">
-                SingGifts — <br />
-                <span className="sg-red">Singapore-Made Gifts,</span><br />
-                Delivered Fast
-              </h1>
+              <motion.h1 
+                className="text-5xl sm:text-6xl lg:text-7xl font-playfair font-black leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                data-testid="hero-title"
+              >
+                <span className="bg-gradient-to-r from-gray-900 via-primary to-red-700 bg-clip-text text-transparent">
+                  SingGifts
+                </span>
+                <br />
+                <span className="text-gray-900">Singapore-Made</span>
+                <br />
+                <span className="bg-gradient-to-r from-primary to-red-600 bg-clip-text text-transparent">
+                  Gifts, Delivered Fast
+                </span>
+              </motion.h1>
               
-              <p className="text-lg sm:text-xl text-gray-600 font-inter leading-relaxed" data-testid="hero-subtitle">
-                Curated souvenirs, local treats, and premium corporate gifts inspired by Singapore's rich culture and heritage.
-              </p>
+              <motion.p 
+                className="text-xl text-gray-700 font-inter leading-relaxed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                data-testid="hero-subtitle"
+              >
+                Curated souvenirs, local treats, and premium corporate gifts celebrating Singapore's rich culture, heritage, and modern excellence.
+              </motion.p>
               
-              <div className="flex flex-wrap gap-4">
-                <Link to="/products?is_bestseller=true" className="btn-primary inline-flex items-center" data-testid="shop-bestsellers-btn">
-                  <TrendingUp size={20} className="mr-2" />
-                  Shop Bestsellers
+              <motion.div 
+                className="flex flex-wrap gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <Link to="/products?is_bestseller=true" className="group relative btn-primary inline-flex items-center overflow-hidden" data-testid="shop-bestsellers-btn">
+                  <span className="relative z-10 flex items-center">
+                    <TrendingUp size={20} className="mr-2" />
+                    Shop Bestsellers
+                  </span>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
                 </Link>
-                <Link to="/deals" className="btn-secondary inline-flex items-center" data-testid="explore-deals-btn">
-                  <Sparkles size={20} className="mr-2" />
-                  Explore Deals
+                <Link to="/deals" className="group relative btn-secondary inline-flex items-center overflow-hidden" data-testid="explore-deals-btn">
+                  <span className="relative z-10 flex items-center">
+                    <Sparkles size={20} className="mr-2" />
+                    Explore Deals
+                  </span>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
                 </Link>
-              </div>
+              </motion.div>
               
-              <div className="flex items-center space-x-8 pt-4">
-                <div>
-                  <div className="text-3xl font-bold text-gray-900 font-playfair">500+</div>
-                  <div className="text-sm text-gray-600 font-inter">Premium Products</div>
-                </div>
-                <div className="w-px h-12 bg-gray-300"></div>
-                <div>
-                  <div className="text-3xl font-bold text-gray-900 font-playfair">10k+</div>
-                  <div className="text-sm text-gray-600 font-inter">Happy Customers</div>
-                </div>
-                <div className="w-px h-12 bg-gray-300"></div>
-                <div>
-                  <div className="flex items-center">
-                    <Star className="text-yellow-400 fill-current" size={24} />
-                    <span className="text-3xl font-bold text-gray-900 ml-2 font-playfair">4.9</span>
-                  </div>
-                  <div className="text-sm text-gray-600 font-inter">Rating</div>
-                </div>
-              </div>
-            </div>
+              {/* Animated Stats */}
+              <motion.div 
+                className="flex items-center flex-wrap gap-8 pt-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                {[
+                  { value: "500+", label: "Premium Products", icon: Package },
+                  { value: "10k+", label: "Happy Customers", icon: Award },
+                  { value: "4.9", label: "Rating", icon: Star, color: "text-yellow-400" }
+                ].map((stat, index) => (
+                  <motion.div 
+                    key={index}
+                    className="flex items-center space-x-3"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <div className="bg-white p-3 rounded-xl shadow-md">
+                      <stat.icon className={stat.color || "text-primary"} size={24} />
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold text-gray-900 font-playfair">{stat.value}</div>
+                      <div className="text-sm text-gray-600 font-inter">{stat.label}</div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
             
-            <div className="relative animate-fadeIn">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+            {/* Right Image with Advanced Animations */}
+            <motion.div 
+              className="relative"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.div 
+                className="relative rounded-3xl overflow-hidden shadow-2xl"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
                 <img 
                   src="https://images.unsplash.com/photo-1686455746257-0210c23f7064" 
                   alt="Singapore Marina Bay" 
                   className="w-full h-auto"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-              </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                
+                {/* Floating Elements */}
+                <motion.div
+                  className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  <span className="text-red-600 font-bold font-inter flex items-center">
+                    <Zap size={16} className="mr-1" />
+                    Flash Sale Live!
+                  </span>
+                </motion.div>
+              </motion.div>
               
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl max-w-xs">
+              {/* Feature Card */}
+              <motion.div 
+                className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl max-w-xs border-2 border-primary/10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 }}
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}
+              >
                 <div className="flex items-center space-x-4">
-                  <div className="bg-green-100 p-3 rounded-full">
-                    <Gift className="text-green-600" size={24} />
-                  </div>
+                  <motion.div 
+                    className="bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-xl"
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  >
+                    <Gift className="text-white" size={28} />
+                  </motion.div>
                   <div>
-                    <div className="font-semibold text-gray-900 font-inter">Free Shipping</div>
-                    <div className="text-sm text-gray-600 font-inter">On orders over SGD 100</div>
+                    <div className="font-bold text-gray-900 font-inter text-lg">Free Shipping</div>
+                    <div className="text-sm text-gray-600 font-inter">Orders over SGD 100</div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+
+              {/* Floating Trust Badge */}
+              <motion.div
+                className="absolute -top-6 -right-6 bg-gradient-to-br from-blue-500 to-blue-700 text-white p-4 rounded-2xl shadow-xl"
+                animate={{ 
+                  rotate: [0, 5, 0, -5, 0],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{ duration: 5, repeat: Infinity }}
+              >
+                <Shield size={32} />
+                <div className="text-xs font-bold mt-1">Trusted</div>
+              </motion.div>
+            </motion.div>
           </div>
+        </div>
+
+        {/* Wave Divider */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+          </svg>
         </div>
       </section>
 
