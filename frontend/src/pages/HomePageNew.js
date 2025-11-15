@@ -145,115 +145,157 @@ function HomePageNew({ user }) {
         </section>
       )}
 
-      {/* Category Sections - Colorful Horizontal Banners */}
+      {/* Category Sections - Vibrant Colors with Product Slider */}
       <div className="container mx-auto px-4 py-8">
         {categories.map((category, catIndex) => {
           const products = productsByCategory[category.id] || [];
           if (products.length === 0) return null;
 
-          // Define unique colors for each category
-          const categoryColors = {
-            'airline-exclusives': 'from-blue-900 to-blue-700',
-            'beauty': 'from-pink-500 to-rose-500',
-            'electronics': 'from-blue-500 to-cyan-500',
-            'fashion': 'from-purple-600 to-pink-600',
-            'food': 'from-orange-500 to-red-500',
-            'health-wellness': 'from-green-500 to-emerald-500',
-            'home-living': 'from-amber-700 to-orange-700',
-            'kids-babies-toys': 'from-yellow-400 to-orange-400',
-            'sports-fitness': 'from-cyan-500 to-blue-500',
-            'travel-gifts': 'from-slate-600 to-slate-800',
-            'wine-spirits': 'from-red-900 to-amber-900',
-            'writing': 'from-indigo-600 to-purple-600',
-            'pets': 'from-amber-500 to-yellow-500'
-          };
+          // Vibrant unique colors for each category (more varied)
+          const colorPalette = [
+            'from-red-600 via-rose-500 to-pink-500',      // Vibrant Red-Pink
+            'from-orange-500 via-amber-400 to-yellow-400', // Orange-Yellow
+            'from-purple-600 via-violet-500 to-fuchsia-500', // Purple-Fuchsia
+            'from-blue-700 via-blue-500 to-cyan-400',     // Blue-Cyan
+            'from-sky-500 via-blue-400 to-indigo-500',    // Sky-Indigo
+            'from-green-600 via-emerald-500 to-teal-400', // Green-Teal
+            'from-amber-700 via-orange-600 to-red-600',   // Brown-Orange
+            'from-yellow-500 via-orange-400 to-red-400',  // Yellow-Red
+            'from-pink-500 via-rose-400 to-red-400',      // Pink-Rose
+            'from-slate-700 via-gray-600 to-zinc-600',    // Slate-Gray
+            'from-lime-500 via-green-500 to-emerald-600', // Lime-Green
+            'from-teal-600 via-cyan-500 to-blue-500',     // Teal-Cyan
+            'from-yellow-600 via-amber-500 to-orange-600', // Gold
+            'from-indigo-600 via-blue-500 to-cyan-500',   // Indigo-Blue
+            'from-stone-700 via-neutral-600 to-gray-700', // Stone
+            'from-emerald-600 via-green-500 to-lime-500', // Emerald-Lime
+            'from-green-700 via-lime-600 to-yellow-500',  // Green-Lime
+            'from-teal-700 via-green-600 to-emerald-600', // Dark Teal
+            'from-violet-600 via-purple-500 to-fuchsia-500', // Violet-Purple
+            'from-fuchsia-600 via-purple-500 to-pink-500' // Fuchsia-Purple
+          ];
 
-          const gradientClass = categoryColors[category.slug] || 'from-red-600 to-red-800';
+          const gradientClass = colorPalette[catIndex % colorPalette.length];
+          const sliderId = `slider-${category.id}`;
 
           return (
             <section key={category.id} className="mb-10" data-testid={`category-section-${category.slug}`}>
-              {/* Colorful Horizontal Category Banner */}
+              {/* Vibrant Horizontal Category Banner */}
               <div 
                 className={`relative h-52 rounded-2xl overflow-hidden shadow-xl mb-6 bg-gradient-to-r ${gradientClass}`}
               >
                 {/* Background Image with Overlay */}
                 <div 
-                  className="absolute inset-0 bg-cover bg-center opacity-30"
+                  className="absolute inset-0 bg-cover bg-center opacity-20"
                   style={{ backgroundImage: `url(${category.image_url})` }}
                 ></div>
                 
                 {/* Content */}
                 <div className="absolute inset-0 flex items-center justify-between px-12">
                   <div className="text-white max-w-2xl z-10">
-                    <h2 className="text-6xl font-playfair font-black mb-3 tracking-tight">
+                    <h2 className="text-6xl font-playfair font-black mb-3 tracking-tight drop-shadow-lg">
                       {category.name}
                     </h2>
-                    <p className="text-2xl font-inter">
+                    <p className="text-2xl font-inter drop-shadow">
                       {category.description}
                     </p>
                   </div>
                   <Link 
                     to={`/products?category=${category.id}`}
-                    className="bg-white/95 backdrop-blur-sm text-gray-900 px-10 py-4 rounded-xl font-bold hover:bg-white hover:scale-105 transition-all shadow-2xl font-inter text-lg flex items-center z-10"
+                    className="bg-white text-gray-900 px-10 py-4 rounded-xl font-bold hover:scale-105 transition-all shadow-2xl font-inter text-lg flex items-center z-10"
                   >
                     View All
                     <ArrowRight size={22} className="ml-2" />
                   </Link>
                 </div>
 
-                {/* Decorative Element */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
+                {/* Decorative Circles */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-48 -mt-48"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full -ml-32 -mb-32"></div>
               </div>
 
-              {/* Products Grid - Smaller Images */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {products.map((product) => (
-                  <Link
-                    key={product.id}
-                    to={`/products/${product.id}`}
-                    className="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-primary hover:shadow-lg transition-all"
-                    data-testid={`product-${product.slug}`}
-                  >
-                    <div className="aspect-square bg-gray-50 relative overflow-hidden">
-                      <img 
-                        src={product.images[0]} 
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
-                      {product.sale_price && (
-                        <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold shadow">
-                          -{Math.round(((product.price - product.sale_price) / product.price) * 100)}%
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-3">
-                      <h3 className="text-xs font-semibold text-gray-900 mb-2 line-clamp-2 font-inter group-hover:text-primary transition-colors h-8">
-                        {product.name}
-                      </h3>
-                      <div className="flex items-center mb-2">
-                        <Star className="text-yellow-400 fill-current" size={10} />
-                        <span className="text-xs text-gray-600 ml-1 font-inter font-semibold">{product.rating}</span>
-                        <span className="text-xs text-gray-400 ml-1 font-inter">({product.review_count})</span>
-                      </div>
-                      <div className="flex items-baseline space-x-1">
-                        {product.sale_price ? (
-                          <>
-                            <span className="text-base font-bold text-primary font-inter">
-                              ${product.sale_price}
-                            </span>
-                            <span className="text-xs text-gray-400 line-through font-inter">
-                              ${product.price}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-base font-bold text-gray-900 font-inter">
-                            ${product.price}
-                          </span>
+              {/* Products Slider with Arrows */}
+              <div className="relative group">
+                {/* Left Arrow */}
+                <button
+                  onClick={() => {
+                    document.getElementById(sliderId).scrollBy({ left: -300, behavior: 'smooth' });
+                  }}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-2xl rounded-full p-3 hover:bg-gray-100 transition-all opacity-0 group-hover:opacity-100 -ml-4"
+                  data-testid={`prev-${category.slug}`}
+                >
+                  <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                {/* Products Slider */}
+                <div 
+                  id={sliderId}
+                  className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide scroll-smooth"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {products.map((product) => (
+                    <Link
+                      key={product.id}
+                      to={`/products/${product.id}`}
+                      className="flex-shrink-0 w-48 group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-primary hover:shadow-xl transition-all"
+                      data-testid={`product-${product.slug}`}
+                    >
+                      <div className="aspect-square bg-gray-50 relative overflow-hidden">
+                        <img 
+                          src={product.images[0]} 
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                        {product.sale_price && (
+                          <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold shadow">
+                            -{Math.round(((product.price - product.sale_price) / product.price) * 100)}%
+                          </div>
                         )}
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                      <div className="p-3">
+                        <h3 className="text-xs font-semibold text-gray-900 mb-2 line-clamp-2 font-inter group-hover:text-primary transition-colors h-8">
+                          {product.name}
+                        </h3>
+                        <div className="flex items-center mb-2">
+                          <Star className="text-yellow-400 fill-current" size={10} />
+                          <span className="text-xs text-gray-600 ml-1 font-inter font-semibold">{product.rating}</span>
+                          <span className="text-xs text-gray-400 ml-1 font-inter">({product.review_count})</span>
+                        </div>
+                        <div className="flex items-baseline space-x-1">
+                          {product.sale_price ? (
+                            <>
+                              <span className="text-base font-bold text-primary font-inter">
+                                ${product.sale_price}
+                              </span>
+                              <span className="text-xs text-gray-400 line-through font-inter">
+                                ${product.price}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="text-base font-bold text-gray-900 font-inter">
+                              ${product.price}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Right Arrow */}
+                <button
+                  onClick={() => {
+                    document.getElementById(sliderId).scrollBy({ left: 300, behavior: 'smooth' });
+                  }}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-2xl rounded-full p-3 hover:bg-gray-100 transition-all opacity-0 group-hover:opacity-100 -mr-4"
+                  data-testid={`next-${category.slug}`}
+                >
+                  <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
             </section>
           );
