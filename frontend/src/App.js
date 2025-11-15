@@ -4,7 +4,7 @@ import axios from 'axios';
 import './App.css';
 
 // Pages
-import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePageNew';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import DealsPage from './pages/DealsPage';
