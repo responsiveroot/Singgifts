@@ -108,7 +108,7 @@ function HomePageNew({ user }) {
                 background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
               }}>
                 <div className="p-6 text-white h-full flex flex-col justify-center">
-                  <h3 className="text-3xl font-playfair font-bold mb-2">13<br />Categories</h3>
+                  <h3 className="text-3xl font-playfair font-bold mb-2">20<br />Categories</h3>
                   <p className="text-sm opacity-90 mb-3 font-inter">500+ Products</p>
                   <Link to="/products" className="bg-white text-blue-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition-colors font-inter inline-block w-fit text-sm">
                     Explore All
