@@ -104,111 +104,103 @@ function HomePageNew({ user }) {
         </section>
       )}
 
-      {/* Category Sections */}
+      {/* Category Sections - E-Commerce Style */}
       <div className="container mx-auto px-4 py-8">
         {categories.map((category, catIndex) => {
           const products = productsByCategory[category.id] || [];
           if (products.length === 0) return null;
 
           return (
-            <section key={category.id} className="mb-12" data-testid={`category-section-${category.slug}`}>
-              {/* Category Header with Banner */}
-              <div className="bg-white rounded-xl overflow-hidden shadow-md mb-6">
-                <div className="grid md:grid-cols-3 gap-0">
-                  {/* Category Banner - Left Side */}
+            <section key={category.id} className="mb-8" data-testid={`category-section-${category.slug}`}>
+              {/* Category Header with Banner - Professional Layout */}
+              <div className="bg-white rounded-lg overflow-hidden shadow border border-gray-200">
+                <div className="grid md:grid-cols-4 gap-0">
+                  {/* Category Banner - Left Side (1 column) */}
                   <div 
-                    className="relative h-64 md:h-auto bg-cover bg-center"
+                    className="relative h-72 md:h-auto bg-cover bg-center"
                     style={{
-                      backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${category.image_url})`
+                      backgroundImage: `linear-gradient(rgba(227,24,55,0.85), rgba(227,24,55,0.95)), url(${category.image_url})`
                     }}
                   >
-                    <div className="absolute inset-0 flex flex-col justify-center p-8 text-white">
-                      <h2 className="text-3xl font-playfair font-bold mb-2">{category.name}</h2>
-                      <p className="text-lg mb-4 opacity-90 font-inter">{category.description}</p>
+                    <div className="absolute inset-0 flex flex-col justify-center p-6 text-white">
+                      <h2 className="text-2xl font-playfair font-bold mb-3 leading-tight">{category.name}</h2>
+                      <p className="text-sm mb-4 opacity-90 font-inter leading-relaxed">{category.description}</p>
                       <Link 
                         to={`/products?category=${category.id}`}
-                        className="inline-flex items-center text-white font-semibold hover:text-accent transition-colors font-inter"
+                        className="inline-flex items-center text-white font-bold hover:text-yellow-300 transition-colors font-inter text-sm bg-white/20 px-4 py-2 rounded hover:bg-white/30"
                       >
                         View All
-                        <ChevronRight size={20} className="ml-1" />
+                        <ChevronRight size={18} className="ml-1" />
                       </Link>
                     </div>
                   </div>
 
-                  {/* Products Grid - Right Side */}
-                  <div className="md:col-span-2 p-6">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {/* Products Grid - Right Side (3 columns) */}
+                  <div className="md:col-span-3 p-6 bg-gray-50">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {products.map((product) => (
                         <Link
                           key={product.id}
                           to={`/products/${product.id}`}
-                          className="group"
+                          className="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-primary hover:shadow-md transition-all"
                           data-testid={`product-${product.slug}`}
                         >
-                          <div className="bg-gray-50 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                            <div className="aspect-square bg-white relative overflow-hidden">
-                              <img 
-                                src={product.images[0]} 
-                                alt={product.name}
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                              />
-                              {product.sale_price && (
-                                <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
-                                  {Math.round(((product.price - product.sale_price) / product.price) * 100)}% OFF
-                                </div>
-                              )}
+                          <div className="aspect-square bg-white relative overflow-hidden border-b border-gray-100">
+                            <img 
+                              src={product.images[0]} 
+                              alt={product.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            {product.sale_price && (
+                              <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md text-xs font-bold shadow">
+                                {Math.round(((product.price - product.sale_price) / product.price) * 100)}% OFF
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-3">
+                            <h3 className="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 font-inter group-hover:text-primary transition-colors min-h-[40px]">
+                              {product.name}
+                            </h3>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center bg-green-50 px-2 py-1 rounded">
+                                <Star className="text-green-600 fill-current" size={12} />
+                                <span className="text-xs text-gray-700 ml-1 font-bold font-inter">{product.rating}</span>
+                              </div>
+                              <span className="text-xs text-gray-500 font-inter">({product.review_count})</span>
                             </div>
-                            <div className="p-3">
-                              <h3 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-2 font-inter group-hover:text-primary transition-colors">
-                                {product.name}
-                              </h3>
-                              <div className="flex items-center mb-2">
-                                <div className="flex items-center">
-                                  <Star className="text-yellow-400 fill-current" size={12} />
-                                  <span className="text-xs text-gray-600 ml-1 font-inter">{product.rating}</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                {product.sale_price ? (
-                                  <>
-                                    <span className="text-lg font-bold text-primary font-inter">
-                                      SGD {product.sale_price}
-                                    </span>
-                                    <span className="text-xs text-gray-500 line-through font-inter">
-                                      SGD {product.price}
-                                    </span>
-                                  </>
-                                ) : (
-                                  <span className="text-lg font-bold text-gray-900 font-inter">
-                                    SGD {product.price}
+                            <div className="flex items-baseline space-x-2">
+                              {product.sale_price ? (
+                                <>
+                                  <span className="text-xl font-bold text-primary font-inter">
+                                    ${product.sale_price}
                                   </span>
-                                )}
-                              </div>
+                                  <span className="text-xs text-gray-500 line-through font-inter">
+                                    ${product.price}
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="text-xl font-bold text-gray-900 font-inter">
+                                  ${product.price}
+                                </span>
+                              )}
                             </div>
                           </div>
                         </Link>
                       ))}
                     </div>
                     
-                    {products.length >= 6 && (
-                      <div className="mt-4 text-center">
-                        <Link 
-                          to={`/products?category=${category.id}`}
-                          className="inline-flex items-center text-primary font-semibold hover:underline font-inter"
-                        >
-                          View All {category.name} Products
-                          <ArrowRight size={16} className="ml-1" />
-                        </Link>
-                      </div>
-                    )}
+                    <div className="mt-5 text-center border-t border-gray-200 pt-4">
+                      <Link 
+                        to={`/products?category=${category.id}`}
+                        className="inline-flex items-center text-primary font-bold hover:text-red-700 font-inter text-sm bg-primary/5 px-6 py-2 rounded-lg hover:bg-primary/10 transition-colors"
+                      >
+                        See All {category.name}
+                        <ArrowRight size={16} className="ml-2" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              {/* Divider */}
-              {catIndex < categories.length - 1 && (
-                <div className="border-t border-gray-200 my-8"></div>
-              )}
             </section>
           );
         })}
