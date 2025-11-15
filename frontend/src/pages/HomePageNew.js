@@ -207,28 +207,36 @@ function HomePageNew({ user }) {
       </div>
 
       {/* Trust Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 py-12 text-white">
+      <section className="bg-gray-100 py-10 border-t border-gray-200">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-6 text-center">
-            <div>
-              <div className="text-4xl mb-2">🇸🇬</div>
-              <h3 className="font-bold text-lg mb-1 font-inter">100% Authentic</h3>
-              <p className="text-sm opacity-90 font-inter">Singapore Products</p>
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="flex items-center space-x-3 bg-white p-4 rounded-lg shadow-sm">
+              <div className="text-3xl">🇸🇬</div>
+              <div>
+                <h3 className="font-bold text-gray-900 font-inter">Authentic SG Products</h3>
+                <p className="text-sm text-gray-600 font-inter">100% Genuine</p>
+              </div>
             </div>
-            <div>
-              <div className="text-4xl mb-2">🚚</div>
-              <h3 className="font-bold text-lg mb-1 font-inter">Free Shipping</h3>
-              <p className="text-sm opacity-90 font-inter">On Orders Over SGD 100</p>
+            <div className="flex items-center space-x-3 bg-white p-4 rounded-lg shadow-sm">
+              <div className="text-3xl">🚚</div>
+              <div>
+                <h3 className="font-bold text-gray-900 font-inter">Free Shipping</h3>
+                <p className="text-sm text-gray-600 font-inter">Orders Over $100</p>
+              </div>
             </div>
-            <div>
-              <div className="text-4xl mb-2">⭐</div>
-              <h3 className="font-bold text-lg mb-1 font-inter">4.9 Rating</h3>
-              <p className="text-sm opacity-90 font-inter">10,000+ Happy Customers</p>
+            <div className="flex items-center space-x-3 bg-white p-4 rounded-lg shadow-sm">
+              <div className="text-3xl">⭐</div>
+              <div>
+                <h3 className="font-bold text-gray-900 font-inter">Rated 4.9/5</h3>
+                <p className="text-sm text-gray-600 font-inter">10k+ Reviews</p>
+              </div>
             </div>
-            <div>
-              <div className="text-4xl mb-2">🔒</div>
-              <h3 className="font-bold text-lg mb-1 font-inter">Secure Payment</h3>
-              <p className="text-sm opacity-90 font-inter">Safe & Protected</p>
+            <div className="flex items-center space-x-3 bg-white p-4 rounded-lg shadow-sm">
+              <div className="text-3xl">🔒</div>
+              <div>
+                <h3 className="font-bold text-gray-900 font-inter">Secure Payment</h3>
+                <p className="text-sm text-gray-600 font-inter">SSL Protected</p>
+              </div>
             </div>
           </div>
         </div>
