@@ -18,7 +18,7 @@ async def seed_data():
     await db.deals.delete_many({})
     await db.cms_sections.delete_many({})
     
-    # Categories with Singapore-themed images
+    # Categories with Singapore-themed images (20 categories)
     categories = [
         {
             "id": str(uuid.uuid4()),
@@ -32,12 +32,42 @@ async def seed_data():
         },
         {
             "id": str(uuid.uuid4()),
+            "name": "Batik",
+            "slug": "batik",
+            "description": "Traditional handcrafted Batik fabrics and accessories",
+            "image_url": "https://images.unsplash.com/photo-1610706502858-6a0989239446",
+            "subcategories": ["Fabrics", "Clothing", "Accessories"],
+            "order": 2,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
             "name": "Beauty",
             "slug": "beauty",
             "description": "Premium beauty and skincare products",
             "image_url": "https://images.unsplash.com/photo-1624167479379-938f4b1c5b45",
             "subcategories": ["Skincare", "Fragrance", "Makeup"],
-            "order": 2,
+            "order": 3,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Chocolates",
+            "slug": "chocolates",
+            "description": "Artisan chocolates and confectionery",
+            "image_url": "https://images.unsplash.com/photo-1511381939415-e44015466834",
+            "subcategories": ["Dark Chocolate", "Milk Chocolate", "Gift Sets"],
+            "order": 4,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Coffee",
+            "slug": "coffee",
+            "description": "Premium Singapore coffee blends",
+            "image_url": "https://images.unsplash.com/photo-1447933601403-0c6688de566e",
+            "subcategories": ["Beans", "Ground Coffee", "Instant Coffee"],
+            "order": 5,
             "created_at": datetime.now(timezone.utc).isoformat()
         },
         {
@@ -47,7 +77,7 @@ async def seed_data():
             "description": "Latest tech and gadgets",
             "image_url": "https://images.unsplash.com/photo-1686455746127-02762fade30c",
             "subcategories": ["Smartphones", "Audio", "Wearables"],
-            "order": 3,
+            "order": 6,
             "created_at": datetime.now(timezone.utc).isoformat()
         },
         {
@@ -57,7 +87,7 @@ async def seed_data():
             "description": "Stylish clothing and accessories",
             "image_url": "https://images.unsplash.com/photo-1749843988896-bcc365717569",
             "subcategories": ["Clothing", "Bags", "Jewelry", "Watches"],
-            "order": 4,
+            "order": 7,
             "created_at": datetime.now(timezone.utc).isoformat()
         },
         {
@@ -67,7 +97,97 @@ async def seed_data():
             "description": "Singapore's finest food and treats",
             "image_url": "https://images.unsplash.com/photo-1734304185641-b6b8eb588603",
             "subcategories": ["Snacks", "Baked Goods", "Beverages"],
-            "order": 5,
+            "order": 8,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Home Decor",
+            "slug": "home-decor",
+            "description": "Elegant home decoration and furnishings",
+            "image_url": "https://images.unsplash.com/photo-1556912998-c57cc6b63cd7",
+            "subcategories": ["Wall Art", "Vases", "Candles"],
+            "order": 9,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Jewelry",
+            "slug": "jewelry",
+            "description": "Exquisite jewelry and accessories",
+            "image_url": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338",
+            "subcategories": ["Necklaces", "Bracelets", "Earrings"],
+            "order": 10,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Kitchenware",
+            "slug": "kitchenware",
+            "description": "Premium kitchen tools and cookware",
+            "image_url": "https://images.unsplash.com/photo-1565183928294-7d22f24ff511",
+            "subcategories": ["Cookware", "Utensils", "Storage"],
+            "order": 11,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Liquor",
+            "slug": "liquor",
+            "description": "Fine wines and premium spirits",
+            "image_url": "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3",
+            "subcategories": ["Wine", "Whiskey", "Spirits"],
+            "order": 12,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Peranakan",
+            "slug": "peranakan",
+            "description": "Traditional Peranakan heritage items",
+            "image_url": "https://images.unsplash.com/photo-1582735689369-4fe89db7114c",
+            "subcategories": ["Ceramics", "Textiles", "Jewelry"],
+            "order": 13,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Perfumes",
+            "slug": "perfumes",
+            "description": "Luxury fragrances and colognes",
+            "image_url": "https://images.unsplash.com/photo-1541643600914-78b084683601",
+            "subcategories": ["Men's", "Women's", "Unisex"],
+            "order": 14,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Skincare",
+            "slug": "skincare",
+            "description": "Premium skincare and wellness products",
+            "image_url": "https://images.unsplash.com/photo-1556228578-0d85b1a4d571",
+            "subcategories": ["Face Care", "Body Care", "Treatments"],
+            "order": 15,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Soap",
+            "slug": "soap",
+            "description": "Handmade artisan soaps and bath products",
+            "image_url": "https://images.unsplash.com/photo-1600857062241-98e5e6fe4aff",
+            "subcategories": ["Bar Soap", "Liquid Soap", "Gift Sets"],
+            "order": 16,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Tea",
+            "slug": "tea",
+            "description": "Premium tea blends and accessories",
+            "image_url": "https://images.unsplash.com/photo-1563822249366-3a0cd3be3303",
+            "subcategories": ["Green Tea", "Black Tea", "Herbal Tea"],
+            "order": 17,
             "created_at": datetime.now(timezone.utc).isoformat()
         },
         {
@@ -77,7 +197,27 @@ async def seed_data():
             "description": "Perfect gifts and souvenirs from Singapore",
             "image_url": "https://images.unsplash.com/photo-1711657973130-8affa319e7be",
             "subcategories": ["Souvenirs", "Corporate Gifts", "Travel Essentials"],
-            "order": 6,
+            "order": 18,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Wedgwood Fine Bone China",
+            "slug": "wedgwood-fine-bone-china",
+            "description": "Exquisite fine bone china tableware",
+            "image_url": "https://images.unsplash.com/photo-1610701596007-11502861dcfa",
+            "subcategories": ["Dinnerware", "Tea Sets", "Collectibles"],
+            "order": 19,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Wax Bar",
+            "slug": "wax-bar",
+            "description": "Scented wax melts and candles",
+            "image_url": "https://images.unsplash.com/photo-1602874801006-e24b83a8c195",
+            "subcategories": ["Wax Melts", "Candles", "Diffusers"],
+            "order": 20,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
     ]
