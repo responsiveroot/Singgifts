@@ -476,51 +476,99 @@ function HomePage({ user }) {
         </section>
       )}
 
-      {/* Bestsellers */}
-      <section className="py-20 bg-gray-50" data-testid="bestsellers-section">
+      {/* Bestsellers with Enhanced Animations */}
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50" data-testid="bestsellers-section">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-playfair font-bold text-gray-900 mb-4">Bestselling Products</h2>
-            <p className="text-lg text-gray-600 font-inter">Customer favorites from our collection</p>
-          </div>
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <motion.span 
+              className="inline-block bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-6 py-2 rounded-full text-sm font-bold mb-4 font-inter"
+              animate={{ rotate: [-2, 2, -2] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              ⭐ TOP RATED
+            </motion.span>
+            <h2 className="text-4xl sm:text-5xl font-playfair font-bold text-gray-900 mb-4">Bestselling Products</h2>
+            <p className="text-xl text-gray-600 font-inter max-w-2xl mx-auto">Customer favorites from our collection</p>
+          </motion.div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {bestsellers.map((product) => (
-              <Link
+            {bestsellers.map((product, index) => (
+              <motion.div
                 key={product.id}
-                to={`/products/${product.id}`}
-                className="bg-white rounded-2xl overflow-hidden shadow-md card-hover"
-                data-testid={`bestseller-${product.slug}`}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
               >
-                <div className="product-image h-64 bg-gray-100">
-                  <img 
-                    src={product.images[0]} 
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center mb-2">
-                    <Star className="text-yellow-400 fill-current" size={16} />
-                    <span className="text-sm font-semibold text-gray-700 ml-1 font-inter">{product.rating}</span>
-                    <span className="text-sm text-gray-500 ml-1 font-inter">({product.review_count})</span>
-                  </div>
-                  <h3 className="font-semibold text-lg text-gray-900 mb-2 font-inter">{product.name}</h3>
-                  <p className="text-sm text-gray-600 mb-4 font-inter line-clamp-2">{product.description}</p>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      {product.sale_price ? (
-                        <>
-                          <span className="text-xl font-bold text-primary font-inter">SGD {product.sale_price}</span>
-                          <span className="text-sm text-gray-500 line-through ml-2 font-inter">SGD {product.price}</span>
-                        </>
-                      ) : (
-                        <span className="text-xl font-bold text-gray-900 font-inter">SGD {product.price}</span>
+                <Link
+                  to={`/products/${product.id}`}
+                  className="block group"
+                  data-testid={`bestseller-${product.slug}`}
+                >
+                  <motion.div 
+                    className="bg-white rounded-3xl overflow-hidden shadow-lg"
+                    whileHover={{ y: -10, boxShadow: "0 25px 50px rgba(0,0,0,0.15)" }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="product-image h-72 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                      {product.sale_price && (
+                        <motion.div 
+                          className="absolute top-4 right-4 z-10 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg"
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        >
+                          {Math.round(((product.price - product.sale_price) / product.price) * 100)}% OFF
+                        </motion.div>
                       )}
+                      <img 
+                        src={product.images[0]} 
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
-                  </div>
-                </div>
-              </Link>
+                    <div className="p-6">
+                      <div className="flex items-center mb-3">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i}
+                            className={`${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                            size={18}
+                          />
+                        ))}
+                        <span className="text-sm font-semibold text-gray-700 ml-2 font-inter">{product.rating}</span>
+                        <span className="text-sm text-gray-500 ml-1 font-inter">({product.review_count})</span>
+                      </div>
+                      <h3 className="font-bold text-xl text-gray-900 mb-2 font-inter group-hover:text-primary transition-colors">{product.name}</h3>
+                      <p className="text-sm text-gray-600 mb-4 font-inter line-clamp-2">{product.description}</p>
+                      <div className="flex items-center justify-between border-t border-gray-100 pt-4">
+                        <div>
+                          {product.sale_price ? (
+                            <>
+                              <span className="text-2xl font-bold text-primary font-inter">SGD {product.sale_price}</span>
+                              <span className="text-sm text-gray-500 line-through ml-2 font-inter">SGD {product.price}</span>
+                            </>
+                          ) : (
+                            <span className="text-2xl font-bold text-gray-900 font-inter">SGD {product.price}</span>
+                          )}
+                        </div>
+                        <motion.button
+                          className="bg-primary text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          whileHover={{ scale: 1.1, rotate: 15 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <ArrowRight size={20} />
+                        </motion.button>
+                      </div>
+                    </div>
+                  </motion.div>
+                </Link>
+              </motion.div>
             ))}
           </div>
           
