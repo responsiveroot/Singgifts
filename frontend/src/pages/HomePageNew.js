@@ -54,24 +54,25 @@ function HomePageNew({ user }) {
   }
 
   return (
-    <div className="homepage-new bg-gray-50">
-      {/* Hero Banner */}
-      <section className="bg-gradient-to-r from-primary via-red-600 to-blue-600 py-16 text-white" data-testid="hero-banner">
-        <div className="container mx-auto px-4">
+    <div className="homepage-new bg-white">
+      {/* Hero Banner - Clean Design */}
+      <section className="relative overflow-hidden" style={{background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'}} data-testid="hero-banner">
+        <div className="container mx-auto px-4 py-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h1 className="text-5xl font-playfair font-bold mb-4">
-                Welcome to SingGifts
+              <div className="inline-block bg-primary text-white px-4 py-1 rounded-full text-sm font-bold mb-4 font-inter">
+                🇸🇬 TRUSTED SINGAPORE BRAND
+              </div>
+              <h1 className="text-5xl font-playfair font-bold mb-4 text-gray-900">
+                Shop Authentic<br />
+                <span className="text-primary">Singapore Products</span>
               </h1>
-              <p className="text-xl mb-6 opacity-90 font-inter">
-                🇸🇬 Singapore's Premier Online Store for Authentic Gifts, Souvenirs & Premium Products
+              <p className="text-lg mb-6 text-gray-700 font-inter">
+                Premium gifts, souvenirs & lifestyle products from Singapore's finest brands
               </p>
               <div className="flex gap-4">
-                <Link to="/products" className="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors font-inter">
-                  Shop Now
-                </Link>
-                <Link to="/deals" className="bg-transparent border-2 border-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-primary transition-colors font-inter">
-                  View Deals
+                <Link to="/products" className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-red-700 transition-colors font-inter shadow-lg">
+                  Start Shopping
                 </Link>
               </div>
             </div>
@@ -79,7 +80,7 @@ function HomePageNew({ user }) {
               <img 
                 src="https://images.unsplash.com/photo-1686455746257-0210c23f7064" 
                 alt="Singapore" 
-                className="rounded-2xl shadow-2xl w-full"
+                className="rounded-xl shadow-xl w-full"
               />
             </div>
           </div>
@@ -88,15 +89,15 @@ function HomePageNew({ user }) {
 
       {/* Flash Deals Banner */}
       {deals.length > 0 && (
-        <section className="bg-gradient-to-r from-amber-500 to-red-600 py-4">
+        <section className="bg-yellow-400 py-3 border-y-4 border-yellow-500">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between text-white">
+            <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <span className="text-2xl font-bold font-playfair">🔥 Flash Deals</span>
-                <span className="text-lg font-inter">Up to {deals[0].discount_percentage}% OFF</span>
+                <span className="text-2xl font-bold font-playfair text-gray-900">⚡ Flash Sale</span>
+                <span className="text-lg font-inter text-gray-900">Up to {deals[0].discount_percentage}% OFF</span>
               </div>
-              <Link to="/deals" className="bg-white text-red-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition-colors font-inter">
-                View All
+              <Link to="/deals" className="bg-gray-900 text-white px-6 py-2 rounded font-bold hover:bg-gray-800 transition-colors font-inter">
+                Shop Now
               </Link>
             </div>
           </div>
