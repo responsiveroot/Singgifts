@@ -72,7 +72,7 @@ function HomePageNew({ user }) {
                     Premium<br />Singapore<br />Gifts
                   </h1>
                   <p className="text-lg mb-6 opacity-90 font-inter">
-                    Shop authentic products from 13 curated categories
+                    Shop authentic products from 20 curated categories
                   </p>
                   <Link to="/products" className="bg-white text-purple-700 px-8 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors font-inter inline-block w-fit">
                     Shop Now →
