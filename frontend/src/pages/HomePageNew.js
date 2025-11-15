@@ -54,76 +54,91 @@ function HomePageNew({ user }) {
   }
 
   return (
-    <div className="homepage-new bg-white">
-      {/* Enhanced Hero Banner */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-red-50 via-white to-blue-50" data-testid="hero-banner">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full filter blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"></div>
-        </div>
-        <div className="container mx-auto px-4 py-16 relative z-10">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center bg-white px-5 py-2 rounded-full shadow-lg mb-6">
-                <span className="text-2xl mr-2">🇸🇬</span>
-                <span className="font-bold text-gray-900 font-inter">Singapore's #1 Gift Store</span>
-              </div>
-              <h1 className="text-6xl font-playfair font-black mb-6 leading-tight">
-                <span className="text-gray-900">Discover</span><br />
-                <span className="bg-gradient-to-r from-primary to-red-700 bg-clip-text text-transparent">Authentic Singapore</span><br />
-                <span className="text-gray-900">Products</span>
-              </h1>
-              <p className="text-xl mb-8 text-gray-700 font-inter leading-relaxed">
-                From premium souvenirs to lifestyle essentials - shop 13 curated categories of authentic Singapore products
-              </p>
-              <div className="flex gap-4">
-                <Link to="/products" className="bg-gradient-to-r from-primary to-red-700 text-white px-10 py-4 rounded-xl font-bold hover:shadow-2xl transition-all font-inter text-lg">
-                  Explore Now →
-                </Link>
-                <Link to="/deals" className="bg-white border-2 border-gray-300 text-gray-900 px-10 py-4 rounded-xl font-bold hover:border-primary hover:text-primary transition-colors font-inter text-lg">
-                  View Deals
-                </Link>
-              </div>
-              <div className="mt-8 flex items-center space-x-6">
-                <div className="flex items-center">
-                  <span className="text-3xl font-bold text-gray-900 font-playfair">500+</span>
-                  <span className="text-sm text-gray-600 ml-2 font-inter">Products</span>
+    <div className="homepage-new bg-gray-50">
+      {/* E-Commerce Style Hero Banner */}
+      <section className="bg-white" data-testid="hero-banner">
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid md:grid-cols-3 gap-4">
+            {/* Main Banner */}
+            <div className="md:col-span-2 relative overflow-hidden rounded-2xl" style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            }}>
+              <div className="grid md:grid-cols-2 h-full">
+                <div className="p-10 flex flex-col justify-center text-white">
+                  <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-bold mb-4 w-fit">
+                    🇸🇬 Singapore's Finest
+                  </div>
+                  <h1 className="text-5xl font-playfair font-bold mb-4 leading-tight">
+                    Premium<br />Singapore<br />Gifts
+                  </h1>
+                  <p className="text-lg mb-6 opacity-90 font-inter">
+                    Shop authentic products from 13 curated categories
+                  </p>
+                  <Link to="/products" className="bg-white text-purple-700 px-8 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors font-inter inline-block w-fit">
+                    Shop Now →
+                  </Link>
                 </div>
-                <div className="flex items-center">
-                  <span className="text-3xl font-bold text-gray-900 font-playfair">10k+</span>
-                  <span className="text-sm text-gray-600 ml-2 font-inter">Customers</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-3xl font-bold text-gray-900 font-playfair">4.9★</span>
-                  <span className="text-sm text-gray-600 ml-2 font-inter">Rating</span>
+                <div className="hidden md:flex items-center justify-center p-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1686455746257-0210c23f7064" 
+                    alt="Singapore" 
+                    className="rounded-xl shadow-2xl w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </div>
-            <div className="hidden md:block">
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-blue-500 rounded-2xl opacity-20 blur-2xl"></div>
-                <img 
-                  src="https://images.unsplash.com/photo-1686455746257-0210c23f7064" 
-                  alt="Singapore Marina Bay" 
-                  className="relative rounded-2xl shadow-2xl w-full transform hover:scale-105 transition-transform duration-300"
-                />
+
+            {/* Side Banners */}
+            <div className="space-y-4">
+              {/* Deal Banner */}
+              <div className="relative overflow-hidden rounded-2xl h-48" style={{
+                background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+              }}>
+                <div className="p-6 text-white h-full flex flex-col justify-center">
+                  <h3 className="text-3xl font-playfair font-bold mb-2">Flash<br />Deals</h3>
+                  <p className="text-sm opacity-90 mb-3 font-inter">Up to 50% OFF</p>
+                  <Link to="/deals" className="bg-white text-pink-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition-colors font-inter inline-block w-fit text-sm">
+                    View Deals
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Categories Banner */}
+              <div className="relative overflow-hidden rounded-2xl h-48" style={{
+                background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+              }}>
+                <div className="p-6 text-white h-full flex flex-col justify-center">
+                  <h3 className="text-3xl font-playfair font-bold mb-2">13<br />Categories</h3>
+                  <p className="text-sm opacity-90 mb-3 font-inter">500+ Products</p>
+                  <Link to="/products" className="bg-white text-blue-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition-colors font-inter inline-block w-fit text-sm">
+                    Explore All
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Flash Deals Banner */}
+      {/* Modern Flash Sale Section */}
       {deals.length > 0 && (
-        <section className="bg-yellow-400 py-3 border-y-4 border-yellow-500">
+        <section className="py-6 relative overflow-hidden" style={{
+          background: 'linear-gradient(90deg, #ff6b6b 0%, #feca57 50%, #ff6b6b 100%)'
+        }}>
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <span className="text-2xl font-bold font-playfair text-gray-900">⚡ Flash Sale</span>
-                <span className="text-lg font-inter text-gray-900">Up to {deals[0].discount_percentage}% OFF</span>
+              <div className="flex items-center space-x-6">
+                <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-xl">
+                  <div className="text-4xl font-bold text-white font-playfair">⚡</div>
+                </div>
+                <div>
+                  <h2 className="text-3xl font-playfair font-bold text-white mb-1">Flash Sale is Live!</h2>
+                  <p className="text-white/90 font-inter text-lg">Get up to <span className="font-bold text-2xl">{deals[0].discount_percentage}%</span> OFF on selected items</p>
+                </div>
               </div>
-              <Link to="/deals" className="bg-gray-900 text-white px-6 py-2 rounded font-bold hover:bg-gray-800 transition-colors font-inter">
-                Shop Now
+              <Link to="/deals" className="bg-white text-red-600 px-10 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-2xl font-inter text-lg flex items-center">
+                Shop Flash Sale
+                <ArrowRight size={20} className="ml-2" />
               </Link>
             </div>
           </div>
