@@ -228,7 +228,19 @@ function CheckoutPage({ user }) {
   return (
     <div className="checkout-page py-12 bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-playfair font-bold text-gray-900 mb-8" data-testid="checkout-title">Checkout</h1>
+        <h1 className="text-4xl font-playfair font-bold text-gray-900 mb-4" data-testid="checkout-title">Checkout</h1>
+        
+        {/* Guest Checkout Notice */}
+        {!user && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <p className="text-blue-800 font-inter text-sm">
+              <strong>Checking out as guest.</strong> You'll receive order confirmation via email. 
+              <Link to="/auth" className="ml-2 underline hover:text-blue-900">
+                Sign in
+              </Link> to track orders and save your preferences.
+            </p>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Checkout Form */}
