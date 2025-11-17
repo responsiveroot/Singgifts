@@ -28,7 +28,7 @@ TEST_COUPONS = {
     "FREESHIP": {"discount_type": "fixed", "discount_value": 10, "min_purchase": 50}
 }
 
-class CouponTester:
+class BackendTester:
     def __init__(self):
         self.session = None
         self.session_token = None
