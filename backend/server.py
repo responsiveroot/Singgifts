@@ -12,7 +12,7 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 from email_utils import send_order_confirmation_email, send_welcome_email
 
 from models import *
-from auth import get_current_user, get_current_admin_user, get_password_hash, verify_password, create_access_token
+from auth import get_current_user, get_current_user_optional, get_current_admin_user, get_password_hash, verify_password, create_access_token
 from utils import slugify, generate_sku, generate_otp
 
 ROOT_DIR = Path(__file__).parent
