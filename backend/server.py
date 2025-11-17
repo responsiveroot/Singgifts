@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import List, Optional
 from datetime import datetime, timedelta, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage
+from email_utils import send_order_confirmation_email, send_welcome_email
 
 from models import *
 from auth import get_current_user, get_current_admin_user, get_password_hash, verify_password, create_access_token
