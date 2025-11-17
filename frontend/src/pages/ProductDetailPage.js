@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Star, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Star, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw, Link2, Check } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useCurrency } from '../context/CurrencyContext';
@@ -16,6 +16,7 @@ function ProductDetailPage({ user, updateCartCount }) {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [copied, setCopied] = useState(false);
   const { convertAndFormat } = useCurrency();
 
   useEffect(() => {
