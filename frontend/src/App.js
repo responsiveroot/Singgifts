@@ -24,6 +24,15 @@ import ShippingReturnsPage from './pages/ShippingReturnsPage';
 import FAQPage from './pages/FAQPage';
 import WishlistPage from './pages/WishlistPage';
 
+// Admin Pages
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminCategories from './pages/admin/AdminCategories';
+import AdminCustomers from './pages/admin/AdminCustomers';
+import AdminCoupons from './pages/admin/AdminCoupons';
+
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
