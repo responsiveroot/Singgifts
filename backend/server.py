@@ -611,6 +611,36 @@ async def generate_product_description(product_name: str, category: str, request
     
     return {"description": response}
 
+# ============== COUPON ROUTES ==============
+
+class CouponValidate(BaseModel):
+    code: str
+
+@api_router.post("/coupons/validate")
+async def validate_coupon(coupon_data: CouponValidate):
+    """Validate coupon code"""
+    coupon = await db.coupons.find_one({"code": coupon_data.code.upper()}, {"_id": 0})
+    
+    if not coupon:
+        raise HTTPException(status_code=404, detail="Invalid coupon code")
+    
+    # Check if coupon is active
+    now = datetime.now(timezone.utc)
+    if coupon.get('expires_at'):
+        expires_at = datetime.fromisoformat(coupon['expires_at'])
+        if now > expires_at:
+            raise HTTPException(status_code=400, detail="Coupon has expired")
+    
+    if not coupon.get('active', True):
+        raise HTTPException(status_code=400, detail="Coupon is not active")
+    
+    return {
+        "code": coupon['code'],
+        "discount_type": coupon['discount_type'],  # 'percentage' or 'fixed'
+        "discount_value": coupon['discount_value'],
+        "min_purchase": coupon.get('min_purchase', 0)
+    }
+
 # ============== WISHLIST ROUTES ==============
 
 @api_router.get("/wishlist")
