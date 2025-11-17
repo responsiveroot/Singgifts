@@ -28,10 +28,6 @@ function CheckoutPage({ user }) {
   });
 
   useEffect(() => {
-    if (!user) {
-      navigate('/auth');
-      return;
-    }
     fetchCart();
   }, [user]);
 
