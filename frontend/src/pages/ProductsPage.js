@@ -239,11 +239,67 @@ function ProductsPage({ user, updateCartCount }) {
                   </li>
                 ))}
               </ul>
+
+              {/* Price Range Filter */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h3 className="font-semibold text-lg mb-4 font-inter">Price Range</h3>
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm text-gray-600 font-inter">Min Price (SGD)</label>
+                    <input
+                      type="number"
+                      value={priceRange.min}
+                      onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
+                      placeholder="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600 font-inter">Max Price (SGD)</label>
+                    <input
+                      type="number"
+                      value={priceRange.max}
+                      onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
+                      placeholder="1000"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                    />
+                  </div>
+                  <button
+                    onClick={handlePriceFilter}
+                    className="w-full bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-inter font-semibold"
+                  >
+                    Apply Price Filter
+                  </button>
+                </div>
+              </div>
+
+              {/* Sort Options */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h3 className="font-semibold text-lg mb-4 font-inter">Sort By</h3>
+                <select
+                  value={sortBy}
+                  onChange={(e) => handleSort(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                >
+                  <option value="">Default</option>
+                  <option value="price_asc">Price: Low to High</option>
+                  <option value="price_desc">Price: High to Low</option>
+                  <option value="newest">Newest First</option>
+                  <option value="popular">Most Popular</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+              </div>
             </div>
           </aside>
 
           {/* Products Grid */}
           <div className="flex-1">
+            {/* Results count and sort */}
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-gray-600 font-inter">
+                <span className="font-semibold">{products.length}</span> products found
+              </p>
+            </div>
             {products.length === 0 ? (
               <div className="text-center py-20">
                 <div className="text-gray-400 mb-4">
