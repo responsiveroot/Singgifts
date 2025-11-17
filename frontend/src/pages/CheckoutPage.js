@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, MapPin, Package } from 'lucide-react';
+import { CreditCard, MapPin, Package, Lock } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useCurrency } from '../context/CurrencyContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -12,6 +13,7 @@ function CheckoutPage({ user }) {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const { convertAndFormat, convertOnly, currency } = useCurrency();
   const [formData, setFormData] = useState({
     fullName: user?.name || '',
     email: user?.email || '',
@@ -19,7 +21,7 @@ function CheckoutPage({ user }) {
     address: '',
     city: 'Singapore',
     postalCode: '',
-    paymentMethod: 'credit_card'
+    country: 'Singapore'
   });
 
   useEffect(() => {
