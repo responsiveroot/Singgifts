@@ -68,7 +68,7 @@ class CouponTester:
             "otp": otp
         }
         
-        async with self.session.post(f"{BACKEND_URL}/auth/verify-login-otp", data=otp_data) as resp:
+        async with self.session.post(f"{BACKEND_URL}/auth/verify-login-otp", params=otp_data) as resp:
             if resp.status != 200:
                 result = await resp.text()
                 raise Exception(f"OTP verification failed: {resp.status} - {result}")
