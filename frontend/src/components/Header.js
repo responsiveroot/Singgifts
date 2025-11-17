@@ -195,6 +195,13 @@ function Header({ user, cartCount, logout }) {
               ))}
             </div>
             <Link 
+              to="/explore-singapore" 
+              className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Explore Singapore
+            </Link>
+            <Link 
               to="/deals" 
               className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
               onClick={() => setIsMenuOpen(false)}
@@ -202,12 +209,38 @@ function Header({ user, cartCount, logout }) {
               Deals
             </Link>
             <Link 
-              to="/products" 
+              to="/batik-label" 
               className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              All Products
+              Batik Label
             </Link>
+            <Link 
+              to="/new-arrivals" 
+              className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              New Arrivals
+            </Link>
+            
+            {/* Currency Selector Mobile */}
+            <div className="pt-2 border-t border-gray-100">
+              <label className="block text-sm font-semibold text-gray-800 mb-2 font-inter">Currency</label>
+              <select 
+                value={currency}
+                onChange={(e) => handleCurrencyChange(e.target.value)}
+                className="w-full text-sm border border-gray-300 rounded-md px-3 py-2 font-inter focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="SGD">SGD - Singapore Dollar</option>
+                <option value="USD">USD - US Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+                <option value="MYR">MYR - Malaysian Ringgit</option>
+                <option value="INR">INR - Indian Rupee</option>
+              </select>
+            </div>
+            
             {user ? (
               <>
                 <Link 
