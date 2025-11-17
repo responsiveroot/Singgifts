@@ -610,6 +610,63 @@ async def generate_product_description(product_name: str, category: str, request
     
     return {"description": response}
 
+# ============== WISHLIST ROUTES ==============
+
+@api_router.get("/wishlist")
+async def get_wishlist(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get user's wishlist"""
+    user = await get_current_user(request, db, session_token)
+    
+    wishlist_items = await db.wishlist.find({"user_id": user['id']}, {"_id": 0}).to_list(100)
+    
+    # Fetch product details
+    product_ids = [item['product_id'] for item in wishlist_items]
+    products = await db.products.find({"id": {"$in": product_ids}}, {"_id": 0}).to_list(100)
+    
+    # Combine wishlist items with product details
+    result = []
+    for item in wishlist_items:
+        product = next((p for p in products if p['id'] == item['product_id']), None)
+        if product:
+            result.append({
+                "wishlist_item": item,
+                "product": product
+            })
+    
+    return result
+
+@api_router.post("/wishlist/{product_id}")
+async def add_to_wishlist(product_id: str, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Add product to wishlist"""
+    user = await get_current_user(request, db, session_token)
+    
+    # Check if already in wishlist
+    existing = await db.wishlist.find_one({"user_id": user['id'], "product_id": product_id})
+    if existing:
+        raise HTTPException(status_code=400, detail="Product already in wishlist")
+    
+    wishlist_item = {
+        "id": str(uuid.uuid4()),
+        "user_id": user['id'],
+        "product_id": product_id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.wishlist.insert_one(wishlist_item)
+    return {"message": "Added to wishlist", "id": wishlist_item['id']}
+
+@api_router.delete("/wishlist/{product_id}")
+async def remove_from_wishlist(product_id: str, request: Request, session_token: Optional[str] = Cookie(None)):
+    """Remove product from wishlist"""
+    user = await get_current_user(request, db, session_token)
+    
+    result = await db.wishlist.delete_one({"user_id": user['id'], "product_id": product_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Product not in wishlist")
+    
+    return {"message": "Removed from wishlist"}
+
 # ============== STRIPE PAYMENT ROUTES ==============
 
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
