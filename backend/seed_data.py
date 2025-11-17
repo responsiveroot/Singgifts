@@ -487,7 +487,7 @@ async def seed_data():
         "id": str(uuid.uuid4()),
         "email": "admin@singgifts.sg",
         "name": "Admin User",
-        "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5aho7OYeW2iCC",  # password: admin123
+        "password_hash": "$2b$12$/Es81n2z.m5W8pcv2FiWpeX8t0B2xuR91I.WBkk7YVXq7.uARHj0.",  # password: admin123
         "is_admin": True,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
