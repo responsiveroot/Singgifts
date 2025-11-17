@@ -300,36 +300,36 @@ async def seed_data():
             "https://images.unsplash.com/photo-1556912998-c57cc6b63cd7?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "jewelry": [
-            "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338",
-            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f",
-            "https://images.unsplash.com/photo-1515377905703-c4788e51af15",
-            "https://images.unsplash.com/photo-1611591437281-460bfbe1220a",
-            "https://images.unsplash.com/photo-1573408301185-9146fe634ad0",
-            "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908"
+            "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop"
         ],
         "kitchenware": [
-            "https://images.unsplash.com/photo-1565183928294-7d22f24ff511",
-            "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1",
-            "https://images.unsplash.com/photo-1556909212-d5b604d0c90d",
-            "https://images.unsplash.com/photo-1588854337221-4cf9fa96b75e",
-            "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c",
-            "https://images.unsplash.com/photo-1584990347449-39b4aa8d6f96"
+            "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "liquor": [
-            "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3",
-            "https://images.unsplash.com/photo-1569529465841-dfecdab7503b",
-            "https://images.unsplash.com/photo-1556679343-c7306c1976bc",
-            "https://images.unsplash.com/photo-1560963689-b5b4e8d8b7c0",
-            "https://images.unsplash.com/photo-1470337458703-46ad1756a187",
-            "https://images.unsplash.com/photo-1586370434639-0fe43b2d32d6"
+            "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "peranakan": [
-            "https://images.unsplash.com/photo-1582735689369-4fe89db7114c",
-            "https://images.unsplash.com/photo-1610701596007-11502861dcfa",
-            "https://images.unsplash.com/photo-1578916171728-46686eac8d58",
-            "https://images.unsplash.com/photo-1586105251261-72a756497a11",
-            "https://images.unsplash.com/photo-1556911261-6bd341186b2f",
-            "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2"
+            "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "perfumes": [
             "https://images.unsplash.com/photo-1541643600914-78b084683601",
