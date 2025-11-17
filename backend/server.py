@@ -771,7 +771,7 @@ async def create_checkout_session(checkout_req: CheckoutRequest, request: Reques
     metadata = {
         "user_id": user['id'] if user else "guest",
         "user_email": user_email,
-        "is_guest": is_guest,
+        "is_guest": str(is_guest),
         "currency": checkout_req.currency.upper(),
         "order_type": "ecommerce_purchase"
     }
