@@ -22,11 +22,11 @@ async def seed_data():
     categories = [
         {
             "id": str(uuid.uuid4()),
-            "name": "Airline Exclusives",
-            "slug": "airline-exclusives",
-            "description": "Premium products from Singapore Airlines",
-            "image_url": "https://images.unsplash.com/photo-1686455746257-0210c23f7064",
-            "subcategories": ["In-Flight Collection", "Duty Free"],
+            "name": "Aprons",
+            "slug": "aprons",
+            "description": "Premium kitchen and cooking aprons",
+            "image_url": "https://images.unsplash.com/photo-1556911220-bff31c812dba",
+            "subcategories": ["Kitchen Aprons", "Chef Aprons", "Designer Aprons"],
             "order": 1,
             "created_at": datetime.now(timezone.utc).isoformat()
         },
