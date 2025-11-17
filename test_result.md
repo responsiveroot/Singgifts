@@ -158,27 +158,33 @@ frontend:
 backend:
   - task: "Guest Checkout - Backend Authentication"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/auth.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created get_current_user_optional() helper function that returns None for unauthenticated requests instead of throwing an error. This enables guest checkout flow."
+      - working: true
+        agent: "testing"
+        comment: "Guest authentication helper working perfectly. get_current_user_optional() correctly returns None for unauthenticated requests, enabling seamless guest checkout flow without throwing authentication errors."
 
   - task: "Guest Checkout - Checkout Endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Updated /api/checkout/create-session endpoint to support guest checkout. Added is_guest flag, handles guest email from shipping address, stores guest orders with 'guest' as user_id. Transaction and metadata properly track guest vs registered users."
+      - working: true
+        agent: "testing"
+        comment: "Guest checkout endpoint working perfectly. All test scenarios passed: ✅ Guest checkout without authentication creates sessions successfully ✅ Guest checkout with coupon applies discounts correctly ✅ Guest transactions stored with user_id='guest' and is_guest=true ✅ Email captured from shipping_address for guest orders ✅ Authenticated checkout still works with proper user_id and is_guest=false ✅ Database verification confirms correct transaction storage. Fixed minor issue: converted boolean is_guest to string for Stripe metadata compatibility."
 
 frontend:
   - task: "Guest Checkout - Checkout Page"
