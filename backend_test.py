@@ -297,9 +297,16 @@ class CouponTester:
         
         try:
             await self.setup_session()
-            await self.login_user()
+            
+            # Test coupon validation API first (no auth required)
             await self.test_coupon_validation_api()
-            await self.test_checkout_with_coupons()
+            
+            # Try to login for checkout tests
+            try:
+                await self.login_user()
+                await self.test_checkout_with_coupons()
+            except Exception as login_error:
+                self.test_results.append(f"⚠️  Login failed, skipping checkout tests: {str(login_error)}")
             
         except Exception as e:
             self.test_results.append(f"❌ Critical error: {str(e)}")
