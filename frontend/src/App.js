@@ -15,6 +15,7 @@ import DashboardPage from './pages/DashboardPage';
 import ExploreSingaporePage from './pages/ExploreSingaporePage';
 import BatikLabelPage from './pages/BatikLabelPage';
 import NewArrivalsPage from './pages/NewArrivalsPage';
+import OrderSuccessPage from './pages/OrderSuccessPage';
 
 // Components
 import Header from './components/Header';
