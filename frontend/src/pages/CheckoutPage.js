@@ -202,6 +202,10 @@ function CheckoutPage({ user }) {
 
       // Redirect to Stripe checkout
       if (response.data.url) {
+        // Clear guest cart if guest user
+        if (!user) {
+          localStorage.removeItem('guestCart');
+        }
         window.location.href = response.data.url;
       } else {
         throw new Error('No checkout URL received');
