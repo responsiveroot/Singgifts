@@ -332,60 +332,60 @@ async def seed_data():
             "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "perfumes": [
-            "https://images.unsplash.com/photo-1541643600914-78b084683601",
-            "https://images.unsplash.com/photo-1588405748880-12d1d2a59bd0",
-            "https://images.unsplash.com/photo-1594035910387-fea47794261f",
-            "https://images.unsplash.com/photo-1615634260167-c8cdede054de",
-            "https://images.unsplash.com/photo-1587017539504-67cfbddac569",
-            "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539"
+            "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "skincare": [
-            "https://images.unsplash.com/photo-1556228578-0d85b1a4d571",
-            "https://images.unsplash.com/photo-1570554886111-e80fcca6a029",
-            "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908",
-            "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b",
-            "https://images.unsplash.com/photo-1620916566398-39f1143ab7be",
-            "https://images.unsplash.com/photo-1612817288484-6f916006741a"
+            "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400&h=400&fit=crop"
         ],
         "soap": [
-            "https://images.unsplash.com/photo-1600857062241-98e5e6fe4aff",
-            "https://images.unsplash.com/photo-1617897903246-719242758050",
-            "https://images.unsplash.com/photo-1631730486572-226d1f595b68",
-            "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108",
-            "https://images.unsplash.com/photo-1621606094126-9fb7a86be8cf",
-            "https://images.unsplash.com/photo-1607422285427-c97308ce48f9"
+            "https://images.unsplash.com/photo-1617897903246-719242758050?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1631730486572-226d1f595b68?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1617897903246-719242758050?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1631730486572-226d1f595b68?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "tea": [
-            "https://images.unsplash.com/photo-1563822249366-3a0cd3be3303",
-            "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9",
-            "https://images.unsplash.com/photo-1597318130878-11e285564fc2",
-            "https://images.unsplash.com/photo-1558160074-4d7d8bdf4256",
-            "https://images.unsplash.com/photo-1556679343-c7306c1976bc",
-            "https://images.unsplash.com/photo-1544787219-7f47ccb76574"
+            "https://images.unsplash.com/photo-1563822249366-3a0cd3be3303?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1563822249366-3a0cd3be3303?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "travel-gifts": [
-            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
-            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e",
-            "https://images.unsplash.com/photo-1488646953014-85cb44e25828",
-            "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1",
-            "https://images.unsplash.com/photo-1503220317375-aaad61436b1b",
-            "https://images.unsplash.com/photo-1533105079780-92b9be482077"
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=400&h=400&fit=crop"
         ],
         "wedgwood-fine-bone-china": [
-            "https://images.unsplash.com/photo-1610701596007-11502861dcfa",
-            "https://images.unsplash.com/photo-1578916171728-46686eac8d58",
-            "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2",
-            "https://images.unsplash.com/photo-1610701595389-c2bbbf1c99e8",
-            "https://images.unsplash.com/photo-1523362628745-0c100150b504",
-            "https://images.unsplash.com/photo-1610701595391-1b56f81cd829"
+            "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "wax-bar": [
-            "https://images.unsplash.com/photo-1602874801006-e24b83a8c195",
-            "https://images.unsplash.com/photo-1509390144185-a342e4f7d2e1",
-            "https://images.unsplash.com/photo-1603006905003-be475563bc59",
-            "https://images.unsplash.com/photo-1602874801018-b3e5a1c4360e",
-            "https://images.unsplash.com/photo-1587467512961-120760940e4e",
-            "https://images.unsplash.com/photo-1602874801007-e574ff9af2e1"
+            "https://images.unsplash.com/photo-1602874801006-e24b83a8c195?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1509390144185-a342e4f7d2e1?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1587467512961-120760940e4e?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1602874801006-e24b83a8c195?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1509390144185-a342e4f7d2e1?w=400&h=400&fit=crop&auto=format&q=80"
         ]
     }
     
