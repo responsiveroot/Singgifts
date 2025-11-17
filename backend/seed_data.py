@@ -237,11 +237,11 @@ async def seed_data():
         ],
         "batik": [
             "https://images.unsplash.com/photo-1610706502858-6a0989239446",
-            "https://images.unsplash.com/photo-1621184455862-c163dfb30e0f",
             "https://images.unsplash.com/photo-1558769132-cb1aea1f3836",
             "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc",
+            "https://images.unsplash.com/photo-1590736969955-71cc94901144",
             "https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f",
-            "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f"
+            "https://images.unsplash.com/photo-1617897903246-719242758050"
         ],
         "beauty": [
             "https://images.unsplash.com/photo-1556228720-195a672e8a03",
