@@ -122,29 +122,9 @@ function HomePageNew({ user }) {
         </div>
       </section>
 
-      {/* Modern Flash Sale Section */}
+      {/* Premium Flash Sale Section with Countdown */}
       {deals.length > 0 && (
-        <section className="py-6 relative overflow-hidden" style={{
-          background: 'linear-gradient(90deg, #ff6b6b 0%, #feca57 50%, #ff6b6b 100%)'
-        }}>
-          <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-6">
-                <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-xl">
-                  <div className="text-4xl font-bold text-white font-playfair">⚡</div>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-playfair font-bold text-white mb-1">Flash Sale is Live!</h2>
-                  <p className="text-white/90 font-inter text-lg">Get up to <span className="font-bold text-2xl">{deals[0].discount_percentage}%</span> OFF on selected items</p>
-                </div>
-              </div>
-              <Link to="/deals" className="bg-white text-red-600 px-10 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all shadow-2xl font-inter text-lg flex items-center">
-                Shop Flash Sale
-                <ArrowRight size={20} className="ml-2" />
-              </Link>
-            </div>
-          </div>
-        </section>
+        <FlashSaleSection deal={deals[0]} productsByCategory={productsByCategory} />
       )}
 
       {/* Category Sections - Vibrant Colors with Product Slider */}
