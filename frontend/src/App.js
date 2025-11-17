@@ -112,6 +112,9 @@ function App() {
             <Route path="/checkout" element={<CheckoutPage user={user} />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/dashboard" element={user ? <DashboardPage user={user} /> : <Navigate to="/auth" />} />
+            <Route path="/explore-singapore" element={<ExploreSingaporePage />} />
+            <Route path="/batik-label" element={<BatikLabelPage />} />
+            <Route path="/new-arrivals" element={<NewArrivalsPage />} />
           </Routes>
         </main>
         <Footer />
