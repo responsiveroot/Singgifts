@@ -131,11 +131,11 @@ function CartPage({ user, updateCartCount }) {
                     <div className="mt-2">
                       {item.product.sale_price ? (
                         <>
-                          <span className="text-xl font-bold text-primary font-inter">SGD {item.product.sale_price}</span>
-                          <span className="text-sm text-gray-500 line-through ml-2 font-inter">SGD {item.product.price}</span>
+                          <span className="text-xl font-bold text-primary font-inter">{convertAndFormat(item.product.sale_price)}</span>
+                          <span className="text-sm text-gray-500 line-through ml-2 font-inter">{convertAndFormat(item.product.price)}</span>
                         </>
                       ) : (
-                        <span className="text-xl font-bold text-gray-900 font-inter">SGD {item.product.price}</span>
+                        <span className="text-xl font-bold text-gray-900 font-inter">{convertAndFormat(item.product.price)}</span>
                       )}
                     </div>
                   </div>
