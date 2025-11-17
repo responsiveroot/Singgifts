@@ -342,11 +342,66 @@ function CheckoutPage({ user }) {
                 ))}
               </div>
 
+              {/* Coupon Code Section */}
+              <div className="border-t border-gray-200 pt-4 mb-4">
+                <div className="flex items-center mb-3">
+                  <Tag className="text-primary mr-2" size={18} />
+                  <span className="font-semibold text-gray-900 font-inter">Have a Coupon?</span>
+                </div>
+                
+                {!appliedCoupon ? (
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      placeholder="Enter coupon code"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter text-sm"
+                      data-testid="coupon-input"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleApplyCoupon}
+                      disabled={applyingCoupon || !couponCode.trim()}
+                      className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 font-inter text-sm whitespace-nowrap"
+                      data-testid="apply-coupon-btn"
+                    >
+                      {applyingCoupon ? 'Applying...' : 'Apply'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+                    <div className="flex items-center">
+                      <Tag className="text-green-600 mr-2" size={16} />
+                      <span className="font-semibold text-green-800 font-inter text-sm">{appliedCoupon.code}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      className="text-red-600 hover:text-red-700 font-inter text-sm underline"
+                      data-testid="remove-coupon-btn"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <div className="border-t border-gray-200 pt-4 space-y-3">
                 <div className="flex justify-between font-inter">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-semibold" data-testid="checkout-subtotal">{convertAndFormat(calculateTotal())}</span>
+                  <span className="font-semibold" data-testid="checkout-subtotal">{convertAndFormat(calculateSubtotal())}</span>
                 </div>
+                {appliedCoupon && (
+                  <div className="flex justify-between font-inter">
+                    <span className="text-green-600">
+                      Discount ({appliedCoupon.code})
+                    </span>
+                    <span className="font-semibold text-green-600" data-testid="checkout-discount">
+                      -{convertAndFormat(calculateDiscount())}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between font-inter">
                   <span className="text-gray-600">Shipping</span>
                   <span className="font-semibold text-green-600">Free</span>
