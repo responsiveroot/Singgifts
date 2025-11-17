@@ -58,7 +58,7 @@ function Header({ user, cartCount, logout }) {
               Home
             </Link>
             
-            {/* Categories Dropdown - Sidebar Style */}
+            {/* Categories Mega Menu with Images */}
             <div 
               className="relative group"
               onMouseEnter={() => setActiveCategory(true)}
@@ -72,24 +72,37 @@ function Header({ user, cartCount, logout }) {
               </button>
               
               {activeCategory && (
-                <div className="absolute top-full left-0 mt-2 w-72 bg-white shadow-2xl border border-gray-200 animate-fadeIn" style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat.id}
-                      to={`/products?category=${cat.id}`}
-                      className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors border-b border-gray-100 group/item"
-                      data-testid={`category-${cat.slug}`}
-                    >
-                      <div className="flex items-center flex-1">
-                        <span className="text-gray-700 font-light text-sm uppercase tracking-wide group-hover/item:text-primary transition-colors">
-                          {cat.name}
-                        </span>
-                      </div>
-                      <svg className="w-4 h-4 text-gray-400 group-hover/item:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  ))}
+                <div className="absolute top-full left-0 mt-2 bg-white shadow-2xl border border-gray-200 animate-fadeIn" style={{ width: '800px', maxHeight: '600px', overflowY: 'auto' }}>
+                  <div className="grid grid-cols-4 gap-0">
+                    {categories.map((cat) => (
+                      <Link
+                        key={cat.id}
+                        to={`/products?category=${cat.id}`}
+                        className="group/item border-b border-r border-gray-100 hover:bg-gray-50 transition-all"
+                        data-testid={`category-${cat.slug}`}
+                      >
+                        <div className="p-4">
+                          {/* Category Image */}
+                          <div className="w-full aspect-square mb-3 overflow-hidden rounded-lg bg-gray-100">
+                            <img 
+                              src={cat.image_url} 
+                              alt={cat.name}
+                              className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                          {/* Category Name */}
+                          <div className="text-center">
+                            <h3 className="text-xs font-semibold text-gray-800 uppercase tracking-wide group-hover/item:text-primary transition-colors mb-1">
+                              {cat.name}
+                            </h3>
+                            <p className="text-xs text-gray-500 line-clamp-2">
+                              {cat.description}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
