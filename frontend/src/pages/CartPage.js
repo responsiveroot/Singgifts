@@ -147,7 +147,19 @@ function CartPage({ user, updateCartCount }) {
   return (
     <div className="cart-page py-12 bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-playfair font-bold text-gray-900 mb-8" data-testid="cart-title">Shopping Cart</h1>
+        <h1 className="text-4xl font-playfair font-bold text-gray-900 mb-4" data-testid="cart-title">Shopping Cart</h1>
+        
+        {/* Guest Info Notice */}
+        {!user && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <p className="text-yellow-800 font-inter text-sm">
+              <strong>Shopping as guest.</strong> 
+              <Link to="/auth" className="ml-2 underline hover:text-yellow-900">
+                Sign in
+              </Link> to save your cart and track your orders.
+            </p>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
