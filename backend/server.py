@@ -40,6 +40,14 @@ class RegisterRequest(BaseModel):
     password: str
     name: str
 
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+class VerifyOtpRequest(BaseModel):
+    email: str
+    otp: str
+
 @api_router.post("/auth/register")
 async def register(register_data: RegisterRequest):
     """Register new user with email/password"""
