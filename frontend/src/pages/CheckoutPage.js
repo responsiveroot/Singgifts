@@ -53,11 +53,18 @@ function CheckoutPage({ user }) {
     return cartItems.reduce((total, item) => {
       const price = item.product.sale_price || item.product.price;
       return total + (price * item.cart_item.quantity);
-    }, 0).toFixed(2);
+    }, 0);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form
+    if (!formData.fullName || !formData.phone || !formData.address || !formData.postalCode) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+    
     setSubmitting(true);
 
     try {
