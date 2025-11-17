@@ -35,10 +35,15 @@ api_router = APIRouter(prefix="/api")
 
 # ============== AUTHENTICATION ROUTES ==============
 
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+    name: str
+
 @api_router.post("/auth/register")
-async def register(email: str, password: str, name: str):
+async def register(register_data: RegisterRequest):
     """Register new user with email/password"""
-    existing_user = await db.users.find_one({"email": email})
+    existing_user = await db.users.find_one({"email": register_data.email})
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     
