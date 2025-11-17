@@ -48,7 +48,10 @@ class BackendTester:
         """Register a new test user and login"""
         print("🔐 Registering and logging in test user...")
         
-        test_email = "testuser@singgifts.sg"
+        # Use timestamp to create unique email
+        import time
+        timestamp = int(time.time())
+        test_email = f"testuser{timestamp}@singgifts.sg"
         test_password = "testpass123"
         test_name = "Test User"
         
