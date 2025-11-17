@@ -13,6 +13,7 @@ function Header({ user, cartCount, logout }) {
   const [activeCategory, setActiveCategory] = useState(null);
   const [currency, setCurrency] = useState(localStorage.getItem('currency') || 'SGD');
   const [closeTimeout, setCloseTimeout] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchCategories();
