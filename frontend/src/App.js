@@ -127,6 +127,12 @@ function App() {
               <Route path="/explore-singapore" element={<ExploreSingaporePage />} />
               <Route path="/batik-label" element={<BatikLabelPage />} />
               <Route path="/new-arrivals" element={<NewArrivalsPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-conditions" element={<TermsConditionsPage />} />
+              <Route path="/shipping-returns" element={<ShippingReturnsPage />} />
+              <Route path="/faq" element={<FAQPage />} />
             </Routes>
           </main>
           <Footer />
