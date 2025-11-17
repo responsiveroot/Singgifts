@@ -244,11 +244,15 @@ function CheckoutPage({ user }) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full btn-primary text-lg py-4 disabled:opacity-50"
+                className="w-full btn-primary text-lg py-4 disabled:opacity-50 flex items-center justify-center space-x-2"
                 data-testid="place-order-btn"
               >
-                {submitting ? 'Placing Order...' : 'Place Order'}
+                <Lock size={20} />
+                <span>{submitting ? 'Redirecting to Stripe...' : 'Proceed to Payment'}</span>
               </button>
+              <p className="text-xs text-center text-gray-500 mt-2">
+                Secure payment powered by Stripe
+              </p>
             </form>
           </div>
 
