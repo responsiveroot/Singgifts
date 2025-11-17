@@ -139,7 +139,7 @@ async def verify_login_otp(otp_data: VerifyOtpRequest, response: Response):
     if expires_at < datetime.now(timezone.utc):
         raise HTTPException(status_code=400, detail="OTP expired")
     
-    user = await db.users.find_one({"email": email}, {"_id": 0})
+    user = await db.users.find_one({"email": otp_data.email}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
