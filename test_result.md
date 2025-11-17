@@ -101,3 +101,74 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Complete the Discount Coupon feature implementation for SingGifts e-commerce platform"
+
+backend:
+  - task: "Discount Coupon - Database Seeding"
+    implemented: true
+    working: "NA"
+    file: "backend/seed_data.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added 5 sample discount coupons to seed_data.py with various discount types (percentage and fixed), minimum purchase requirements, and expiry dates. Database successfully re-seeded."
+
+  - task: "Discount Coupon - Validation API"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Backend endpoint /api/coupons/validate already exists. It validates coupon codes, checks expiry dates, and returns discount information."
+
+  - task: "Discount Coupon - Checkout Integration (Backend)"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated CheckoutRequest model to accept optional coupon_code. Updated /api/checkout/create-session endpoint to apply coupon discounts. Discount is validated, calculated (percentage or fixed), and applied to the total amount. Coupon info is stored in transaction metadata."
+
+frontend:
+  - task: "Discount Coupon - Checkout Page UI"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/CheckoutPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added coupon UI to CheckoutPage. Features include: coupon input field, apply/remove buttons, real-time discount calculation, minimum purchase validation, visual feedback (green badge when applied), and discount display in order summary."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Discount Coupon - Validation API"
+    - "Discount Coupon - Checkout Integration (Backend)"
+    - "Discount Coupon - Checkout Page UI"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "I have completed the discount coupon feature implementation. Added 5 sample coupons (WELCOME10, SAVE20, FLAT15, SINGAPORE50, FREESHIP) with different discount types and requirements. The backend validation and checkout integration are complete. The frontend UI has been added to the checkout page with real-time discount calculation and visual feedback. Backend has been restarted successfully. Need backend testing to verify: 1) Coupon validation API, 2) Coupon application during checkout, 3) Discount calculation accuracy for both percentage and fixed discounts, 4) Minimum purchase validation, 5) Expired/invalid coupon handling. Test coupons: WELCOME10 (10% off, min $50), SAVE20 (20% off, min $100), FLAT15 ($15 off, min $75), SINGAPORE50 ($50 off, min $200), FREESHIP ($10 off, min $50)."
