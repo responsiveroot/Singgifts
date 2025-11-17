@@ -11,6 +11,7 @@ function Header({ user, cartCount, logout }) {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const [currency, setCurrency] = useState(localStorage.getItem('currency') || 'SGD');
+  const [closeTimeout, setCloseTimeout] = useState(null);
 
   useEffect(() => {
     fetchCategories();
