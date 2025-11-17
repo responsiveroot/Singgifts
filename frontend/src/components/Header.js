@@ -185,15 +185,18 @@ function Header({ user, cartCount, logout }) {
               Home
             </Link>
             <div>
-              <div className="font-semibold text-gray-800 mb-2 font-inter">Categories</div>
+              <div className="font-semibold text-gray-800 mb-3 font-inter uppercase text-sm tracking-wide">Categories</div>
               {categories.map((cat) => (
                 <Link
                   key={cat.id}
                   to={`/products?category=${cat.id}`}
-                  className="block py-2 pl-4 text-gray-600 hover:text-primary transition-colors font-inter"
+                  className="flex items-center justify-between py-3 pl-4 pr-2 text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-inter border-b border-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {cat.name}
+                  <span className="text-sm uppercase tracking-wide font-light">{cat.name}</span>
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </Link>
               ))}
             </div>
