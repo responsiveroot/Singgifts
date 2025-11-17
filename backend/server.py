@@ -261,29 +261,69 @@ async def create_category(category_data: CategoryCreate, request: Request, sessi
 
 @api_router.get("/products", response_model=List[Product])
 async def get_products(
+    limit: int = 100, 
+    search: Optional[str] = None,
+    category: Optional[str] = None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] = None,
+    sort_by: Optional[str] = None,
     category_id: Optional[str] = None,
     is_featured: Optional[bool] = None,
     is_bestseller: Optional[bool] = None,
-    search: Optional[str] = None,
-    skip: int = 0,
-    limit: int = 50
+    skip: int = 0
 ):
-    """Get products with filters"""
+    """Get products with advanced filters and sorting"""
+    # Build query
     query = {}
-    if category_id:
-        query['category_id'] = category_id
-    if is_featured is not None:
-        query['is_featured'] = is_featured
-    if is_bestseller is not None:
-        query['is_bestseller'] = is_bestseller
+    
+    # Search filter
     if search:
-        query['$or'] = [
-            {'name': {'$regex': search, '$options': 'i'}},
-            {'description': {'$regex': search, '$options': 'i'}},
-            {'tags': {'$regex': search, '$options': 'i'}}
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}},
+            {"tags": {"$regex": search, "$options": "i"}}
         ]
     
-    products = await db.products.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    # Category filter (support both 'category' and 'category_id' for backward compatibility)
+    if category:
+        query["category_id"] = category
+    elif category_id:
+        query["category_id"] = category_id
+    
+    # Legacy filters
+    if is_featured is not None:
+        query["is_featured"] = is_featured
+    if is_bestseller is not None:
+        query["is_bestseller"] = is_bestseller
+    
+    # Price range filter
+    if min_price is not None or max_price is not None:
+        price_query = {}
+        if min_price is not None:
+            price_query["$gte"] = min_price
+        if max_price is not None:
+            price_query["$lte"] = max_price
+        query["price"] = price_query
+    
+    # Sorting
+    sort_order = []
+    if sort_by == "price_asc":
+        sort_order = [("price", 1)]
+    elif sort_by == "price_desc":
+        sort_order = [("price", -1)]
+    elif sort_by == "newest":
+        sort_order = [("created_at", -1)]
+    elif sort_by == "popular":
+        sort_order = [("review_count", -1)]
+    elif sort_by == "rating":
+        sort_order = [("rating", -1)]
+    
+    # Execute query
+    if sort_order:
+        products = await db.products.find(query, {"_id": 0}).sort(sort_order).skip(skip).limit(limit).to_list(length=None)
+    else:
+        products = await db.products.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(length=None)
+    
     return products
 
 @api_router.get("/products/{product_id}", response_model=Product)
