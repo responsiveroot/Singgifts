@@ -495,6 +495,69 @@ async def seed_data():
     await db.users.insert_one(admin)
     print("Created admin user (email: admin@singgifts.sg, password: admin123)")
     
+    # Create discount coupons
+    await db.coupons.delete_many({})
+    coupons = [
+        {
+            "id": str(uuid.uuid4()),
+            "code": "WELCOME10",
+            "discount_type": "percentage",
+            "discount_value": 10,
+            "min_purchase": 50,
+            "active": True,
+            "expires_at": (datetime.now(timezone.utc) + timedelta(days=90)).isoformat(),
+            "description": "10% off for new customers (min purchase $50)",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "code": "SAVE20",
+            "discount_type": "percentage",
+            "discount_value": 20,
+            "min_purchase": 100,
+            "active": True,
+            "expires_at": (datetime.now(timezone.utc) + timedelta(days=60)).isoformat(),
+            "description": "20% off on orders above $100",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "code": "FLAT15",
+            "discount_type": "fixed",
+            "discount_value": 15,
+            "min_purchase": 75,
+            "active": True,
+            "expires_at": (datetime.now(timezone.utc) + timedelta(days=45)).isoformat(),
+            "description": "$15 off on orders above $75",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "code": "SINGAPORE50",
+            "discount_type": "fixed",
+            "discount_value": 50,
+            "min_purchase": 200,
+            "active": True,
+            "expires_at": (datetime.now(timezone.utc) + timedelta(days=30)).isoformat(),
+            "description": "$50 off on orders above $200",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "code": "FREESHIP",
+            "discount_type": "fixed",
+            "discount_value": 10,
+            "min_purchase": 50,
+            "active": True,
+            "expires_at": (datetime.now(timezone.utc) + timedelta(days=120)).isoformat(),
+            "description": "Free shipping on orders above $50",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+    ]
+    
+    await db.coupons.insert_many(coupons)
+    print(f"Created {len(coupons)} discount coupons")
+    
     print("\n✅ Database seeded successfully!")
     client.close()
 
