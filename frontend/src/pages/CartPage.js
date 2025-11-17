@@ -20,8 +20,35 @@ function CartPage({ user, updateCartCount }) {
 
   const fetchCart = async () => {
     try {
-      const response = await axios.get(`${API}/cart`, { withCredentials: true });
-      setCartItems(response.data);
+      if (user) {
+        // Logged-in user: fetch from backend
+        const response = await axios.get(`${API}/cart`, { withCredentials: true });
+        setCartItems(response.data);
+      } else {
+        // Guest user: get from localStorage
+        const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+        
+        // Fetch product details for guest cart
+        const cartWithProducts = await Promise.all(
+          guestCart.map(async (item) => {
+            try {
+              const response = await axios.get(`${API}/products/${item.product_id}`);
+              return {
+                product: response.data,
+                cart_item: {
+                  id: item.id,
+                  quantity: item.quantity
+                }
+              };
+            } catch (error) {
+              console.error('Failed to fetch product:', error);
+              return null;
+            }
+          })
+        );
+        
+        setCartItems(cartWithProducts.filter(item => item !== null));
+      }
     } catch (error) {
       console.error('Failed to fetch cart:', error);
       toast.error('Failed to load cart');
