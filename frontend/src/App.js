@@ -16,6 +16,12 @@ import ExploreSingaporePage from './pages/ExploreSingaporePage';
 import BatikLabelPage from './pages/BatikLabelPage';
 import NewArrivalsPage from './pages/NewArrivalsPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsConditionsPage from './pages/TermsConditionsPage';
+import ShippingReturnsPage from './pages/ShippingReturnsPage';
+import FAQPage from './pages/FAQPage';
 
 // Components
 import Header from './components/Header';
