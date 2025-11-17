@@ -77,8 +77,8 @@ function Header({ user, cartCount, logout }) {
             {/* Categories Mega Menu with Images */}
             <div 
               className="relative group"
-              onMouseEnter={() => setActiveCategory(true)}
-              onMouseLeave={() => setActiveCategory(null)}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               <button className="text-gray-700 hover:text-primary transition-colors flex items-center font-semibold uppercase text-sm tracking-wide" data-testid="nav-categories">
                 Categories
@@ -88,7 +88,12 @@ function Header({ user, cartCount, logout }) {
               </button>
               
               {activeCategory && (
-                <div className="absolute top-full left-0 mt-2 bg-white shadow-2xl border border-gray-200 animate-fadeIn" style={{ width: '800px', maxHeight: '600px', overflowY: 'auto' }}>
+                <div 
+                  className="absolute top-full left-0 mt-2 bg-white shadow-2xl border border-gray-200 animate-fadeIn" 
+                  style={{ width: '800px', maxHeight: '500px', overflowY: 'auto' }}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
                   <div className="grid grid-cols-4 gap-0">
                     {categories.map((cat) => (
                       <Link
