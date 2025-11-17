@@ -715,8 +715,12 @@ class CheckoutRequest(BaseModel):
 
 @api_router.post("/checkout/create-session")
 async def create_checkout_session(checkout_req: CheckoutRequest, request: Request, session_token: Optional[str] = Cookie(None)):
-    """Create Stripe checkout session"""
-    user = await get_current_user(request, db, session_token)
+    """Create Stripe checkout session (supports guest checkout)"""
+    user = await get_current_user_optional(request, db, session_token)
+    
+    # For guest checkout, extract email from shipping address
+    is_guest = user is None
+    user_email = user['email'] if user else checkout_req.shipping_address.get('email', '')
     
     # Calculate total from backend (SECURITY: Never trust frontend amounts)
     subtotal = 0.0
