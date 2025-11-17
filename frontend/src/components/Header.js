@@ -217,6 +217,10 @@ function Header({ user, cartCount, logout }) {
               </Link>
             )}
 
+            <Link to="/wishlist" className="relative text-gray-700 hover:text-primary transition-colors hidden md:block" data-testid="wishlist-link">
+              <Heart size={24} />
+            </Link>
+
             <Link to="/cart" className="relative" data-testid="cart-btn">
               <ShoppingCart className="text-gray-700 hover:text-primary transition-colors" size={24} />
               {cartCount > 0 && (
