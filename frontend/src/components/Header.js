@@ -110,6 +110,22 @@ function Header({ user, cartCount, logout }) {
 
           {/* Right side */}
           <div className="flex items-center space-x-4">
+            {/* Currency Selector */}
+            <select 
+              value={currency}
+              onChange={(e) => handleCurrencyChange(e.target.value)}
+              className="hidden md:block text-sm border border-gray-300 rounded-md px-2 py-1 font-inter focus:outline-none focus:ring-2 focus:ring-primary"
+              data-testid="currency-selector"
+            >
+              <option value="SGD">SGD $</option>
+              <option value="USD">USD $</option>
+              <option value="EUR">EUR €</option>
+              <option value="GBP">GBP £</option>
+              <option value="AUD">AUD $</option>
+              <option value="MYR">MYR RM</option>
+              <option value="INR">INR ₹</option>
+            </select>
+
             {user ? (
               <>
                 <Link to="/dashboard" className="hidden md:flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors" data-testid="nav-dashboard">
