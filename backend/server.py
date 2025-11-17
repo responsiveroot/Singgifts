@@ -113,10 +113,6 @@ async def verify_otp(otp_data: VerifyOtpRequest, response: Response):
     
     return {"message": "Registration successful", "session_token": session_token, "user": user}
 
-class LoginRequest(BaseModel):
-    email: str
-    password: str
-
 @api_router.post("/auth/login")
 async def login(login_data: LoginRequest, response: Response):
     """Login with email/password"""
