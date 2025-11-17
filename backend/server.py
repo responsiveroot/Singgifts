@@ -711,6 +711,7 @@ class CheckoutRequest(BaseModel):
     shipping_address: dict
     currency: str = "sgd"
     frontend_origin: str
+    coupon_code: Optional[str] = None
 
 @api_router.post("/checkout/create-session")
 async def create_checkout_session(checkout_req: CheckoutRequest, request: Request, session_token: Optional[str] = Cookie(None)):
