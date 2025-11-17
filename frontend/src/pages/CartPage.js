@@ -68,14 +68,24 @@ function CartPage({ user, updateCartCount }) {
           : item
       ));
       
-      // Then update on server (simplified - in real app you'd have an update endpoint)
-      await removeFromCart(cartItemId);
-      const item = cartItems.find(i => i.cart_item.id === cartItemId);
-      await axios.post(
-        `${API}/cart`,
-        { product_id: item.product.id, quantity: newQuantity },
-        { withCredentials: true }
-      );
+      if (user) {
+        // Logged-in user: update on server
+        await removeFromCart(cartItemId);
+        const item = cartItems.find(i => i.cart_item.id === cartItemId);
+        await axios.post(
+          `${API}/cart`,
+          { product_id: item.product.id, quantity: newQuantity },
+          { withCredentials: true }
+        );
+      } else {
+        // Guest user: update localStorage
+        const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+        const updatedCart = guestCart.map(item =>
+          item.id === cartItemId ? { ...item, quantity: newQuantity } : item
+        );
+        localStorage.setItem('guestCart', JSON.stringify(updatedCart));
+      }
+      
       updateCartCount();
     } catch (error) {
       toast.error('Failed to update quantity');
