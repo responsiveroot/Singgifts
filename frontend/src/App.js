@@ -144,6 +144,18 @@ function App() {
               <Route path="/shipping-returns" element={<ShippingReturnsPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/wishlist" element={<WishlistPage user={user} updateCartCount={updateCartCount} />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin" element={
+                user?.is_admin ? <AdminLayout user={user} setUser={setUser} /> : <Navigate to="/auth" />
+              }>
+                <Route index element={<AdminDashboard />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="categories" element={<AdminCategories />} />
+                <Route path="customers" element={<AdminCustomers />} />
+                <Route path="coupons" element={<AdminCoupons />} />
+              </Route>
             </Routes>
           </main>
           <Footer />
