@@ -134,6 +134,7 @@ function App() {
               <Route path="/terms-conditions" element={<TermsConditionsPage />} />
               <Route path="/shipping-returns" element={<ShippingReturnsPage />} />
               <Route path="/faq" element={<FAQPage />} />
+              <Route path="/wishlist" element={<WishlistPage user={user} updateCartCount={updateCartCount} />} />
             </Routes>
           </main>
           <Footer />
