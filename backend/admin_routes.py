@@ -1,9 +1,16 @@
-from fastapi import APIRouter, HTTPException, Request, Cookie
+from fastapi import APIRouter, HTTPException, Request, Cookie, Depends
 from typing import Optional, List
 from datetime import datetime, timezone
 import uuid
+from motor.motor_asyncio import AsyncIOMotorClient
+import os
 from models import *
 from auth import get_current_admin_user
+
+# Get DB connection
+mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+client = AsyncIOMotorClient(mongo_url)
+db_conn = client[os.environ.get('DB_NAME', 'singgifts_db')]
 
 admin_router = APIRouter(prefix="/admin")
 
