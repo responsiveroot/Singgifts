@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend Testing Suite for SingGifts Discount Coupon Feature
-Tests coupon validation API and checkout integration with coupons
+Backend Testing Suite for SingGifts E-commerce Platform
+Tests discount coupon feature and guest checkout functionality
 """
 
 import asyncio
