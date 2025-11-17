@@ -791,6 +791,14 @@ async def get_checkout_status(session_id: str, request: Request, session_token: 
         # Clear user's cart
         await db.cart_items.delete_many({"user_id": transaction['user_id']})
         
+        # Send order confirmation email
+        await send_order_confirmation_email(
+            transaction['user_email'],
+            order.id,
+            transaction['amount'],
+            transaction['currency']
+        )
+        
         return {
             "status": "completed",
             "payment_status": "paid",
