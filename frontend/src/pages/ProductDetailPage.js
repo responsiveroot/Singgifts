@@ -291,11 +291,11 @@ function ProductDetailPage({ user, updateCartCount }) {
                     <div className="flex items-center justify-between">
                       {relatedProduct.sale_price ? (
                         <div>
-                          <span className="text-lg font-bold text-primary font-inter">SGD {relatedProduct.sale_price}</span>
-                          <span className="text-xs text-gray-500 line-through ml-1 font-inter">SGD {relatedProduct.price}</span>
+                          <span className="text-lg font-bold text-primary font-inter">{convertAndFormat(relatedProduct.sale_price)}</span>
+                          <span className="text-xs text-gray-500 line-through ml-1 font-inter">{convertAndFormat(relatedProduct.price)}</span>
                         </div>
                       ) : (
-                        <span className="text-lg font-bold text-gray-900 font-inter">SGD {relatedProduct.price}</span>
+                        <span className="text-lg font-bold text-gray-900 font-inter">{convertAndFormat(relatedProduct.price)}</span>
                       )}
                     </div>
                   </div>
