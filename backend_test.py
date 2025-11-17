@@ -542,9 +542,9 @@ class BackendTester:
             self.test_results.append(f"❌ Authenticated transaction verification failed: {str(e)}")
     
     async def run_all_tests(self):
-        """Run all coupon tests"""
-        print("🚀 Starting SingGifts Discount Coupon Backend Tests")
-        print("=" * 60)
+        """Run all backend tests"""
+        print("🚀 Starting SingGifts Backend Tests (Coupons + Guest Checkout)")
+        print("=" * 70)
         
         try:
             await self.setup_session()
@@ -552,12 +552,17 @@ class BackendTester:
             # Test coupon validation API first (no auth required)
             await self.test_coupon_validation_api()
             
-            # Try to login for checkout tests
+            # Test guest checkout functionality (no auth required)
+            await self.test_guest_checkout_flow()
+            await self.test_guest_checkout_with_coupon()
+            
+            # Try to login for authenticated tests
             try:
                 await self.login_user()
                 await self.test_checkout_with_coupons()
+                await self.test_authenticated_checkout_still_works()
             except Exception as login_error:
-                self.test_results.append(f"⚠️  Login failed, skipping checkout tests: {str(login_error)}")
+                self.test_results.append(f"⚠️  Login failed, skipping authenticated tests: {str(login_error)}")
             
         except Exception as e:
             self.test_results.append(f"❌ Critical error: {str(e)}")
@@ -566,12 +571,13 @@ class BackendTester:
             await self.cleanup_session()
             
         # Print results
-        print("\n" + "=" * 60)
+        print("\n" + "=" * 70)
         print("📋 TEST RESULTS SUMMARY")
-        print("=" * 60)
+        print("=" * 70)
         
         passed = 0
         failed = 0
+        warnings = 0
         
         for result in self.test_results:
             print(result)
@@ -579,10 +585,12 @@ class BackendTester:
                 passed += 1
             elif result.startswith("❌"):
                 failed += 1
+            elif result.startswith("⚠️"):
+                warnings += 1
                 
-        print("\n" + "=" * 60)
-        print(f"📊 FINAL SCORE: {passed} PASSED, {failed} FAILED")
-        print("=" * 60)
+        print("\n" + "=" * 70)
+        print(f"📊 FINAL SCORE: {passed} PASSED, {failed} FAILED, {warnings} WARNINGS")
+        print("=" * 70)
         
         return passed, failed
 
