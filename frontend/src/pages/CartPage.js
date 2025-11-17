@@ -182,7 +182,7 @@ function CartPage({ user, updateCartCount }) {
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between font-inter">
                   <span className="text-gray-600">Subtotal ({cartItems.reduce((sum, item) => sum + item.cart_item.quantity, 0)} items)</span>
-                  <span className="font-semibold text-gray-900" data-testid="cart-subtotal">SGD {calculateTotal()}</span>
+                  <span className="font-semibold text-gray-900" data-testid="cart-subtotal">{convertAndFormat(calculateTotal())}</span>
                 </div>
                 <div className="flex justify-between font-inter">
                   <span className="text-gray-600">Shipping</span>
@@ -191,7 +191,7 @@ function CartPage({ user, updateCartCount }) {
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex justify-between font-inter">
                     <span className="text-lg font-semibold text-gray-900">Total</span>
-                    <span className="text-2xl font-bold text-primary" data-testid="cart-total">SGD {calculateTotal()}</span>
+                    <span className="text-2xl font-bold text-primary" data-testid="cart-total">{convertAndFormat(calculateTotal())}</span>
                   </div>
                 </div>
               </div>
