@@ -52,11 +52,67 @@ function CheckoutPage({ user }) {
     }
   };
 
-  const calculateTotal = () => {
+  const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => {
       const price = item.product.sale_price || item.product.price;
       return total + (price * item.cart_item.quantity);
     }, 0);
+  };
+
+  const calculateDiscount = () => {
+    if (!appliedCoupon) return 0;
+    
+    const subtotal = calculateSubtotal();
+    
+    if (appliedCoupon.discount_type === 'percentage') {
+      return (subtotal * appliedCoupon.discount_value) / 100;
+    } else {
+      return appliedCoupon.discount_value;
+    }
+  };
+
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal();
+    const discount = calculateDiscount();
+    return Math.max(0, subtotal - discount);
+  };
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      toast.error('Please enter a coupon code');
+      return;
+    }
+
+    setApplyingCoupon(true);
+
+    try {
+      const response = await axios.post(`${API}/coupons/validate`, {
+        code: couponCode.trim()
+      }, { withCredentials: true });
+
+      const subtotal = calculateSubtotal();
+      
+      // Check minimum purchase requirement
+      if (subtotal < response.data.min_purchase) {
+        toast.error(`Minimum purchase of $${response.data.min_purchase} required for this coupon`);
+        setApplyingCoupon(false);
+        return;
+      }
+
+      setAppliedCoupon(response.data);
+      toast.success(`Coupon "${response.data.code}" applied successfully!`);
+    } catch (error) {
+      console.error('Coupon validation error:', error);
+      toast.error(error.response?.data?.detail || 'Invalid coupon code');
+    } finally {
+      setApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+    toast.info('Coupon removed');
   };
 
   const handleSubmit = async (e) => {
