@@ -133,6 +133,44 @@ async def login(login_data: LoginRequest, response: Response):
     
     return {"message": "OTP sent to email", "otp": otp}
 
+@api_router.post("/auth/admin-login")
+async def admin_login(login_data: LoginRequest, response: Response):
+    """Direct admin login without OTP"""
+    user = await db.users.find_one({"email": login_data.email}, {"_id": 0})
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if not user.get('is_admin', False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    if not verify_password(login_data.password, user['password_hash']):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Create session directly
+    session_token = create_access_token({"sub": user['id']})
+    session = UserSession(
+        user_id=user['id'],
+        session_token=session_token,
+        expires_at=datetime.now(timezone.utc) + timedelta(days=7)
+    )
+    
+    session_dict = session.model_dump()
+    session_dict['created_at'] = session_dict['created_at'].isoformat()
+    session_dict['expires_at'] = session_dict['expires_at'].isoformat()
+    await db.user_sessions.insert_one(session_dict)
+    
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        max_age=604800
+    )
+    
+    return {"message": "Login successful", "session_token": session_token, "user": user}
+
 @api_router.post("/auth/verify-login-otp")
 async def verify_login_otp(otp_data: VerifyOtpRequest, response: Response):
     """Verify login OTP and create session"""
