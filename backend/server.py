@@ -920,6 +920,9 @@ async def stripe_webhook(request: Request):
 # Include the router in the main app
 app.include_router(api_router)
 
+# Include admin router
+app.include_router(admin_router, prefix="/api")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
