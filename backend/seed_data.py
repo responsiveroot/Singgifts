@@ -358,9 +358,9 @@ async def seed_data():
         "tea": [
             "https://images.unsplash.com/photo-1563822249366-3a0cd3be3303",
             "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9",
-            "https://images.unsplash.com/photo-1556679343-c7306c1976bc",
             "https://images.unsplash.com/photo-1597318130878-11e285564fc2",
-            "https://images.unsplash.com/photo-1558857563-b781c7b8b14b",
+            "https://images.unsplash.com/photo-1558160074-4d7d8bdf4256",
+            "https://images.unsplash.com/photo-1556679343-c7306c1976bc",
             "https://images.unsplash.com/photo-1544787219-7f47ccb76574"
         ],
         "travel-gifts": [
