@@ -92,7 +92,7 @@ async def verify_otp(otp_data: VerifyOtpRequest, response: Response):
     session_dict['expires_at'] = session_dict['expires_at'].isoformat()
     await db.user_sessions.insert_one(session_dict)
     
-    await db.otps.delete_one({"email": email})
+    await db.otps.delete_one({"email": otp_data.email})
     
     response.set_cookie(
         key="session_token",
