@@ -219,8 +219,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Guest Checkout - Backend Authentication"
-    - "Guest Checkout - Checkout Endpoint"
     - "Guest Checkout - Checkout Page"
     - "Guest Checkout - Cart Page"
   stuck_tasks: []
