@@ -115,6 +115,7 @@ function App() {
               <Route path="/deals" element={<DealsPage user={user} />} />
               <Route path="/cart" element={<CartPage user={user} updateCartCount={updateCartCount} />} />
               <Route path="/checkout" element={<CheckoutPage user={user} />} />
+              <Route path="/order-success" element={<OrderSuccessPage />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/dashboard" element={user ? <DashboardPage user={user} /> : <Navigate to="/auth" />} />
               <Route path="/explore-singapore" element={<ExploreSingaporePage />} />
