@@ -236,36 +236,36 @@ async def seed_data():
             "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "batik": [
-            "https://images.unsplash.com/photo-1610706502858-6a0989239446",
-            "https://images.unsplash.com/photo-1558769132-cb1aea1f3836",
-            "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc",
-            "https://images.unsplash.com/photo-1590736969955-71cc94901144",
-            "https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f",
-            "https://images.unsplash.com/photo-1617897903246-719242758050"
+            "https://images.unsplash.com/photo-1610706502858-6a0989239446?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1621184455862-c163dfb30e0f?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1617897903246-719242758050?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400&fit=crop"
         ],
         "beauty": [
-            "https://images.unsplash.com/photo-1556228720-195a672e8a03",
-            "https://images.unsplash.com/photo-1571875257727-256c39da42af",
-            "https://images.unsplash.com/photo-1596462502278-27bfdc403348",
-            "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
-            "https://images.unsplash.com/photo-1512496015851-a90fb38ba796",
-            "https://images.unsplash.com/photo-1526947425960-945c6e72858f"
+            "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=400&h=400&fit=crop"
         ],
         "chocolates": [
-            "https://images.unsplash.com/photo-1511381939415-e44015466834",
-            "https://images.unsplash.com/photo-1549007994-cb92caebd54b",
-            "https://images.unsplash.com/photo-1606312619070-d48b4a1ed831",
-            "https://images.unsplash.com/photo-1481391319762-47dff72954d9",
-            "https://images.unsplash.com/photo-1548907040-4baa42d10919",
-            "https://images.unsplash.com/photo-1561424787-3062a2aabec8"
+            "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1548907040-4baa42d10919?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "coffee": [
-            "https://images.unsplash.com/photo-1447933601403-0c6688de566e",
-            "https://images.unsplash.com/photo-1559056199-641a0ac8b55e",
-            "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
-            "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd",
-            "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
-            "https://images.unsplash.com/photo-1461023058943-07fcbe16d735"
+            "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=400&fit=crop"
         ],
         "electronics": [
             "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
