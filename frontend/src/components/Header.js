@@ -32,6 +32,21 @@ function Header({ user, cartCount, logout }) {
     window.dispatchEvent(new Event('currencyChange'));
   };
 
+  const handleMouseEnter = () => {
+    if (closeTimeout) {
+      clearTimeout(closeTimeout);
+      setCloseTimeout(null);
+    }
+    setActiveCategory(true);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setActiveCategory(null);
+    }, 300); // 300ms delay before closing
+    setCloseTimeout(timeout);
+  };
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       {/* Top bar */}
