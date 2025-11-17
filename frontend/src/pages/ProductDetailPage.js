@@ -63,6 +63,24 @@ function ProductDetailPage({ user, updateCartCount }) {
     }
   };
 
+  const copyProductLink = async () => {
+    const productUrl = window.location.href;
+    
+    try {
+      await navigator.clipboard.writeText(productUrl);
+      setCopied(true);
+      toast.success('Link copied to clipboard!');
+      
+      // Reset copied state after 2 seconds
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to copy link:', error);
+      toast.error('Failed to copy link');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
