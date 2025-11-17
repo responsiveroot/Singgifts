@@ -1,11 +1,146 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, ChevronRight } from 'lucide-react';
+import { ArrowRight, Star, ChevronRight, Clock, Zap, TrendingUp } from 'lucide-react';
 import axios from 'axios';
 import { useCurrency } from '../context/CurrencyContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+
+// Flash Sale Component with Countdown Timer
+function FlashSaleSection({ deal, productsByCategory }) {
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const { convertAndFormat } = useCurrency();
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const endTime = new Date(deal.end_date);
+      const now = new Date();
+      const difference = endTime - now;
+
+      if (difference > 0) {
+        setTimeLeft({
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60)
+        });
+      }
+    };
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
+    return () => clearInterval(timer);
+  }, [deal.end_date]);
+
+  // Get featured products for flash sale (first 6 products from first category)
+  const featuredProducts = Object.values(productsByCategory).flat().slice(0, 6);
+
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-br from-red-600 via-pink-600 to-orange-500 py-12">
+      {/* Animated Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-300 rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Header with Countdown */}
+        <div className="flex flex-col md:flex-row items-center justify-between mb-8">
+          <div className="flex items-center space-x-4 mb-4 md:mb-0">
+            <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl animate-bounce">
+              <Zap size={40} className="text-yellow-300" fill="currentColor" />
+            </div>
+            <div>
+              <h2 className="text-4xl md:text-5xl font-playfair font-black text-white mb-2 tracking-tight">
+                ⚡ Flash Sale
+              </h2>
+              <p className="text-white/90 font-inter text-lg">
+                Up to <span className="font-black text-yellow-300 text-3xl">{deal.discount_percentage}%</span> OFF
+              </p>
+            </div>
+          </div>
+
+          {/* Countdown Timer */}
+          <div className="flex items-center space-x-3">
+            <Clock size={24} className="text-white" />
+            <div className="flex space-x-2">
+              <div className="bg-white/20 backdrop-blur-md px-4 py-3 rounded-xl text-center min-w-[70px]">
+                <div className="text-3xl font-black text-white font-mono">{String(timeLeft.hours).padStart(2, '0')}</div>
+                <div className="text-xs text-white/80 font-inter uppercase tracking-wide">Hours</div>
+              </div>
+              <div className="text-3xl font-black text-white">:</div>
+              <div className="bg-white/20 backdrop-blur-md px-4 py-3 rounded-xl text-center min-w-[70px]">
+                <div className="text-3xl font-black text-white font-mono">{String(timeLeft.minutes).padStart(2, '0')}</div>
+                <div className="text-xs text-white/80 font-inter uppercase tracking-wide">Minutes</div>
+              </div>
+              <div className="text-3xl font-black text-white">:</div>
+              <div className="bg-white/20 backdrop-blur-md px-4 py-3 rounded-xl text-center min-w-[70px]">
+                <div className="text-3xl font-black text-white font-mono">{String(timeLeft.seconds).padStart(2, '0')}</div>
+                <div className="text-xs text-white/80 font-inter uppercase tracking-wide">Seconds</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Featured Products Carousel */}
+        <div className="mb-6">
+          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
+            {featuredProducts.map((product) => (
+              <Link
+                key={product.id}
+                to={`/products/${product.id}`}
+                className="flex-shrink-0 w-56 bg-white rounded-xl overflow-hidden shadow-2xl hover:shadow-3xl hover:scale-105 transition-all group"
+              >
+                <div className="relative">
+                  <div className="aspect-square bg-gray-100">
+                    <img 
+                      src={product.images[0]} 
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-black shadow-lg flex items-center space-x-1">
+                    <TrendingUp size={14} />
+                    <span>-{deal.discount_percentage}%</span>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 font-inter h-10">
+                    {product.name}
+                  </h3>
+                  <div className="flex items-center mb-2">
+                    <Star className="text-yellow-400 fill-current" size={14} />
+                    <span className="text-sm text-gray-600 ml-1 font-inter">{product.rating}</span>
+                  </div>
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-xl font-black text-red-600 font-inter">
+                      {convertAndFormat(product.sale_price || product.price * 0.75)}
+                    </span>
+                    <span className="text-sm text-gray-400 line-through font-inter">
+                      {convertAndFormat(product.price)}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA Button */}
+        <div className="text-center">
+          <Link 
+            to="/deals" 
+            className="inline-flex items-center bg-white text-red-600 px-12 py-5 rounded-2xl font-black text-xl hover:bg-yellow-300 hover:text-red-700 transition-all shadow-2xl hover:shadow-3xl hover:scale-105 font-inter"
+          >
+            <Zap size={24} className="mr-2" />
+            Shop All Flash Deals
+            <ArrowRight size={24} className="ml-2" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function HomePageNew({ user }) {
   const [categories, setCategories] = useState([]);
