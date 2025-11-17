@@ -374,18 +374,18 @@ async def seed_data():
         "wedgwood-fine-bone-china": [
             "https://images.unsplash.com/photo-1610701596007-11502861dcfa",
             "https://images.unsplash.com/photo-1578916171728-46686eac8d58",
-            "https://images.unsplash.com/photo-1586105251261-72a756497a11",
-            "https://images.unsplash.com/photo-1602712300295-2ce22b5c6068",
-            "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
-            "https://images.unsplash.com/photo-1523362628745-0c100150b504"
+            "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2",
+            "https://images.unsplash.com/photo-1610701595389-c2bbbf1c99e8",
+            "https://images.unsplash.com/photo-1523362628745-0c100150b504",
+            "https://images.unsplash.com/photo-1610701595391-1b56f81cd829"
         ],
         "wax-bar": [
             "https://images.unsplash.com/photo-1602874801006-e24b83a8c195",
-            "https://images.unsplash.com/photo-1605651201712-46e2d1092090",
+            "https://images.unsplash.com/photo-1509390144185-a342e4f7d2e1",
             "https://images.unsplash.com/photo-1603006905003-be475563bc59",
-            "https://images.unsplash.com/photo-1599561046251-1638db0d6a6e",
+            "https://images.unsplash.com/photo-1602874801018-b3e5a1c4360e",
             "https://images.unsplash.com/photo-1587467512961-120760940e4e",
-            "https://images.unsplash.com/photo-1608295289383-ae8f6bdfc2f9"
+            "https://images.unsplash.com/photo-1602874801007-e574ff9af2e1"
         ]
     }
     
