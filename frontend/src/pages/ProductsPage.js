@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { Star, ShoppingCart, Search, Filter, X } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useCurrency } from '../context/CurrencyContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -15,6 +16,7 @@ function ProductsPage({ user, updateCartCount }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
   const [showFilters, setShowFilters] = useState(false);
+  const { convertAndFormat } = useCurrency();
 
   useEffect(() => {
     fetchData();
