@@ -1,6 +1,6 @@
 from fastapi import HTTPException, Request, Cookie
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import bcrypt
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 import os
