@@ -769,8 +769,9 @@ async def create_checkout_session(checkout_req: CheckoutRequest, request: Reques
     
     # Metadata to track order
     metadata = {
-        "user_id": user['id'],
-        "user_email": user['email'],
+        "user_id": user['id'] if user else "guest",
+        "user_email": user_email,
+        "is_guest": is_guest,
         "currency": checkout_req.currency.upper(),
         "order_type": "ecommerce_purchase"
     }
@@ -794,8 +795,9 @@ async def create_checkout_session(checkout_req: CheckoutRequest, request: Reques
     # Store payment transaction
     transaction = {
         "id": str(uuid.uuid4()),
-        "user_id": user['id'],
-        "user_email": user['email'],
+        "user_id": user['id'] if user else "guest",
+        "user_email": user_email,
+        "is_guest": is_guest,
         "session_id": session.session_id,
         "subtotal": subtotal,
         "discount": discount_amount,
