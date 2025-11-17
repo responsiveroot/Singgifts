@@ -793,12 +793,15 @@ async def create_checkout_session(checkout_req: CheckoutRequest, request: Reques
         "user_id": user['id'],
         "user_email": user['email'],
         "session_id": session.session_id,
+        "subtotal": subtotal,
+        "discount": discount_amount,
         "amount": total_amount,
         "currency": checkout_req.currency.upper(),
         "payment_status": "pending",
         "status": "initiated",
         "cart_items": checkout_req.cart_items,
         "shipping_address": checkout_req.shipping_address,
+        "coupon": coupon_data,
         "metadata": metadata,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
