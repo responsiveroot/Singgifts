@@ -16,6 +16,8 @@ function ProductsPage({ user, updateCartCount }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
   const [showFilters, setShowFilters] = useState(false);
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [sortBy, setSortBy] = useState('');
   const { convertAndFormat } = useCurrency();
 
   useEffect(() => {
