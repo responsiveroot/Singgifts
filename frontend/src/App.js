@@ -146,6 +146,9 @@ function App() {
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/wishlist" element={<WishlistPage user={user} updateCartCount={updateCartCount} />} />
               
+              {/* Admin Login Route */}
+              <Route path="/admin-login" element={<AdminLoginPage setUser={setUser} />} />
+              
               {/* Admin Routes */}
               <Route path="/admin" element={
                 user?.is_admin ? <AdminLayout user={user} setUser={setUser} /> : <Navigate to="/auth" />
