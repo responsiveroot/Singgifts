@@ -719,12 +719,40 @@ async def create_checkout_session(checkout_req: CheckoutRequest, request: Reques
     user = await get_current_user(request, db, session_token)
     
     # Calculate total from backend (SECURITY: Never trust frontend amounts)
-    total_amount = 0.0
+    subtotal = 0.0
     for item in checkout_req.cart_items:
         product = await db.products.find_one({"id": item['product_id']}, {"_id": 0})
         if product:
             price = float(product.get('sale_price') or product.get('price'))
-            total_amount += price * item['quantity']
+            subtotal += price * item['quantity']
+    
+    # Apply coupon discount if provided
+    discount_amount = 0.0
+    coupon_data = None
+    if checkout_req.coupon_code:
+        coupon = await db.coupons.find_one({"code": checkout_req.coupon_code.upper()}, {"_id": 0})
+        if coupon and coupon.get('active', True):
+            # Check expiry
+            now = datetime.now(timezone.utc)
+            if coupon.get('expires_at'):
+                expires_at = datetime.fromisoformat(coupon['expires_at'])
+                if now <= expires_at:
+                    # Check minimum purchase
+                    if subtotal >= coupon.get('min_purchase', 0):
+                        if coupon['discount_type'] == 'percentage':
+                            discount_amount = (subtotal * coupon['discount_value']) / 100
+                        else:  # fixed
+                            discount_amount = coupon['discount_value']
+                        
+                        coupon_data = {
+                            "code": coupon['code'],
+                            "discount_type": coupon['discount_type'],
+                            "discount_value": coupon['discount_value'],
+                            "discount_amount": discount_amount
+                        }
+    
+    # Calculate final amount after discount
+    total_amount = max(0, subtotal - discount_amount)
     
     # Initialize Stripe Checkout
     host_url = str(request.base_url)
@@ -742,6 +770,11 @@ async def create_checkout_session(checkout_req: CheckoutRequest, request: Reques
         "currency": checkout_req.currency.upper(),
         "order_type": "ecommerce_purchase"
     }
+    
+    # Add coupon info to metadata if applied
+    if coupon_data:
+        metadata["coupon_code"] = coupon_data['code']
+        metadata["discount_amount"] = str(discount_amount)
     
     # Create checkout session
     session_request = CheckoutSessionRequest(
