@@ -33,13 +33,45 @@ function CheckoutPage({ user }) {
 
   const fetchCart = async () => {
     try {
-      const response = await axios.get(`${API}/cart`, { withCredentials: true });
-      if (response.data.length === 0) {
-        toast.error('Your cart is empty');
-        navigate('/cart');
-        return;
+      // For logged-in users, fetch from backend cart
+      if (user) {
+        const response = await axios.get(`${API}/cart`, { withCredentials: true });
+        if (response.data.length === 0) {
+          toast.error('Your cart is empty');
+          navigate('/cart');
+          return;
+        }
+        setCartItems(response.data);
+      } else {
+        // For guests, get cart from localStorage
+        const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+        if (guestCart.length === 0) {
+          toast.error('Your cart is empty');
+          navigate('/cart');
+          return;
+        }
+        
+        // Fetch product details for guest cart items
+        const cartWithProducts = await Promise.all(
+          guestCart.map(async (item) => {
+            try {
+              const response = await axios.get(`${API}/products/${item.product_id}`);
+              return {
+                product: response.data,
+                cart_item: {
+                  id: item.id,
+                  quantity: item.quantity
+                }
+              };
+            } catch (error) {
+              console.error('Failed to fetch product:', error);
+              return null;
+            }
+          })
+        );
+        
+        setCartItems(cartWithProducts.filter(item => item !== null));
       }
-      setCartItems(response.data);
     } catch (error) {
       console.error('Failed to fetch cart:', error);
       toast.error('Failed to load cart');
