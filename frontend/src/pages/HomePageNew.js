@@ -82,21 +82,38 @@ function FlashSaleSection({ deal, productsByCategory }) {
           </div>
         </div>
 
-        {/* Featured Products Carousel */}
-        <div className="mb-6">
-          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
+        {/* Featured Products Carousel with Arrows */}
+        <div className="mb-6 relative group">
+          {/* Left Arrow */}
+          <button
+            onClick={() => {
+              document.getElementById('flash-sale-slider').scrollBy({ left: -300, behavior: 'smooth' });
+            }}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white shadow-2xl rounded-full p-3 hover:bg-gray-100 transition-all opacity-0 group-hover:opacity-100 -ml-4"
+          >
+            <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* Products Slider */}
+          <div 
+            id="flash-sale-slider"
+            className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide scroll-smooth"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
             {featuredProducts.map((product) => (
               <Link
                 key={product.id}
                 to={`/products/${product.id}`}
-                className="flex-shrink-0 w-56 bg-white rounded-xl overflow-hidden shadow-2xl hover:shadow-3xl hover:scale-105 transition-all group"
+                className="flex-shrink-0 w-56 bg-white rounded-xl overflow-hidden shadow-2xl hover:shadow-3xl hover:scale-105 transition-all group/card"
               >
                 <div className="relative">
                   <div className="aspect-square bg-gray-100">
                     <img 
                       src={product.images[0]} 
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-300"
                     />
                   </div>
                   <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-black shadow-lg flex items-center space-x-1">
@@ -124,6 +141,18 @@ function FlashSaleSection({ deal, productsByCategory }) {
               </Link>
             ))}
           </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => {
+              document.getElementById('flash-sale-slider').scrollBy({ left: 300, behavior: 'smooth' });
+            }}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white shadow-2xl rounded-full p-3 hover:bg-gray-100 transition-all opacity-0 group-hover:opacity-100 -mr-4"
+          >
+            <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
 
         {/* CTA Button */}
