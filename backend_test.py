@@ -596,7 +596,7 @@ class BackendTester:
 
 async def main():
     """Main test runner"""
-    tester = CouponTester()
+    tester = BackendTester()
     passed, failed = await tester.run_all_tests()
     
     # Exit with appropriate code
