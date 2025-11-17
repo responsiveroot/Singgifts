@@ -271,11 +271,11 @@ function ProductsPage({ user, updateCartCount }) {
                         <div className="flex items-center justify-between">
                           {product.sale_price ? (
                             <div>
-                              <span className="text-xl font-bold text-primary font-inter">SGD {product.sale_price}</span>
-                              <span className="text-sm text-gray-500 line-through ml-2 font-inter">SGD {product.price}</span>
+                              <span className="text-xl font-bold text-primary font-inter">{convertAndFormat(product.sale_price)}</span>
+                              <span className="text-sm text-gray-500 line-through ml-2 font-inter">{convertAndFormat(product.price)}</span>
                             </div>
                           ) : (
-                            <span className="text-xl font-bold text-gray-900 font-inter">SGD {product.price}</span>
+                            <span className="text-xl font-bold text-gray-900 font-inter">{convertAndFormat(product.price)}</span>
                           )}
                         </div>
                       </div>
