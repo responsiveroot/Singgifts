@@ -269,15 +269,15 @@ function HomePageNew({ user }) {
                           {product.sale_price ? (
                             <>
                               <span className="text-base font-bold text-primary font-inter">
-                                ${product.sale_price}
+                                {convertAndFormat(product.sale_price)}
                               </span>
                               <span className="text-xs text-gray-400 line-through font-inter">
-                                ${product.price}
+                                {convertAndFormat(product.price)}
                               </span>
                             </>
                           ) : (
                             <span className="text-base font-bold text-gray-900 font-inter">
-                              ${product.price}
+                              {convertAndFormat(product.price)}
                             </span>
                           )}
                         </div>
