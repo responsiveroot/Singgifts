@@ -197,7 +197,7 @@ function ProductDetailPage({ user, updateCartCount }) {
             </div>
 
             {/* Quantity and Add to Cart */}
-            <div className="flex items-center space-x-4 mb-8">
+            <div className="flex items-center space-x-4 mb-6">
               <div className="flex items-center border border-gray-300 rounded-lg">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -223,6 +223,27 @@ function ProductDetailPage({ user, updateCartCount }) {
               >
                 <ShoppingCart size={20} className="mr-2" />
                 Add to Cart
+              </button>
+            </div>
+
+            {/* Share Button */}
+            <div className="mb-8">
+              <button
+                onClick={copyProductLink}
+                className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg hover:border-primary hover:bg-primary hover:text-white transition-all inline-flex items-center justify-center font-inter font-medium"
+                data-testid="copy-link-btn"
+              >
+                {copied ? (
+                  <>
+                    <Check size={20} className="mr-2" />
+                    Link Copied!
+                  </>
+                ) : (
+                  <>
+                    <Link2 size={20} className="mr-2" />
+                    Copy Product Link
+                  </>
+                )}
               </button>
             </div>
 
