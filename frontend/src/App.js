@@ -25,6 +25,7 @@ import FAQPage from './pages/FAQPage';
 import WishlistPage from './pages/WishlistPage';
 
 // Admin Pages
+import AdminLoginPage from './pages/AdminLoginPage';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
