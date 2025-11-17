@@ -124,10 +124,14 @@ async def login(login_data: LoginRequest, response: Response):
     
     return {"message": "OTP sent to email", "otp": otp}
 
+class VerifyOtpRequest(BaseModel):
+    email: str
+    otp: str
+
 @api_router.post("/auth/verify-login-otp")
-async def verify_login_otp(email: str, otp: str, response: Response):
+async def verify_login_otp(otp_data: VerifyOtpRequest, response: Response):
     """Verify login OTP and create session"""
-    otp_doc = await db.login_otps.find_one({"email": email, "otp": otp})
+    otp_doc = await db.login_otps.find_one({"email": otp_data.email, "otp": otp_data.otp})
     if not otp_doc:
         raise HTTPException(status_code=400, detail="Invalid OTP")
     
