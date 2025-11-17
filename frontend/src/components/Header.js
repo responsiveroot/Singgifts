@@ -58,13 +58,13 @@ function Header({ user, cartCount, logout }) {
               Home
             </Link>
             
-            {/* Categories Dropdown */}
+            {/* Categories Dropdown - Sidebar Style */}
             <div 
               className="relative group"
               onMouseEnter={() => setActiveCategory(true)}
               onMouseLeave={() => setActiveCategory(null)}
             >
-              <button className="text-gray-700 hover:text-primary transition-colors flex items-center" data-testid="nav-categories">
+              <button className="text-gray-700 hover:text-primary transition-colors flex items-center font-semibold uppercase text-sm tracking-wide" data-testid="nav-categories">
                 Categories
                 <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -72,19 +72,22 @@ function Header({ user, cartCount, logout }) {
               </button>
               
               {activeCategory && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2 animate-fadeIn max-h-96 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-2 w-72 bg-white shadow-2xl border border-gray-200 animate-fadeIn" style={{ maxHeight: '500px', overflowY: 'auto' }}>
                   {categories.map((cat) => (
                     <Link
                       key={cat.id}
                       to={`/products?category=${cat.id}`}
-                      className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors border-b border-gray-100 group/item"
                       data-testid={`category-${cat.slug}`}
                     >
-                      <img src={cat.image_url} alt={cat.name} className="w-10 h-10 rounded-lg object-cover mr-3" />
-                      <div>
-                        <div className="font-semibold text-gray-800">{cat.name}</div>
-                        <div className="text-xs text-gray-500">{cat.description}</div>
+                      <div className="flex items-center flex-1">
+                        <span className="text-gray-700 font-light text-sm uppercase tracking-wide group-hover/item:text-primary transition-colors">
+                          {cat.name}
+                        </span>
                       </div>
+                      <svg className="w-4 h-4 text-gray-400 group-hover/item:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
                     </Link>
                   ))}
                 </div>
