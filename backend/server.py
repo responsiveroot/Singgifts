@@ -60,9 +60,9 @@ async def register(register_data: RegisterRequest):
     return {"message": "OTP sent to email", "otp": otp}
 
 @api_router.post("/auth/verify-otp")
-async def verify_otp(email: str, otp: str, response: Response):
+async def verify_otp(otp_data: VerifyOtpRequest, response: Response):
     """Verify OTP and create user"""
-    otp_doc = await db.otps.find_one({"email": email, "otp": otp})
+    otp_doc = await db.otps.find_one({"email": otp_data.email, "otp": otp_data.otp})
     if not otp_doc:
         raise HTTPException(status_code=400, detail="Invalid OTP")
     
