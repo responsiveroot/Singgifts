@@ -153,6 +153,74 @@ backend:
 frontend:
   - task: "Discount Coupon - Checkout Page UI"
     implemented: true
+
+
+backend:
+  - task: "Guest Checkout - Backend Authentication"
+    implemented: true
+    working: "NA"
+    file: "backend/auth.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created get_current_user_optional() helper function that returns None for unauthenticated requests instead of throwing an error. This enables guest checkout flow."
+
+  - task: "Guest Checkout - Checkout Endpoint"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated /api/checkout/create-session endpoint to support guest checkout. Added is_guest flag, handles guest email from shipping address, stores guest orders with 'guest' as user_id. Transaction and metadata properly track guest vs registered users."
+
+frontend:
+  - task: "Guest Checkout - Checkout Page"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/CheckoutPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Removed authentication requirement from CheckoutPage. Added support for guest cart from localStorage. Added blue notice banner for guest users with link to sign in. Enhanced email validation for guest checkout. Cart is cleared from localStorage after successful guest checkout."
+
+  - task: "Guest Checkout - Cart Page"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/CartPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Removed authentication requirement from CartPage. Implemented localStorage-based cart for guests. Updated cart operations (add, remove, update quantity) to work with both backend (logged-in) and localStorage (guest). Added yellow notice banner for guests encouraging sign-in."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.1"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Guest Checkout - Backend Authentication"
+    - "Guest Checkout - Checkout Endpoint"
+    - "Guest Checkout - Checkout Page"
+    - "Guest Checkout - Cart Page"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
     working: "NA"
     file: "frontend/src/pages/CheckoutPage.js"
     stuck_count: 0
