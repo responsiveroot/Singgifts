@@ -100,10 +100,14 @@ async def verify_otp(email: str, otp: str, response: Response):
     
     return {"message": "Registration successful", "session_token": session_token, "user": user}
 
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
 @api_router.post("/auth/login")
-async def login(email: str, password: str, response: Response):
+async def login(login_data: LoginRequest, response: Response):
     """Login with email/password"""
-    user = await db.users.find_one({"email": email}, {"_id": 0})
+    user = await db.users.find_one({"email": login_data.email}, {"_id": 0})
     if not user or not user.get('password_hash'):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
