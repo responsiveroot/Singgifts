@@ -22,6 +22,7 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsConditionsPage from './pages/TermsConditionsPage';
 import ShippingReturnsPage from './pages/ShippingReturnsPage';
 import FAQPage from './pages/FAQPage';
+import WishlistPage from './pages/WishlistPage';
 
 // Components
 import Header from './components/Header';
