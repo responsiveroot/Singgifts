@@ -54,7 +54,7 @@ class CouponTester:
             "password": TEST_USER["password"]
         }
         
-        async with self.session.post(f"{BACKEND_URL}/auth/login", data=login_data) as resp:
+        async with self.session.post(f"{BACKEND_URL}/auth/login", params=login_data) as resp:
             if resp.status != 200:
                 result = await resp.text()
                 raise Exception(f"Login failed: {resp.status} - {result}")
