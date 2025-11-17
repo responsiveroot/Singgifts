@@ -68,34 +68,45 @@ function CheckoutPage({ user }) {
     setSubmitting(true);
 
     try {
-      const orderItems = cartItems.map(item => ({
+      // Prepare cart items for checkout
+      const checkoutItems = cartItems.map(item => ({
         product_id: item.product.id,
         product_name: item.product.name,
         quantity: item.cart_item.quantity,
         price: item.product.sale_price || item.product.price
       }));
 
-      const orderData = {
-        items: orderItems,
-        total_amount: parseFloat(calculateTotal()),
-        shipping_address: {
-          fullName: formData.fullName,
-          phone: formData.phone,
-          address: formData.address,
-          city: formData.city,
-          postalCode: formData.postalCode
-        },
-        payment_method: formData.paymentMethod
+      // Prepare shipping address
+      const shippingAddress = {
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        postalCode: formData.postalCode,
+        country: formData.country
       };
 
-      await axios.post(`${API}/orders`, orderData, { withCredentials: true });
-      
-      toast.success('Order placed successfully!');
-      navigate('/dashboard');
+      // Get frontend origin
+      const frontendOrigin = window.location.origin;
+
+      // Create Stripe checkout session
+      const response = await axios.post(`${API}/checkout/create-session`, {
+        cart_items: checkoutItems,
+        shipping_address: shippingAddress,
+        currency: currency.toLowerCase(),
+        frontend_origin: frontendOrigin
+      }, { withCredentials: true });
+
+      // Redirect to Stripe checkout
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      } else {
+        throw new Error('No checkout URL received');
+      }
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error('Failed to place order');
-    } finally {
+      toast.error(error.response?.data?.detail || 'Failed to initiate checkout');
       setSubmitting(false);
     }
   };
