@@ -46,7 +46,7 @@ function Header({ user, cartCount, logout }) {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 font-inter font-medium">
+          <nav className="hidden lg:flex items-center space-x-6 font-inter font-medium">
             <Link to="/" className="text-gray-700 hover:text-primary transition-colors" data-testid="nav-home">
               Home
             </Link>
@@ -65,7 +65,7 @@ function Header({ user, cartCount, logout }) {
               </button>
               
               {activeCategory && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2 animate-fadeIn">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2 animate-fadeIn max-h-96 overflow-y-auto">
                   {categories.map((cat) => (
                     <Link
                       key={cat.id}
@@ -84,11 +84,20 @@ function Header({ user, cartCount, logout }) {
               )}
             </div>
 
+            <Link to="/explore-singapore" className="text-gray-700 hover:text-primary transition-colors" data-testid="nav-explore">
+              Explore Singapore
+            </Link>
+            
             <Link to="/deals" className="text-gray-700 hover:text-primary transition-colors" data-testid="nav-deals">
               Deals
             </Link>
-            <Link to="/products" className="text-gray-700 hover:text-primary transition-colors" data-testid="nav-products">
-              All Products
+            
+            <Link to="/batik-label" className="text-gray-700 hover:text-primary transition-colors" data-testid="nav-batik">
+              Batik Label
+            </Link>
+            
+            <Link to="/new-arrivals" className="text-gray-700 hover:text-primary transition-colors" data-testid="nav-new-arrivals">
+              New Arrivals
             </Link>
           </nav>
 
