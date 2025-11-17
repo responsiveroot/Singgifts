@@ -920,20 +920,6 @@ async def stripe_webhook(request: Request):
 # Include the router in the main app
 app.include_router(api_router)
 
-# Include admin router
-admin_router_with_db = APIRouter()
-for route in admin_router.routes:
-    admin_router_with_db.routes.append(route)
-
-@admin_router_with_db.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
-async def admin_route_wrapper(request: Request, path: str):
-    # Inject db into request state
-    request.state.db = db
-    return await admin_router(request)
-
-# Include admin routes under /api/admin
-app.include_router(admin_router, prefix="/api", dependencies=[])
-
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
