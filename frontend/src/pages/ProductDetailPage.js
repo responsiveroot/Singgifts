@@ -146,14 +146,14 @@ function ProductDetailPage({ user, updateCartCount }) {
             <div className="mb-6">
               {product.sale_price ? (
                 <div>
-                  <span className="text-4xl font-bold text-primary font-inter" data-testid="sale-price">SGD {product.sale_price}</span>
-                  <span className="text-2xl text-gray-500 line-through ml-4 font-inter" data-testid="original-price">SGD {product.price}</span>
+                  <span className="text-4xl font-bold text-primary font-inter" data-testid="sale-price">{convertAndFormat(product.sale_price)}</span>
+                  <span className="text-2xl text-gray-500 line-through ml-4 font-inter" data-testid="original-price">{convertAndFormat(product.price)}</span>
                   <span className="ml-3 bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-bold">
                     Save {Math.round(((product.price - product.sale_price) / product.price) * 100)}%
                   </span>
                 </div>
               ) : (
-                <span className="text-4xl font-bold text-gray-900 font-inter" data-testid="price">SGD {product.price}</span>
+                <span className="text-4xl font-bold text-gray-900 font-inter" data-testid="price">{convertAndFormat(product.price)}</span>
               )}
             </div>
 
