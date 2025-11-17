@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Star, TrendingUp } from 'lucide-react';
+import { useCurrency } from '../context/CurrencyContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -9,6 +10,7 @@ const API = `${BACKEND_URL}/api`;
 function NewArrivalsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { convertAndFormat } = useCurrency();
 
   useEffect(() => {
     fetchNewArrivals();
