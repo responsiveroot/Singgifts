@@ -103,26 +103,28 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="App min-h-screen flex flex-col bg-white">
-        <Header user={user} cartCount={cartCount} logout={logout} />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage user={user} />} />
-            <Route path="/products" element={<ProductsPage user={user} updateCartCount={updateCartCount} />} />
-            <Route path="/products/:productId" element={<ProductDetailPage user={user} updateCartCount={updateCartCount} />} />
-            <Route path="/deals" element={<DealsPage user={user} />} />
-            <Route path="/cart" element={<CartPage user={user} updateCartCount={updateCartCount} />} />
-            <Route path="/checkout" element={<CheckoutPage user={user} />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/dashboard" element={user ? <DashboardPage user={user} /> : <Navigate to="/auth" />} />
-            <Route path="/explore-singapore" element={<ExploreSingaporePage />} />
-            <Route path="/batik-label" element={<BatikLabelPage />} />
-            <Route path="/new-arrivals" element={<NewArrivalsPage />} />
-          </Routes>
-        </main>
-        <Footer />
-        <AIChat />
-      </div>
+      <CurrencyProvider>
+        <div className="App min-h-screen flex flex-col bg-white">
+          <Header user={user} cartCount={cartCount} logout={logout} />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<HomePage user={user} />} />
+              <Route path="/products" element={<ProductsPage user={user} updateCartCount={updateCartCount} />} />
+              <Route path="/products/:productId" element={<ProductDetailPage user={user} updateCartCount={updateCartCount} />} />
+              <Route path="/deals" element={<DealsPage user={user} />} />
+              <Route path="/cart" element={<CartPage user={user} updateCartCount={updateCartCount} />} />
+              <Route path="/checkout" element={<CheckoutPage user={user} />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/dashboard" element={user ? <DashboardPage user={user} /> : <Navigate to="/auth" />} />
+              <Route path="/explore-singapore" element={<ExploreSingaporePage />} />
+              <Route path="/batik-label" element={<BatikLabelPage />} />
+              <Route path="/new-arrivals" element={<NewArrivalsPage />} />
+            </Routes>
+          </main>
+          <Footer />
+          <AIChat />
+        </div>
+      </CurrencyProvider>
     </BrowserRouter>
   );
 }
