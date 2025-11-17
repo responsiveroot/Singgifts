@@ -147,8 +147,15 @@ function CheckoutPage({ user }) {
     e.preventDefault();
     
     // Validate form
-    if (!formData.fullName || !formData.phone || !formData.address || !formData.postalCode) {
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.address || !formData.postalCode) {
       toast.error('Please fill in all required fields');
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address');
       return;
     }
     
