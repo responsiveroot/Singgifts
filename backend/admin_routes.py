@@ -16,28 +16,28 @@ admin_router = APIRouter(prefix="/admin")
 
 # ============== ADMIN DASHBOARD STATS ==============
 
-async def get_admin_stats(db):
+async def get_admin_stats():
     """Get dashboard statistics"""
-    total_products = await db.products.count_documents({})
-    total_orders = await db.payment_transactions.count_documents({"payment_status": "paid"})
-    total_customers = await db.users.count_documents({"is_admin": {"$ne": True}})
+    total_products = await db_conn.products.count_documents({})
+    total_orders = await db_conn.payment_transactions.count_documents({"payment_status": "paid"})
+    total_customers = await db_conn.users.count_documents({"is_admin": {"$ne": True}})
     
     # Calculate total revenue
     revenue_pipeline = [
         {"$match": {"payment_status": "paid"}},
         {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
     ]
-    revenue_result = await db.payment_transactions.aggregate(revenue_pipeline).to_list(length=1)
+    revenue_result = await db_conn.payment_transactions.aggregate(revenue_pipeline).to_list(length=1)
     total_revenue = revenue_result[0]["total"] if revenue_result else 0
     
     # Get recent orders
-    recent_orders = await db.payment_transactions.find(
+    recent_orders = await db_conn.payment_transactions.find(
         {"payment_status": "paid"},
         {"_id": 0}
     ).sort("created_at", -1).limit(10).to_list(length=10)
     
     # Get low stock products
-    low_stock_products = await db.products.find(
+    low_stock_products = await db_conn.products.find(
         {"stock": {"$lt": 10}},
         {"_id": 0}
     ).sort("stock", 1).limit(10).to_list(length=10)
@@ -52,9 +52,9 @@ async def get_admin_stats(db):
     }
 
 @admin_router.get("/dashboard/stats")
-async def get_dashboard_stats(request: Request, db, session_token: Optional[str] = Cookie(None)):
+async def get_dashboard_stats(request: Request, db_conn, session_token: Optional[str] = Cookie(None)):
     """Get admin dashboard statistics"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     return await get_admin_stats(db)
 
 # ============== ADMIN PRODUCT MANAGEMENT ==============
@@ -70,7 +70,7 @@ async def get_all_products_admin(
     limit: int = 50
 ):
     """Get all products for admin (with search and filter)"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
     query = {}
     if search:
@@ -82,8 +82,8 @@ async def get_all_products_admin(
     if category_id:
         query["category_id"] = category_id
     
-    products = await db.products.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(length=limit)
-    total = await db.products.count_documents(query)
+    products = await db_conn.products.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(length=limit)
+    total = await db_conn.products.count_documents(query)
     
     return {"products": products, "total": total}
 
@@ -95,7 +95,7 @@ async def create_product_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Create new product"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
     product_data = {
         "id": str(uuid.uuid4()),
@@ -116,7 +116,7 @@ async def create_product_admin(
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.products.insert_one(product_data)
+    await db_conn.products.insert_one(product_data)
     return {"message": "Product created successfully", "product": product_data}
 
 @admin_router.put("/products/{product_id}")
@@ -128,9 +128,9 @@ async def update_product_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Update existing product"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    existing_product = await db.products.find_one({"id": product_id}, {"_id": 0})
+    existing_product = await db_conn.products.find_one({"id": product_id}, {"_id": 0})
     if not existing_product:
         raise HTTPException(status_code=404, detail="Product not found")
     
@@ -147,7 +147,7 @@ async def update_product_admin(
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.products.update_one({"id": product_id}, {"$set": update_data})
+    await db_conn.products.update_one({"id": product_id}, {"$set": update_data})
     return {"message": "Product updated successfully"}
 
 @admin_router.delete("/products/{product_id}")
@@ -158,9 +158,9 @@ async def delete_product_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Delete product"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    result = await db.products.delete_one({"id": product_id})
+    result = await db_conn.products.delete_one({"id": product_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Product not found")
     
@@ -179,7 +179,7 @@ async def get_all_orders_admin(
     limit: int = 50
 ):
     """Get all orders for admin"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
     query = {}
     if status:
@@ -187,8 +187,8 @@ async def get_all_orders_admin(
     if is_guest is not None:
         query["is_guest"] = is_guest
     
-    orders = await db.payment_transactions.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(length=limit)
-    total = await db.payment_transactions.count_documents(query)
+    orders = await db_conn.payment_transactions.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(length=limit)
+    total = await db_conn.payment_transactions.count_documents(query)
     
     return {"orders": orders, "total": total}
 
@@ -200,9 +200,9 @@ async def get_order_details_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get order details"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    order = await db.payment_transactions.find_one({"id": order_id}, {"_id": 0})
+    order = await db_conn.payment_transactions.find_one({"id": order_id}, {"_id": 0})
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     
@@ -217,13 +217,13 @@ async def update_order_status_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Update order status"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
     valid_statuses = ["pending", "processing", "shipped", "delivered", "cancelled"]
     if status not in valid_statuses:
         raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {', '.join(valid_statuses)}")
     
-    result = await db.payment_transactions.update_one(
+    result = await db_conn.payment_transactions.update_one(
         {"id": order_id},
         {"$set": {"status": status, "updated_at": datetime.now(timezone.utc).isoformat()}}
     )
@@ -242,13 +242,13 @@ async def get_all_categories_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get all categories for admin"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    categories = await db.categories.find({}, {"_id": 0}).sort("order", 1).to_list(length=100)
+    categories = await db_conn.categories.find({}, {"_id": 0}).sort("order", 1).to_list(length=100)
     
     # Add product count for each category
     for category in categories:
-        product_count = await db.products.count_documents({"category_id": category["id"]})
+        product_count = await db_conn.products.count_documents({"category_id": category["id"]})
         category["product_count"] = product_count
     
     return {"categories": categories}
@@ -261,7 +261,7 @@ async def create_category_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Create new category"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
     category_data = {
         "id": str(uuid.uuid4()),
@@ -274,7 +274,7 @@ async def create_category_admin(
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.categories.insert_one(category_data)
+    await db_conn.categories.insert_one(category_data)
     return {"message": "Category created successfully", "category": category_data}
 
 @admin_router.put("/categories/{category_id}")
@@ -286,9 +286,9 @@ async def update_category_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Update existing category"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    existing_category = await db.categories.find_one({"id": category_id}, {"_id": 0})
+    existing_category = await db_conn.categories.find_one({"id": category_id}, {"_id": 0})
     if not existing_category:
         raise HTTPException(status_code=404, detail="Category not found")
     
@@ -301,7 +301,7 @@ async def update_category_admin(
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.categories.update_one({"id": category_id}, {"$set": update_data})
+    await db_conn.categories.update_one({"id": category_id}, {"$set": update_data})
     return {"message": "Category updated successfully"}
 
 @admin_router.delete("/categories/{category_id}")
@@ -312,17 +312,17 @@ async def delete_category_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Delete category"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
     # Check if category has products
-    product_count = await db.products.count_documents({"category_id": category_id})
+    product_count = await db_conn.products.count_documents({"category_id": category_id})
     if product_count > 0:
         raise HTTPException(
             status_code=400, 
             detail=f"Cannot delete category with {product_count} products. Please reassign or delete products first."
         )
     
-    result = await db.categories.delete_one({"id": category_id})
+    result = await db_conn.categories.delete_one({"id": category_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Category not found")
     
@@ -340,7 +340,7 @@ async def get_all_customers_admin(
     limit: int = 50
 ):
     """Get all customers for admin"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
     query = {"is_admin": {"$ne": True}}
     if search:
@@ -349,12 +349,12 @@ async def get_all_customers_admin(
             {"name": {"$regex": search, "$options": "i"}}
         ]
     
-    customers = await db.users.find(query, {"_id": 0, "password_hash": 0}).skip(skip).limit(limit).to_list(length=limit)
-    total = await db.users.count_documents(query)
+    customers = await db_conn.users.find(query, {"_id": 0, "password_hash": 0}).skip(skip).limit(limit).to_list(length=limit)
+    total = await db_conn.users.count_documents(query)
     
     # Add order count for each customer
     for customer in customers:
-        order_count = await db.payment_transactions.count_documents({"user_id": customer["id"], "payment_status": "paid"})
+        order_count = await db_conn.payment_transactions.count_documents({"user_id": customer["id"], "payment_status": "paid"})
         customer["order_count"] = order_count
     
     return {"customers": customers, "total": total}
@@ -367,9 +367,9 @@ async def get_customer_orders_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get customer order history"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    orders = await db.payment_transactions.find(
+    orders = await db_conn.payment_transactions.find(
         {"user_id": customer_id},
         {"_id": 0}
     ).sort("created_at", -1).to_list(length=100)
@@ -385,9 +385,9 @@ async def get_all_coupons_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get all coupons for admin"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    coupons = await db.coupons.find({}, {"_id": 0}).sort("created_at", -1).to_list(length=100)
+    coupons = await db_conn.coupons.find({}, {"_id": 0}).sort("created_at", -1).to_list(length=100)
     return {"coupons": coupons}
 
 @admin_router.post("/coupons")
@@ -398,10 +398,10 @@ async def create_coupon_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Create new coupon"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
     # Check if code already exists
-    existing_coupon = await db.coupons.find_one({"code": coupon["code"].upper()})
+    existing_coupon = await db_conn.coupons.find_one({"code": coupon["code"].upper()})
     if existing_coupon:
         raise HTTPException(status_code=400, detail="Coupon code already exists")
     
@@ -417,7 +417,7 @@ async def create_coupon_admin(
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.coupons.insert_one(coupon_data)
+    await db_conn.coupons.insert_one(coupon_data)
     return {"message": "Coupon created successfully", "coupon": coupon_data}
 
 @admin_router.put("/coupons/{coupon_id}")
@@ -429,9 +429,9 @@ async def update_coupon_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Update existing coupon"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    existing_coupon = await db.coupons.find_one({"id": coupon_id}, {"_id": 0})
+    existing_coupon = await db_conn.coupons.find_one({"id": coupon_id}, {"_id": 0})
     if not existing_coupon:
         raise HTTPException(status_code=404, detail="Coupon not found")
     
@@ -445,7 +445,7 @@ async def update_coupon_admin(
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.coupons.update_one({"id": coupon_id}, {"$set": update_data})
+    await db_conn.coupons.update_one({"id": coupon_id}, {"$set": update_data})
     return {"message": "Coupon updated successfully"}
 
 @admin_router.delete("/coupons/{coupon_id}")
@@ -456,9 +456,9 @@ async def delete_coupon_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Delete coupon"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    result = await db.coupons.delete_one({"id": coupon_id})
+    result = await db_conn.coupons.delete_one({"id": coupon_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Coupon not found")
     
@@ -472,14 +472,14 @@ async def toggle_coupon_status_admin(
     session_token: Optional[str] = Cookie(None)
 ):
     """Toggle coupon active status"""
-    await get_current_admin_user(request, db, session_token)
+    await get_current_admin_user(request, db_conn, session_token)
     
-    coupon = await db.coupons.find_one({"id": coupon_id}, {"_id": 0})
+    coupon = await db_conn.coupons.find_one({"id": coupon_id}, {"_id": 0})
     if not coupon:
         raise HTTPException(status_code=404, detail="Coupon not found")
     
     new_status = not coupon.get("active", True)
-    await db.coupons.update_one(
+    await db_conn.coupons.update_one(
         {"id": coupon_id},
         {"$set": {"active": new_status, "updated_at": datetime.now(timezone.utc).isoformat()}}
     )
