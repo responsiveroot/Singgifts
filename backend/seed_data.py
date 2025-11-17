@@ -225,9 +225,175 @@ async def seed_data():
     await db.categories.insert_many(categories)
     print(f"Created {len(categories)} categories")
     
-    # Sample products
+    # Sample products with diverse images per category
+    category_product_images = {
+        "airline-exclusives": [
+            "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
+            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e",
+            "https://images.unsplash.com/photo-1583596645856-70e38b87e0f9",
+            "https://images.unsplash.com/photo-1474302770737-173ee21bab63",
+            "https://images.unsplash.com/photo-1520483601200-c49bc4e42070",
+            "https://images.unsplash.com/photo-1540962351504-03099e0a754b"
+        ],
+        "batik": [
+            "https://images.unsplash.com/photo-1610706502858-6a0989239446",
+            "https://images.unsplash.com/photo-1621184455862-c163dfb30e0f",
+            "https://images.unsplash.com/photo-1558769132-cb1aea1f3836",
+            "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc",
+            "https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f",
+            "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f"
+        ],
+        "beauty": [
+            "https://images.unsplash.com/photo-1556228720-195a672e8a03",
+            "https://images.unsplash.com/photo-1571875257727-256c39da42af",
+            "https://images.unsplash.com/photo-1596462502278-27bfdc403348",
+            "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
+            "https://images.unsplash.com/photo-1512496015851-a90fb38ba796",
+            "https://images.unsplash.com/photo-1526947425960-945c6e72858f"
+        ],
+        "chocolates": [
+            "https://images.unsplash.com/photo-1511381939415-e44015466834",
+            "https://images.unsplash.com/photo-1549007994-cb92caebd54b",
+            "https://images.unsplash.com/photo-1606312619070-d48b4a1ed831",
+            "https://images.unsplash.com/photo-1481391319762-47dff72954d9",
+            "https://images.unsplash.com/photo-1548907040-4baa42d10919",
+            "https://images.unsplash.com/photo-1561424787-3062a2aabec8"
+        ],
+        "coffee": [
+            "https://images.unsplash.com/photo-1447933601403-0c6688de566e",
+            "https://images.unsplash.com/photo-1559056199-641a0ac8b55e",
+            "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
+            "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd",
+            "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
+            "https://images.unsplash.com/photo-1461023058943-07fcbe16d735"
+        ],
+        "electronics": [
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+            "https://images.unsplash.com/photo-1546868871-7041f2a55e12",
+            "https://images.unsplash.com/photo-1484704849700-f032a568e944",
+            "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb",
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+            "https://images.unsplash.com/photo-1498049794561-7780e7231661"
+        ],
+        "fashion": [
+            "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+            "https://images.unsplash.com/photo-1596783074918-c84cb06531ca",
+            "https://images.unsplash.com/photo-1602810316498-ab67cf68c8e1",
+            "https://images.unsplash.com/photo-1506152983158-b4a74a01c721",
+            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf",
+            "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5"
+        ],
+        "food": [
+            "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445",
+            "https://images.unsplash.com/photo-1551024506-0bccd828d307",
+            "https://images.unsplash.com/photo-1496412705862-e0088f16f791",
+            "https://images.unsplash.com/photo-1563379926898-05f4575a45d8",
+            "https://images.unsplash.com/photo-1599490659213-e2b9527bd087",
+            "https://images.unsplash.com/photo-1559181567-c3190ca9959b"
+        ],
+        "home-decor": [
+            "https://images.unsplash.com/photo-1556912998-c57cc6b63cd7",
+            "https://images.unsplash.com/photo-1524758631624-e2822e304c36",
+            "https://images.unsplash.com/photo-1513694203232-719a280e022f",
+            "https://images.unsplash.com/photo-1545127398-14699f92334b",
+            "https://images.unsplash.com/photo-1470223453668-c45b4f9d0e9c",
+            "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2"
+        ],
+        "jewelry": [
+            "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338",
+            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f",
+            "https://images.unsplash.com/photo-1515377905703-c4788e51af15",
+            "https://images.unsplash.com/photo-1611591437281-460bfbe1220a",
+            "https://images.unsplash.com/photo-1573408301185-9146fe634ad0",
+            "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908"
+        ],
+        "kitchenware": [
+            "https://images.unsplash.com/photo-1565183928294-7d22f24ff511",
+            "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1",
+            "https://images.unsplash.com/photo-1556909212-d5b604d0c90d",
+            "https://images.unsplash.com/photo-1588854337221-4cf9fa96b75e",
+            "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c",
+            "https://images.unsplash.com/photo-1584990347449-39b4aa8d6f96"
+        ],
+        "liquor": [
+            "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3",
+            "https://images.unsplash.com/photo-1569529465841-dfecdab7503b",
+            "https://images.unsplash.com/photo-1556679343-c7306c1976bc",
+            "https://images.unsplash.com/photo-1560963689-b5b4e8d8b7c0",
+            "https://images.unsplash.com/photo-1470337458703-46ad1756a187",
+            "https://images.unsplash.com/photo-1586370434639-0fe43b2d32d6"
+        ],
+        "peranakan": [
+            "https://images.unsplash.com/photo-1582735689369-4fe89db7114c",
+            "https://images.unsplash.com/photo-1610701596007-11502861dcfa",
+            "https://images.unsplash.com/photo-1578916171728-46686eac8d58",
+            "https://images.unsplash.com/photo-1586105251261-72a756497a11",
+            "https://images.unsplash.com/photo-1556911261-6bd341186b2f",
+            "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2"
+        ],
+        "perfumes": [
+            "https://images.unsplash.com/photo-1541643600914-78b084683601",
+            "https://images.unsplash.com/photo-1588405748880-12d1d2a59bd0",
+            "https://images.unsplash.com/photo-1594035910387-fea47794261f",
+            "https://images.unsplash.com/photo-1615634260167-c8cdede054de",
+            "https://images.unsplash.com/photo-1587017539504-67cfbddac569",
+            "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539"
+        ],
+        "skincare": [
+            "https://images.unsplash.com/photo-1556228578-0d85b1a4d571",
+            "https://images.unsplash.com/photo-1570554886111-e80fcca6a029",
+            "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908",
+            "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b",
+            "https://images.unsplash.com/photo-1620916566398-39f1143ab7be",
+            "https://images.unsplash.com/photo-1612817288484-6f916006741a"
+        ],
+        "soap": [
+            "https://images.unsplash.com/photo-1600857062241-98e5e6fe4aff",
+            "https://images.unsplash.com/photo-1617897903246-719242758050",
+            "https://images.unsplash.com/photo-1631730486572-226d1f595b68",
+            "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108",
+            "https://images.unsplash.com/photo-1621606094126-9fb7a86be8cf",
+            "https://images.unsplash.com/photo-1607422285427-c97308ce48f9"
+        ],
+        "tea": [
+            "https://images.unsplash.com/photo-1563822249366-3a0cd3be3303",
+            "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9",
+            "https://images.unsplash.com/photo-1556679343-c7306c1976bc",
+            "https://images.unsplash.com/photo-1597318130878-11e285564fc2",
+            "https://images.unsplash.com/photo-1558857563-b781c7b8b14b",
+            "https://images.unsplash.com/photo-1544787219-7f47ccb76574"
+        ],
+        "travel-gifts": [
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e",
+            "https://images.unsplash.com/photo-1488646953014-85cb44e25828",
+            "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1",
+            "https://images.unsplash.com/photo-1503220317375-aaad61436b1b",
+            "https://images.unsplash.com/photo-1533105079780-92b9be482077"
+        ],
+        "wedgwood-fine-bone-china": [
+            "https://images.unsplash.com/photo-1610701596007-11502861dcfa",
+            "https://images.unsplash.com/photo-1578916171728-46686eac8d58",
+            "https://images.unsplash.com/photo-1586105251261-72a756497a11",
+            "https://images.unsplash.com/photo-1602712300295-2ce22b5c6068",
+            "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
+            "https://images.unsplash.com/photo-1523362628745-0c100150b504"
+        ],
+        "wax-bar": [
+            "https://images.unsplash.com/photo-1602874801006-e24b83a8c195",
+            "https://images.unsplash.com/photo-1605651201712-46e2d1092090",
+            "https://images.unsplash.com/photo-1603006905003-be475563bc59",
+            "https://images.unsplash.com/photo-1599561046251-1638db0d6a6e",
+            "https://images.unsplash.com/photo-1587467512961-120760940e4e",
+            "https://images.unsplash.com/photo-1608295289383-ae8f6bdfc2f9"
+        ]
+    }
+    
     products = []
     for i, cat in enumerate(categories):
+        # Get product images for this category
+        product_images = category_product_images.get(cat['slug'], [cat['image_url']] * 6)
+        
         for j in range(6):  # 6 products per category
             product = {
                 "id": str(uuid.uuid4()),
@@ -238,7 +404,7 @@ async def seed_data():
                 "category_id": cat['id'],
                 "price": (j+1) * 25.00,
                 "sale_price": (j+1) * 20.00 if j % 2 == 0 else None,
-                "images": [cat['image_url']],
+                "images": [product_images[j % len(product_images)]],
                 "stock": 50 + j * 10,
                 "sku": f"SG-{i}{j}{uuid.uuid4().hex[:6].upper()}",
                 "tags": ["singapore", "premium", cat['name'].lower()],
