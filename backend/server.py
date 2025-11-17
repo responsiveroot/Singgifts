@@ -111,12 +111,12 @@ async def login(login_data: LoginRequest, response: Response):
     if not user or not user.get('password_hash'):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    if not verify_password(password, user['password_hash']):
+    if not verify_password(login_data.password, user['password_hash']):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     otp = generate_otp()
     await db.login_otps.insert_one({
-        "email": email,
+        "email": login_data.email,
         "otp": otp,
         "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
         "created_at": datetime.now(timezone.utc).isoformat()
