@@ -282,7 +282,7 @@ function CheckoutPage({ user }) {
               <div className="border-t border-gray-200 pt-4 space-y-3">
                 <div className="flex justify-between font-inter">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-semibold" data-testid="checkout-subtotal">SGD {calculateTotal()}</span>
+                  <span className="font-semibold" data-testid="checkout-subtotal">{convertAndFormat(calculateTotal())}</span>
                 </div>
                 <div className="flex justify-between font-inter">
                   <span className="text-gray-600">Shipping</span>
@@ -291,7 +291,7 @@ function CheckoutPage({ user }) {
                 <div className="border-t border-gray-200 pt-3">
                   <div className="flex justify-between font-inter">
                     <span className="text-lg font-semibold text-gray-900">Total</span>
-                    <span className="text-2xl font-bold text-primary" data-testid="checkout-total">SGD {calculateTotal()}</span>
+                    <span className="text-2xl font-bold text-primary" data-testid="checkout-total">{convertAndFormat(calculateTotal())}</span>
                   </div>
                 </div>
               </div>
