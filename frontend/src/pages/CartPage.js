@@ -85,7 +85,16 @@ function CartPage({ user, updateCartCount }) {
 
   const removeFromCart = async (cartItemId) => {
     try {
-      await axios.delete(`${API}/cart/${cartItemId}`, { withCredentials: true });
+      if (user) {
+        // Logged-in user: remove from backend
+        await axios.delete(`${API}/cart/${cartItemId}`, { withCredentials: true });
+      } else {
+        // Guest user: remove from localStorage
+        const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+        const updatedCart = guestCart.filter(item => item.id !== cartItemId);
+        localStorage.setItem('guestCart', JSON.stringify(updatedCart));
+      }
+      
       setCartItems(prev => prev.filter(item => item.cart_item.id !== cartItemId));
       updateCartCount();
       toast.success('Removed from cart');
