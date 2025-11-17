@@ -64,6 +64,13 @@ async def get_current_user(request: Request, db, session_token: Optional[str] = 
     
     return user
 
+async def get_current_user_optional(request: Request, db, session_token: Optional[str] = Cookie(None)):
+    """Get current user if authenticated, otherwise return None (for guest checkout)"""
+    try:
+        return await get_current_user(request, db, session_token)
+    except HTTPException:
+        return None
+
 async def get_current_admin_user(request: Request, db, session_token: Optional[str] = Cookie(None)):
     """Get current admin user"""
     user = await get_current_user(request, db, session_token)
