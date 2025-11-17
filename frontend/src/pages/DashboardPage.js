@@ -134,7 +134,7 @@ function DashboardPage({ user }) {
                           <p className="font-semibold text-gray-900 font-inter">{item.product_name}</p>
                           <p className="text-sm text-gray-600 font-inter">Quantity: {item.quantity}</p>
                         </div>
-                        <p className="font-semibold text-gray-900 font-inter">SGD {(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-semibold text-gray-900 font-inter">{convertAndFormat(item.price * item.quantity)}</p>
                       </div>
                     ))}
                   </div>
