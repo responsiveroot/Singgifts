@@ -149,13 +149,21 @@ function CheckoutPage({ user }) {
       // Get frontend origin
       const frontendOrigin = window.location.origin;
 
-      // Create Stripe checkout session
-      const response = await axios.post(`${API}/checkout/create-session`, {
+      // Prepare checkout data with coupon if applied
+      const checkoutData = {
         cart_items: checkoutItems,
         shipping_address: shippingAddress,
         currency: currency.toLowerCase(),
         frontend_origin: frontendOrigin
-      }, { withCredentials: true });
+      };
+
+      // Add coupon code if applied
+      if (appliedCoupon) {
+        checkoutData.coupon_code = appliedCoupon.code;
+      }
+
+      // Create Stripe checkout session
+      const response = await axios.post(`${API}/checkout/create-session`, checkoutData, { withCredentials: true });
 
       // Redirect to Stripe checkout
       if (response.data.url) {
