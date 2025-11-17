@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, ChevronRight } from 'lucide-react';
 import axios from 'axios';
+import { useCurrency } from '../context/CurrencyContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -11,6 +12,7 @@ function HomePageNew({ user }) {
   const [productsByCategory, setProductsByCategory] = useState({});
   const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { convertAndFormat, convertOnly } = useCurrency();
 
   useEffect(() => {
     fetchData();
