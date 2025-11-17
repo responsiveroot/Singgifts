@@ -136,15 +136,25 @@ async def login(login_data: LoginRequest, response: Response):
 @api_router.post("/auth/admin-login")
 async def admin_login(login_data: LoginRequest, response: Response):
     """Direct admin login without OTP"""
+    print(f"DEBUG: Admin login attempt for: {login_data.email}")
+    
     user = await db.users.find_one({"email": login_data.email}, {"_id": 0})
     
     if not user:
+        print(f"DEBUG: User not found: {login_data.email}")
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
+    print(f"DEBUG: User found, is_admin: {user.get('is_admin')}")
+    
     if not user.get('is_admin', False):
+        print(f"DEBUG: User is not admin")
         raise HTTPException(status_code=403, detail="Admin access required")
     
-    if not verify_password(login_data.password, user['password_hash']):
+    print(f"DEBUG: Testing password verification...")
+    password_valid = verify_password(login_data.password, user['password_hash'])
+    print(f"DEBUG: Password valid: {password_valid}")
+    
+    if not password_valid:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     # Create session directly
