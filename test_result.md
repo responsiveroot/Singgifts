@@ -107,39 +107,48 @@ user_problem_statement: "Complete the Discount Coupon feature implementation for
 backend:
   - task: "Discount Coupon - Database Seeding"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/seed_data.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Added 5 sample discount coupons to seed_data.py with various discount types (percentage and fixed), minimum purchase requirements, and expiry dates. Database successfully re-seeded."
+      - working: true
+        agent: "testing"
+        comment: "Database seeding verified successfully. All 5 discount coupons (WELCOME10, SAVE20, FLAT15, SINGAPORE50, FREESHIP) are properly seeded with correct discount types, values, and minimum purchase requirements. Coupons are active and have appropriate expiry dates."
 
   - task: "Discount Coupon - Validation API"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Backend endpoint /api/coupons/validate already exists. It validates coupon codes, checks expiry dates, and returns discount information."
+      - working: true
+        agent: "testing"
+        comment: "Coupon validation API (/api/coupons/validate) working perfectly. All test scenarios passed: ✅ Valid coupons (WELCOME10, SAVE20, FLAT15, SINGAPORE50, FREESHIP) return correct discount info ✅ Invalid coupon codes properly rejected with 404 ✅ Case-insensitive handling works (lowercase converted to uppercase) ✅ Response includes all required fields: code, discount_type, discount_value, min_purchase"
 
   - task: "Discount Coupon - Checkout Integration (Backend)"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Updated CheckoutRequest model to accept optional coupon_code. Updated /api/checkout/create-session endpoint to apply coupon discounts. Discount is validated, calculated (percentage or fixed), and applied to the total amount. Coupon info is stored in transaction metadata."
+      - working: true
+        agent: "testing"
+        comment: "Checkout integration with coupons working perfectly. All test scenarios passed: ✅ Valid coupon with sufficient cart value applies discount correctly ✅ Valid coupon with insufficient cart value ignores discount (minimum purchase not met) ✅ Percentage discount calculation accurate (WELCOME10: 10% off $90 = $9 discount) ✅ Fixed discount calculation accurate (FLAT15: $15 off $110, SINGAPORE50: $50 off $350) ✅ Invalid coupons in checkout are gracefully ignored, checkout proceeds without discount ✅ Checkout sessions created successfully with proper Stripe integration"
 
 frontend:
   - task: "Discount Coupon - Checkout Page UI"
