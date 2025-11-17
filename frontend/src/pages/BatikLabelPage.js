@@ -107,15 +107,15 @@ function BatikLabelPage() {
                     {product.sale_price ? (
                       <>
                         <span className="text-lg font-bold text-primary font-inter">
-                          ${product.sale_price}
+                          {convertAndFormat(product.sale_price)}
                         </span>
                         <span className="text-sm text-gray-400 line-through font-inter">
-                          ${product.price}
+                          {convertAndFormat(product.price)}
                         </span>
                       </>
                     ) : (
                       <span className="text-lg font-bold text-gray-900 font-inter">
-                        ${product.price}
+                        {convertAndFormat(product.price)}
                       </span>
                     )}
                   </div>
