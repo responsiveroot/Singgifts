@@ -115,7 +115,7 @@ function DashboardPage({ user }) {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600 font-inter">Total</p>
-                      <p className="font-semibold text-gray-900 font-inter" data-testid="order-total">SGD {order.total_amount}</p>
+                      <p className="font-semibold text-gray-900 font-inter" data-testid="order-total">{convertAndFormat(order.total_amount)}</p>
                     </div>
                     <div>
                       <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(order.status)} font-inter`}>
