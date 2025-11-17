@@ -30,12 +30,18 @@ function ProductsPage({ user, updateCartCount }) {
       const isBestseller = searchParams.get('is_bestseller') === 'true';
       const isFeatured = searchParams.get('is_featured') === 'true';
       const search = searchParams.get('search') || '';
+      const minPrice = searchParams.get('min_price') || '';
+      const maxPrice = searchParams.get('max_price') || '';
+      const sort = searchParams.get('sort_by') || '';
 
-      let url = `${API}/products?limit=50`;
-      if (categoryParam) url += `&category_id=${categoryParam}`;
+      let url = `${API}/products?limit=200`;
+      if (categoryParam) url += `&category=${categoryParam}`;
       if (isBestseller) url += `&is_bestseller=true`;
       if (isFeatured) url += `&is_featured=true`;
-      if (search) url += `&search=${search}`;
+      if (search) url += `&search=${encodeURIComponent(search)}`;
+      if (minPrice) url += `&min_price=${minPrice}`;
+      if (maxPrice) url += `&max_price=${maxPrice}`;
+      if (sort) url += `&sort_by=${sort}`;
 
       const [productsRes, categoriesRes] = await Promise.all([
         axios.get(url),
@@ -45,6 +51,8 @@ function ProductsPage({ user, updateCartCount }) {
       setProducts(productsRes.data);
       setCategories(categoriesRes.data);
       setSelectedCategory(categoryParam);
+      setPriceRange({ min: minPrice, max: maxPrice });
+      setSortBy(sort);
     } catch (error) {
       console.error('Failed to fetch products:', error);
       toast.error('Failed to load products');
