@@ -15,10 +15,6 @@ function CartPage({ user, updateCartCount }) {
   const { convertAndFormat, convertOnly } = useCurrency();
 
   useEffect(() => {
-    if (!user) {
-      navigate('/auth');
-      return;
-    }
     fetchCart();
   }, [user]);
 
