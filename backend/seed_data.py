@@ -225,15 +225,15 @@ async def seed_data():
     await db.categories.insert_many(categories)
     print(f"Created {len(categories)} categories")
     
-    # Sample products with diverse images per category
+    # Sample products with diverse images per category (with proper Unsplash parameters)
     category_product_images = {
         "airline-exclusives": [
-            "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
-            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e",
-            "https://images.unsplash.com/photo-1583596645856-70e38b87e0f9",
-            "https://images.unsplash.com/photo-1474302770737-173ee21bab63",
-            "https://images.unsplash.com/photo-1520483601200-c49bc4e42070",
-            "https://images.unsplash.com/photo-1540962351504-03099e0a754b"
+            "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "batik": [
             "https://images.unsplash.com/photo-1610706502858-6a0989239446",
