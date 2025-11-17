@@ -44,41 +44,87 @@ class CouponTester:
         if self.session:
             await self.session.close()
             
-    async def login_user(self):
-        """Login test user and get session token"""
-        print("🔐 Logging in test user...")
+    async def register_and_login_user(self):
+        """Register a new test user and login"""
+        print("🔐 Registering and logging in test user...")
         
-        # Step 1: Login to get OTP
-        login_data = {
-            "email": TEST_USER["email"],
-            "password": TEST_USER["password"]
+        test_email = "testuser@singgifts.sg"
+        test_password = "testpass123"
+        test_name = "Test User"
+        
+        # Step 1: Register new user
+        register_data = {
+            "email": test_email,
+            "password": test_password,
+            "name": test_name
         }
         
-        async with self.session.post(f"{BACKEND_URL}/auth/login", params=login_data) as resp:
+        async with self.session.post(f"{BACKEND_URL}/auth/register", params=register_data) as resp:
             if resp.status != 200:
                 result = await resp.text()
-                raise Exception(f"Login failed: {resp.status} - {result}")
+                raise Exception(f"Registration failed: {resp.status} - {result}")
             
-            login_result = await resp.json()
-            otp = login_result.get("otp")
+            register_result = await resp.json()
+            otp = register_result.get("otp")
             
-        # Step 2: Verify OTP to get session token
-        otp_data = {
-            "email": TEST_USER["email"],
+        # Step 2: Verify registration OTP
+        verify_data = {
+            "email": test_email,
             "otp": otp
         }
         
-        async with self.session.post(f"{BACKEND_URL}/auth/verify-login-otp", params=otp_data) as resp:
+        async with self.session.post(f"{BACKEND_URL}/auth/verify-otp", params=verify_data) as resp:
             if resp.status != 200:
                 result = await resp.text()
                 raise Exception(f"OTP verification failed: {resp.status} - {result}")
             
-            otp_result = await resp.json()
-            self.session_token = otp_result.get("session_token")
-            self.user_data = otp_result.get("user")
+            verify_result = await resp.json()
+            self.session_token = verify_result.get("session_token")
+            self.user_data = verify_result.get("user")
             
-        print(f"✅ Login successful for user: {self.user_data['email']}")
+        print(f"✅ Registration and login successful for user: {self.user_data['email']}")
         return True
+        
+    async def login_user(self):
+        """Try to login existing user, fallback to registration"""
+        try:
+            # Try existing admin user first
+            print("🔐 Trying to login existing admin user...")
+            
+            login_data = {
+                "email": TEST_USER["email"],
+                "password": TEST_USER["password"]
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/auth/login", params=login_data) as resp:
+                if resp.status != 200:
+                    print("❌ Admin login failed, trying user registration...")
+                    return await self.register_and_login_user()
+                
+                login_result = await resp.json()
+                otp = login_result.get("otp")
+                
+            # Step 2: Verify OTP to get session token
+            otp_data = {
+                "email": TEST_USER["email"],
+                "otp": otp
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/auth/verify-login-otp", params=otp_data) as resp:
+                if resp.status != 200:
+                    result = await resp.text()
+                    raise Exception(f"OTP verification failed: {resp.status} - {result}")
+                
+                otp_result = await resp.json()
+                self.session_token = otp_result.get("session_token")
+                self.user_data = otp_result.get("user")
+                
+            print(f"✅ Login successful for user: {self.user_data['email']}")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Login failed: {str(e)}, trying registration...")
+            return await self.register_and_login_user()
         
     async def test_coupon_validation_api(self):
         """Test /api/coupons/validate endpoint"""
