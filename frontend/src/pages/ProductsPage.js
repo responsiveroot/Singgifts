@@ -86,6 +86,25 @@ function ProductsPage({ user, updateCartCount }) {
     setSearchParams({});
     setSearchQuery('');
     setSelectedCategory('');
+    setPriceRange({ min: '', max: '' });
+    setSortBy('');
+  };
+
+  const handlePriceFilter = () => {
+    const params = new URLSearchParams(searchParams);
+    if (priceRange.min) params.set('min_price', priceRange.min);
+    else params.delete('min_price');
+    if (priceRange.max) params.set('max_price', priceRange.max);
+    else params.delete('max_price');
+    setSearchParams(params);
+  };
+
+  const handleSort = (sortOption) => {
+    const params = new URLSearchParams(searchParams);
+    if (sortOption) params.set('sort_by', sortOption);
+    else params.delete('sort_by');
+    setSortBy(sortOption);
+    setSearchParams(params);
   };
 
   const addToCart = async (productId, e) => {
