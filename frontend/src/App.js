@@ -12,6 +12,9 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
+import ExploreSingaporePage from './pages/ExploreSingaporePage';
+import BatikLabelPage from './pages/BatikLabelPage';
+import NewArrivalsPage from './pages/NewArrivalsPage';
 
 // Components
 import Header from './components/Header';
