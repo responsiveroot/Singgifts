@@ -71,7 +71,7 @@ async def verify_otp(otp_data: VerifyOtpRequest, response: Response):
         raise HTTPException(status_code=400, detail="OTP expired")
     
     user = User(
-        email=email,
+        email=otp_data.email,
         name=otp_doc['name'],
         password_hash=otp_doc['password_hash']
     )
