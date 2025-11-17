@@ -227,13 +227,13 @@ async def seed_data():
     
     # Sample products with diverse images per category (with proper Unsplash parameters)
     category_product_images = {
-        "airline-exclusives": [
-            "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=400&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=400&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop&auto=format&q=80",
-            "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop&auto=format&q=80"
+        "aprons": [
+            "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1600618528240-fb9fc964b853?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1600618528240-fb9fc964b853?w=400&h=400&fit=crop&auto=format&q=80",
+            "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "batik": [
             "https://images.unsplash.com/photo-1610706502858-6a0989239446?w=400&h=400&fit=crop",
