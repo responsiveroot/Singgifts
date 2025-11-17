@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, MapPin, Package, Lock } from 'lucide-react';
+import { CreditCard, MapPin, Package, Lock, Tag } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useCurrency } from '../context/CurrencyContext';
@@ -14,6 +14,9 @@ function CheckoutPage({ user }) {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const { convertAndFormat, convertOnly, currency } = useCurrency();
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
   const [formData, setFormData] = useState({
     fullName: user?.name || '',
     email: user?.email || '',
