@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Package, Clock, CheckCircle, XCircle, User, MapPin, Mail, Phone } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useCurrency } from '../context/CurrencyContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -9,6 +10,8 @@ const API = `${BACKEND_URL}/api`;
 function DashboardPage({ user }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('orders');
+  const { convertAndFormat } = useCurrency();
 
   useEffect(() => {
     fetchOrders();
