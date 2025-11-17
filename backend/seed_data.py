@@ -268,36 +268,36 @@ async def seed_data():
             "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=400&fit=crop"
         ],
         "electronics": [
-            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
-            "https://images.unsplash.com/photo-1546868871-7041f2a55e12",
-            "https://images.unsplash.com/photo-1484704849700-f032a568e944",
-            "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb",
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-            "https://images.unsplash.com/photo-1498049794561-7780e7231661"
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=400&fit=crop"
         ],
         "fashion": [
-            "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
-            "https://images.unsplash.com/photo-1596783074918-c84cb06531ca",
-            "https://images.unsplash.com/photo-1602810316498-ab67cf68c8e1",
-            "https://images.unsplash.com/photo-1506152983158-b4a74a01c721",
-            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf",
-            "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5"
+            "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1602810316498-ab67cf68c8e1?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1506152983158-b4a74a01c721?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=400&h=400&fit=crop"
         ],
         "food": [
-            "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445",
-            "https://images.unsplash.com/photo-1551024506-0bccd828d307",
-            "https://images.unsplash.com/photo-1496412705862-e0088f16f791",
-            "https://images.unsplash.com/photo-1563379926898-05f4575a45d8",
-            "https://images.unsplash.com/photo-1599490659213-e2b9527bd087",
-            "https://images.unsplash.com/photo-1559181567-c3190ca9959b"
+            "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1496412705862-e0088f16f791?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=400&h=400&fit=crop"
         ],
         "home-decor": [
-            "https://images.unsplash.com/photo-1556912998-c57cc6b63cd7",
-            "https://images.unsplash.com/photo-1524758631624-e2822e304c36",
-            "https://images.unsplash.com/photo-1513694203232-719a280e022f",
-            "https://images.unsplash.com/photo-1545127398-14699f92334b",
-            "https://images.unsplash.com/photo-1470223453668-c45b4f9d0e9c",
-            "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2"
+            "https://images.unsplash.com/photo-1556912998-c57cc6b63cd7?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1545127398-14699f92334b?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1556912998-c57cc6b63cd7?w=400&h=400&fit=crop&auto=format&q=80"
         ],
         "jewelry": [
             "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338",
