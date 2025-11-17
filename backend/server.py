@@ -49,10 +49,10 @@ async def register(register_data: RegisterRequest):
     
     otp = generate_otp()
     await db.otps.insert_one({
-        "email": email,
+        "email": register_data.email,
         "otp": otp,
-        "password_hash": get_password_hash(password),
-        "name": name,
+        "password_hash": get_password_hash(register_data.password),
+        "name": register_data.name,
         "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
         "created_at": datetime.now(timezone.utc).isoformat()
     })
