@@ -103,6 +103,26 @@ function ProductDetailPage({ user, updateCartCount }) {
 
   return (
     <div className="product-detail-page py-12 bg-gray-50 min-h-screen">
+      {/* Meta Tags for Social Sharing */}
+      <Helmet>
+        <title>{product.name} | SingGifts</title>
+        <meta name="description" content={product.description} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="product" />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:title" content={product.name} />
+        <meta property="og:description" content={product.description} />
+        <meta property="og:image" content={product.images[0]} />
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={window.location.href} />
+        <meta property="twitter:title" content={product.name} />
+        <meta property="twitter:description" content={product.description} />
+        <meta property="twitter:image" content={product.images[0]} />
+      </Helmet>
+
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
         <div className="mb-8 text-sm text-gray-600 font-inter">
