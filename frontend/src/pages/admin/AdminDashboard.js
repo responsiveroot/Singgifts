@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { BarChart3, Package, ShoppingCart, Users, DollarSign, AlertTriangle } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { StatCardSkeleton, ListItemSkeleton } from '../../components/SkeletonLoader';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
