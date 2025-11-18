@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Star, ChevronRight, Clock, Zap, TrendingUp } from 'lucide-react';
 import axios from 'axios';
 import { useCurrency } from '../context/CurrencyContext';
+import SEO from '../components/SEO';
+import { websiteSchema, organizationSchema } from '../components/StructuredData';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
