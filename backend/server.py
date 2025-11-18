@@ -984,6 +984,58 @@ app.include_router(api_router)
 # Include admin router
 app.include_router(admin_router, prefix="/api")
 
+# ============== SEO ROUTES ==============
+
+@app.get("/sitemap.xml")
+async def generate_sitemap():
+    """Generate XML sitemap for SEO"""
+    from fastapi.responses import Response
+    
+    # Get all products and categories
+    products = await db.products.find({}, {"_id": 0, "id": 1, "updated_at": 1}).to_list(length=1000)
+    categories = await db.categories.find({}, {"_id": 0, "id": 1}).to_list(length=100)
+    
+    base_url = "https://gift-mart-sg.preview.emergentagent.com"
+    
+    sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    # Homepage
+    sitemap += f'  <url><loc>{base_url}/</loc><priority>1.0</priority><changefreq>daily</changefreq></url>\n'
+    
+    # Static pages
+    static_pages = ['/products', '/about', '/contact', '/faq', '/privacy-policy', '/terms', '/shipping-returns']
+    for page in static_pages:
+        sitemap += f'  <url><loc>{base_url}{page}</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>\n'
+    
+    # Products
+    for product in products:
+        sitemap += f'  <url><loc>{base_url}/products/{product["id"]}</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>\n'
+    
+    # Categories
+    for category in categories:
+        sitemap += f'  <url><loc>{base_url}/products?category={category["id"]}</loc><priority>0.6</priority><changefreq>weekly</changefreq></url>\n'
+    
+    sitemap += '</urlset>'
+    
+    return Response(content=sitemap, media_type="application/xml")
+
+@app.get("/robots.txt")
+async def robots_txt():
+    """Generate robots.txt for SEO"""
+    from fastapi.responses import Response
+    
+    robots = """User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin-login
+Disallow: /api/
+
+Sitemap: https://gift-mart-sg.preview.emergentagent.com/sitemap.xml
+"""
+    
+    return Response(content=robots, media_type="text/plain")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
