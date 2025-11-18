@@ -26,6 +26,13 @@ function ProductDetailPage({ user, updateCartCount }) {
     fetchProductDetails();
   }, [productId]);
 
+  useEffect(() => {
+    if (product) {
+      // Track product view
+      trackProductView(product);
+    }
+  }, [product]);
+
   const fetchProductDetails = async () => {
     try {
       const [productRes, reviewsRes] = await Promise.all([
