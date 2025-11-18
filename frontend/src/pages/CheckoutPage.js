@@ -32,6 +32,13 @@ function CheckoutPage({ user }) {
     fetchCart();
   }, [user]);
 
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      // Track begin checkout
+      trackBeginCheckout(cartItems, calculateTotal());
+    }
+  }, [cartItems]);
+
   const fetchCart = async () => {
     try {
       // For logged-in users, fetch from backend cart
