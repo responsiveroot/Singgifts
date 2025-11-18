@@ -125,6 +125,7 @@ function App() {
   return (
     <BrowserRouter>
       <CurrencyProvider>
+        <Analytics />
         <div className="App min-h-screen flex flex-col bg-white">
           <Header user={user} cartCount={cartCount} logout={logout} />
           <main className="flex-grow">
