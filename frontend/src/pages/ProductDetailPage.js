@@ -134,6 +134,18 @@ function ProductDetailPage({ user, updateCartCount }) {
         <meta property="twitter:title" content={product.name} />
         <meta property="twitter:description" content={product.description} />
         <meta property="twitter:image" content={product.images[0]} />
+        
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify(createProductSchema(product))}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(createBreadcrumbSchema([
+            { name: 'Home', url: '/' },
+            { name: 'Products', url: '/products' },
+            { name: product.name, url: `/products/${product.id}` }
+          ]))}
+        </script>
       </Helmet>
 
       <div className="container mx-auto px-4">
