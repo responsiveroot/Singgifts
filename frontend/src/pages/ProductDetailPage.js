@@ -5,6 +5,8 @@ import { Star, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw, Link2, Che
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useCurrency } from '../context/CurrencyContext';
+import { trackProductView, trackAddToCart } from '../components/Analytics';
+import { createProductSchema, createBreadcrumbSchema } from '../components/StructuredData';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
