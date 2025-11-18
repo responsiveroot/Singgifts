@@ -66,6 +66,10 @@ function ProductDetailPage({ user, updateCartCount }) {
         { product_id: productId, quantity },
         { withCredentials: true }
       );
+      
+      // Track add to cart event
+      trackAddToCart(product, quantity);
+      
       toast.success('Added to cart!');
       updateCartCount();
     } catch (error) {
