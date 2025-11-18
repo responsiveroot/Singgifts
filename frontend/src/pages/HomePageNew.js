@@ -223,6 +223,14 @@ function HomePageNew({ user }) {
 
   return (
     <div className="homepage-new bg-gray-50">
+      <SEO 
+        title="Premium Singaporean Gifts & Souvenirs"
+        description="Discover authentic Singaporean gifts, souvenirs, and unique products. Shop premium items celebrating Singapore's culture and heritage with fast shipping."
+        keywords="Singapore gifts, Singaporean souvenirs, Singapore products, authentic gifts, cultural gifts"
+        url="/"
+        schema={[websiteSchema, organizationSchema]}
+      />
+      
       {/* E-Commerce Style Hero Banner */}
       <section className="bg-white" data-testid="hero-banner">
         <div className="container mx-auto px-4 py-6">
