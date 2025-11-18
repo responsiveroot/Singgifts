@@ -4,6 +4,7 @@ import { CreditCard, MapPin, Package, Lock, Tag } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useCurrency } from '../context/CurrencyContext';
+import { trackBeginCheckout } from '../components/Analytics';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
