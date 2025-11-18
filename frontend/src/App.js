@@ -53,6 +53,8 @@ function App() {
 
   useEffect(() => {
     checkAuth();
+    // Initialize Google Analytics
+    initGA();
   }, []);
 
   const checkAuth = async () => {
