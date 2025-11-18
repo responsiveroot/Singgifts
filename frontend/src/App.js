@@ -38,6 +38,7 @@ import AdminCoupons from './pages/admin/AdminCoupons';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import AIChat from './components/AIChat';
+import Analytics, { initGA } from './components/Analytics';
 
 // Context
 import { CurrencyProvider } from './context/CurrencyContext';
