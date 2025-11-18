@@ -30,8 +30,21 @@ function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+      <div>
+        <h1 className="text-3xl font-playfair font-bold text-gray-900 mb-8">Dashboard Overview</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {[...Array(4)].map((_, i) => <StatCardSkeleton key={i} />)}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-white rounded-xl p-6 shadow-md">
+            <h2 className="text-xl font-playfair font-bold text-gray-900 mb-4">Recent Orders</h2>
+            {[...Array(5)].map((_, i) => <ListItemSkeleton key={i} />)}
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-md">
+            <h2 className="text-xl font-playfair font-bold text-gray-900 mb-4">Low Stock Alert</h2>
+            {[...Array(5)].map((_, i) => <ListItemSkeleton key={i} />)}
+          </div>
+        </div>
       </div>
     );
   }
