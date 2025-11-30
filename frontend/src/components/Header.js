@@ -232,61 +232,121 @@ function Header({ user, cartCount, logout }) {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu - Full Screen */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 py-4 animate-fadeIn" data-testid="mobile-menu">
-          <div className="container mx-auto px-4 space-y-4">
-            <Link 
-              to="/" 
-              className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <div>
-              <div className="font-semibold text-gray-800 mb-3 font-inter uppercase text-sm tracking-wide">Categories</div>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  to={`/products?category=${cat.id}`}
-                  className="flex items-center justify-between py-3 pl-4 pr-2 text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-inter border-b border-gray-100"
+        <div className="lg:hidden fixed inset-0 bg-white z-50 overflow-y-auto" data-testid="mobile-menu">
+          <div className="container mx-auto px-4 py-4">
+            {/* Mobile Menu Header */}
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+              <Link to="/" onClick={() => setIsMenuOpen(false)}>
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_a518ec26-715d-489b-87fc-44c951b31297/artifacts/7thk371k_singgifts-logo.jpeg" 
+                  alt="SingGifts" 
+                  className="h-10 w-auto"
+                />
+              </Link>
+              <button 
+                onClick={() => setIsMenuOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Menu Items */}
+            <div className="space-y-1">
+              <Link 
+                to="/" 
+                className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                🏠 Home
+              </Link>
+
+              <Link 
+                to="/products" 
+                className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                🛍️ All Products
+              </Link>
+              
+              {/* Categories Section */}
+              <div className="py-2">
+                <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Shop by Category</div>
+                <div className="space-y-1">
+                  {categories.slice(0, 8).map((cat) => (
+                    <Link
+                      key={cat.id}
+                      to={`/products?category=${cat.id}`}
+                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-50 rounded-lg font-inter"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {cat.name}
+                    </Link>
+                  ))}
+                  {categories.length > 8 && (
+                    <Link
+                      to="/products"
+                      className="block py-2 px-4 text-sm text-primary hover:bg-gray-50 rounded-lg font-inter font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      View All Categories →
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              {/* Special Collections */}
+              <div className="py-2 border-t border-gray-100">
+                <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Special Collections</div>
+                <Link 
+                  to="/explore-singapore" 
+                  className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <span className="text-sm uppercase tracking-wide font-light">{cat.name}</span>
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  🇸🇬 Explore Singapore
                 </Link>
-              ))}
-            </div>
-            <Link 
-              to="/explore-singapore" 
-              className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Explore Singapore
-            </Link>
-            <Link 
-              to="/deals" 
-              className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Deals
-            </Link>
-            <Link 
-              to="/batik-label" 
-              className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Batik Label
-            </Link>
-            <Link 
-              to="/new-arrivals" 
-              className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              New Arrivals
-            </Link>
+                <Link 
+                  to="/batik-label" 
+                  className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  🎨 Batik Label
+                </Link>
+                <Link 
+                  to="/deals" 
+                  className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  🔥 Deals
+                </Link>
+                <Link 
+                  to="/new-arrivals" 
+                  className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  ✨ New Arrivals
+                </Link>
+              </div>
+
+              {/* User Actions */}
+              <div className="py-2 border-t border-gray-100">
+                <Link 
+                  to="/wishlist" 
+                  className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  ❤️ Wishlist
+                </Link>
+                <Link 
+                  to="/cart" 
+                  className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  🛒 Cart {cartCount > 0 && `(${cartCount})`}
+                </Link>
+              </div>
             
             {/* Currency Selector Mobile */}
             <div className="pt-2 border-t border-gray-100">
