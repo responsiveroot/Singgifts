@@ -526,14 +526,20 @@ async def update_product(product_id: str, product_data: ProductCreate, request: 
 
 @api_router.get("/cart", response_model=List[dict])
 async def get_cart(request: Request, session_token: Optional[str] = Cookie(None)):
-    """Get user's cart"""
+    """Get user's cart with products from all collections"""
     user = await get_current_user(request, db, session_token)
     
     cart_items = await db.cart_items.find({"user_id": user['id']}, {"_id": 0}).to_list(100)
     
     result = []
     for item in cart_items:
+        # Try to find product in all collections
         product = await db.products.find_one({"id": item['product_id']}, {"_id": 0})
+        if not product:
+            product = await db.explore_singapore_products.find_one({"id": item['product_id']}, {"_id": 0})
+        if not product:
+            product = await db.batik_products.find_one({"id": item['product_id']}, {"_id": 0})
+        
         if product:
             result.append({
                 "cart_item": item,
