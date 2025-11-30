@@ -272,9 +272,9 @@ function HomePageNew({ user }) {
                 background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
               }}>
                 <div className="p-6 text-white h-full flex flex-col justify-center">
-                  <h3 className="text-3xl font-playfair font-bold mb-2">Flash<br />Deals</h3>
-                  <p className="text-sm opacity-90 mb-3 font-inter">Up to 50% OFF</p>
-                  <Link to="/deals" className="bg-white text-pink-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition-colors font-inter inline-block w-fit text-sm">
+                  <h3 className="category-banner-title font-playfair font-bold mb-2">Flash<br />Deals</h3>
+                  <p className="category-banner-subtitle opacity-90 mb-3 font-inter">Up to 50% OFF</p>
+                  <Link to="/deals" className="category-banner-button bg-white text-pink-600 rounded-lg font-bold hover:bg-gray-100 transition-colors font-inter inline-block w-fit">
                     View Deals
                   </Link>
                 </div>
