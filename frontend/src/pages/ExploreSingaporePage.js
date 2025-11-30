@@ -52,13 +52,19 @@ function ExploreSingaporePage() {
         </div>
       </section>
 
-      {/* Attractions Grid */}
+      {/* Landmarks Grid */}
       <section className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-playfair font-bold text-center mb-12">Must-Visit Attractions</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {attractions.map((attraction) => (
-            <Link key={attraction.id} to={`/landmark/${attraction.slug}`} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-              <div className="h-48 overflow-hidden">
+        {landmarks.length === 0 ? (
+          <div className="text-center py-12">
+            <MapPin size={64} className="mx-auto text-gray-300 mb-4" />
+            <p className="text-gray-600 font-inter">No landmarks available yet. Check back soon!</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {landmarks.map((landmark) => (
+              <Link key={landmark.id} to={`/landmark/${landmark.id}`} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                <div className="h-48 overflow-hidden bg-gray-200 flex items-center justify-center">{landmark.image ? (
                 <img 
                   src={attraction.image} 
                   alt={attraction.name}
