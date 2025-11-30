@@ -328,6 +328,54 @@ function AdminProducts() {
                 </select>
                 <p className="text-xs text-gray-500 mt-1 font-inter">Assign this product to a landmark for "Explore Singapore" feature</p>
               </div>
+
+              {/* Deals & Labels */}
+              <div className="border-t pt-4 space-y-4">
+                <h3 className="font-semibold text-gray-900 font-inter">Special Labels & Deals</h3>
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="is_batik_label"
+                    checked={formData.is_batik_label}
+                    onChange={(e) => setFormData({...formData, is_batik_label: e.target.checked})}
+                    className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label htmlFor="is_batik_label" className="text-sm text-gray-700 font-inter">
+                    BATIC Label Product
+                  </label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="is_on_deal"
+                    checked={formData.is_on_deal}
+                    onChange={(e) => setFormData({...formData, is_on_deal: e.target.checked})}
+                    className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label htmlFor="is_on_deal" className="text-sm text-gray-700 font-inter">
+                    On Deal
+                  </label>
+                </div>
+
+                {formData.is_on_deal && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Deal Discount %</label>
+                    <input
+                      type="number"
+                      step="1"
+                      min="0"
+                      max="100"
+                      value={formData.deal_percentage}
+                      onChange={(e) => setFormData({...formData, deal_percentage: e.target.value})}
+                      placeholder="e.g., 20 for 20% off"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                    />
+                  </div>
+                )}
+              </div>
+
               <div className="flex justify-end space-x-4 mt-6">
                 <button
                   type="button"
