@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, FolderTree, Users, Tag, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, FolderTree, Users, Tag, MapPin, Palmtree, LogOut } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
