@@ -1108,6 +1108,11 @@ Sitemap: https://ecom-refinement.preview.emergentagent.com/sitemap.xml
     
     return Response(content=robots, media_type="text/plain")
 
+# Mount static files for uploads
+upload_dir = Path("/app/uploads")
+upload_dir.mkdir(exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="/app/uploads"), name="uploads")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
