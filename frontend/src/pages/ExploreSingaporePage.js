@@ -64,21 +64,25 @@ function ExploreSingaporePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {landmarks.map((landmark) => (
               <Link key={landmark.id} to={`/landmark/${landmark.id}`} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                <div className="h-48 overflow-hidden bg-gray-200 flex items-center justify-center">{landmark.image ? (
-                <img 
-                  src={attraction.image} 
-                  alt={attraction.name}
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6">
-                <div className="text-xs text-primary font-semibold mb-2 font-inter">{attraction.category}</div>
-                <h3 className="text-xl font-playfair font-bold mb-2">{attraction.name}</h3>
-                <p className="text-gray-600 font-inter">{attraction.description}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+                <div className="h-48 overflow-hidden bg-gray-200 flex items-center justify-center">
+                  {landmark.image ? (
+                    <img src={landmark.image} alt={landmark.name} className="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
+                  ) : (
+                    <MapPin size={48} className="text-gray-400" />
+                  )}
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <MapPin size={18} className="text-primary" />
+                    <span className="text-sm text-primary font-semibold font-inter">Landmark</span>
+                  </div>
+                  <h3 className="text-xl font-playfair font-bold mb-2">{landmark.name}</h3>
+                  <p className="text-gray-600 font-inter">{landmark.description || 'Discover Singapore'}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Call to Action */}
