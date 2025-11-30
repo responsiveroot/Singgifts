@@ -58,6 +58,49 @@ function AdminProducts() {
     }
   };
 
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    const uploadedUrls = [];
+
+    try {
+      for (const file of files) {
+        const formDataUpload = new FormData();
+        formDataUpload.append('file', file);
+
+        const response = await axios.post(`${API}/admin/upload-image`, formDataUpload, {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        uploadedUrls.push(response.data.url);
+      }
+
+      setUploadedImages([...uploadedImages, ...uploadedUrls]);
+      
+      // Update formData images field
+      const allImages = [...uploadedImages, ...uploadedUrls];
+      setFormData({...formData, images: allImages.join(', ')});
+      
+      toast.success(`${files.length} image(s) uploaded successfully`);
+    } catch (error) {
+      toast.error('Failed to upload images');
+      console.error('Upload error:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeUploadedImage = (urlToRemove) => {
+    const updatedImages = uploadedImages.filter(url => url !== urlToRemove);
+    setUploadedImages(updatedImages);
+    setFormData({...formData, images: updatedImages.join(', ')});
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
