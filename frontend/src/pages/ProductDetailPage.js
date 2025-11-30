@@ -326,7 +326,9 @@ function ProductDetailPage({ user, updateCartCount }) {
               <p className="text-gray-700 font-inter leading-relaxed">{product.long_description}</p>
               <div className="mt-4">
                 <p className="text-sm text-gray-600 font-inter"><span className="font-semibold">SKU:</span> {product.sku}</p>
-                <p className="text-sm text-gray-600 font-inter"><span className="font-semibold">Tags:</span> {product.tags.join(', ')}</p>
+                {product.tags && product.tags.length > 0 && (
+                  <p className="text-sm text-gray-600 font-inter"><span className="font-semibold">Tags:</span> {product.tags.join(', ')}</p>
+                )}
               </div>
             </div>
           </div>
