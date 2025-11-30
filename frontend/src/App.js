@@ -40,6 +40,17 @@ import Footer from './components/Footer';
 import AIChat from './components/AIChat';
 import Analytics, { initGA } from './components/Analytics';
 
+// Scroll to top component
+function ScrollToTop() {
+  const { pathname } = require('react-router-dom').useLocation();
+  
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+}
+
 // Context
 import { CurrencyProvider } from './context/CurrencyContext';
 
