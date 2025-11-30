@@ -98,7 +98,7 @@ function AuthPage() {
       });
       
       toast.success('Login successful!');
-      window.location.href = '/';
+      window.location.href = '/dashboard';
     } catch (error) {
       toast.error(error.response?.data?.detail || 'OTP verification failed');
     } finally {
