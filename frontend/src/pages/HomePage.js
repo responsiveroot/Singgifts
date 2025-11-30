@@ -38,6 +38,20 @@ function HomePage({ user }) {
     }
   };
 
+  const getCategoryGradient = (categorySlug) => {
+    const gradients = {
+      'souvenirs': '#E31837, #FF6B6B',
+      'food': '#FF8C00, #FFD700',
+      'apparel': '#4A90E2, #7B68EE',
+      'accessories': '#50C878, #32CD32',
+      'home-decor': '#FF69B4, #FF1493',
+      'books': '#8B4513, #D2691E',
+      'electronics': '#708090, #2F4F4F',
+      'toys': '#FF4500, #FF6347'
+    };
+    return gradients[categorySlug] || '#E31837, #FF6B6B';
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
