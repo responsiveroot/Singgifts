@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
 Backend Testing Suite for SingGifts E-commerce Platform
-Tests discount coupon feature and guest checkout functionality
+Tests discount coupon feature, guest checkout functionality, and image upload system
 """
 
 import asyncio
 import aiohttp
 import json
 import os
+import io
 from datetime import datetime, timezone
 
 # Get backend URL from frontend .env
