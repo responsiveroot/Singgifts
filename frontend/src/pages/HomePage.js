@@ -390,15 +390,37 @@ function HomePage({ user }) {
                 background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
               }}
             >
-              <div className="category-banner-container">
+              <div 
+                className="category-banner-container"
+                style={{
+                  display: 'flex',
+                  flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+                  alignItems: window.innerWidth < 768 ? 'flex-start' : 'center',
+                  justifyContent: window.innerWidth >= 768 ? 'space-between' : 'flex-start',
+                  width: '100%'
+                }}
+              >
                 <div>
                   {/* Line 1: Title - 14px on mobile */}
-                  <h2 className="category-banner-title font-semibold text-white font-inter mb-1">
+                  <h2 
+                    className="category-banner-title font-semibold text-white font-inter mb-1"
+                    style={{
+                      fontSize: window.innerWidth < 768 ? '14px' : '2.25rem',
+                      lineHeight: window.innerWidth < 768 ? '1.2' : 'normal'
+                    }}
+                  >
                     {category.name}
                   </h2>
                   
                   {/* Line 2: Subtitle - 10px on mobile */}
-                  <p className="category-banner-subtitle text-white font-inter leading-snug mb-2 md:mb-0" style={{ opacity: 0.9 }}>
+                  <p 
+                    className="category-banner-subtitle text-white font-inter leading-snug mb-2 md:mb-0" 
+                    style={{ 
+                      opacity: 0.9,
+                      fontSize: window.innerWidth < 768 ? '10px' : '1.125rem',
+                      lineHeight: window.innerWidth < 768 ? '1.3' : 'normal'
+                    }}
+                  >
                     {category.description}
                   </p>
                 </div>
@@ -407,6 +429,12 @@ function HomePage({ user }) {
                 <Link
                   to={`/products?category=${category.id}`}
                   className="category-banner-button inline-flex items-center bg-white text-gray-900 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter"
+                  style={{
+                    fontSize: window.innerWidth < 768 ? '10px' : '1rem',
+                    padding: window.innerWidth < 768 ? '6px 12px' : '0.5rem 1rem',
+                    marginTop: window.innerWidth < 768 ? '8px' : '0',
+                    marginLeft: window.innerWidth >= 768 ? '1rem' : '0'
+                  }}
                 >
                   View All
                   <ArrowRight size={10} className="ml-1 md:hidden" />
