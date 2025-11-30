@@ -27,6 +27,9 @@ function AdminLayout({ user, setUser }) {
     { icon: Package, label: 'Products', path: '/admin/products' },
     { icon: ShoppingCart, label: 'Orders', path: '/admin/orders' },
     { icon: FolderTree, label: 'Categories', path: '/admin/categories' },
+    { icon: MapPin, label: 'Landmarks', path: '/admin/landmarks' },
+    { icon: Palmtree, label: 'Explore Singapore', path: '/admin/explore-singapore' },
+    { icon: Tag, label: 'Batik Label', path: '/admin/batik-label' },
     { icon: Users, label: 'Customers', path: '/admin/customers' },
     { icon: Tag, label: 'Coupons', path: '/admin/coupons' },
   ];
