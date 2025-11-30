@@ -1,3 +1,9 @@
+/* Category Banner Container - Base */
+.category-banner-container {
+  position: relative;
+  z-index: 10;
+}
+
 /* Category Banner Mobile Styles - FORCED SIZES AND LAYOUT */
 @media (max-width: 767px) {
   /* Force the parent container to stack vertically */
@@ -33,6 +39,13 @@
 
 /* Desktop styles */
 @media (min-width: 768px) {
+  .category-banner-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  
   .category-banner-title {
     font-size: 2.25rem !important;
   }
@@ -43,5 +56,6 @@
   
   .category-banner-button {
     font-size: 1rem !important;
+    margin-left: 1rem !important;
   }
 }
