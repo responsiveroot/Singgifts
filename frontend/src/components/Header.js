@@ -347,50 +347,55 @@ function Header({ user, cartCount, logout }) {
                   🛒 Cart {cartCount > 0 && `(${cartCount})`}
                 </Link>
               </div>
-            
-            {/* Currency Selector Mobile */}
-            <div className="pt-2 border-t border-gray-100">
-              <label className="block text-sm font-semibold text-gray-800 mb-2 font-inter">Currency</label>
-              <select 
-                value={currency}
-                onChange={(e) => handleCurrencyChange(e.target.value)}
-                className="w-full text-sm border border-gray-300 rounded-md px-3 py-2 font-inter focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option value="SGD">SGD - Singapore Dollar</option>
-                <option value="USD">USD - US Dollar</option>
-                <option value="EUR">EUR - Euro</option>
-                <option value="GBP">GBP - British Pound</option>
-                <option value="AUD">AUD - Australian Dollar</option>
-                <option value="MYR">MYR - Malaysian Ringgit</option>
-                <option value="INR">INR - Indian Rupee</option>
-              </select>
+              
+              {/* Account Section */}
+              <div className="py-2 border-t border-gray-100">
+                {user ? (
+                  <>
+                    <Link 
+                      to="/dashboard" 
+                      className="block py-3 px-4 text-gray-900 hover:bg-gray-50 rounded-lg font-inter font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      👤 My Account
+                    </Link>
+                    <button 
+                      onClick={() => { logout(); setIsMenuOpen(false); }} 
+                      className="block w-full text-left py-3 px-4 text-red-600 hover:bg-red-50 rounded-lg font-inter font-medium"
+                    >
+                      🚪 Logout
+                    </button>
+                  </>
+                ) : (
+                  <Link 
+                    to="/auth" 
+                    className="block py-3 px-4 bg-primary text-white rounded-lg font-inter font-semibold text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login / Sign Up
+                  </Link>
+                )}
+              </div>
+
+              {/* Currency Selector Mobile */}
+              <div className="py-4 border-t border-gray-100">
+                <label className="block px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Currency</label>
+                <select 
+                  value={currency}
+                  onChange={(e) => handleCurrencyChange(e.target.value)}
+                  className="w-full mx-4 text-sm border border-gray-300 rounded-lg px-3 py-2 font-inter focus:outline-none focus:ring-2 focus:ring-primary"
+                  style={{ width: 'calc(100% - 2rem)' }}
+                >
+                  <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
+                  <option value="USD">🇺🇸 USD - US Dollar</option>
+                  <option value="EUR">🇪🇺 EUR - Euro</option>
+                  <option value="GBP">🇬🇧 GBP - British Pound</option>
+                  <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                  <option value="MYR">🇲🇾 MYR - Malaysian Ringgit</option>
+                  <option value="INR">🇮🇳 INR - Indian Rupee</option>
+                </select>
+              </div>
             </div>
-            
-            {user ? (
-              <>
-                <Link 
-                  to="/dashboard" 
-                  className="block py-2 text-gray-700 hover:text-primary transition-colors font-inter font-medium"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Dashboard
-                </Link>
-                <button 
-                  onClick={() => { logout(); setIsMenuOpen(false); }} 
-                  className="block py-2 text-gray-600 hover:text-primary transition-colors font-inter"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link 
-                to="/auth" 
-                className="block py-2 text-primary font-semibold font-inter"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login / Sign Up
-              </Link>
-            )}
           </div>
         </div>
       )}
