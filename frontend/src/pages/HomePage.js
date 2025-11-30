@@ -384,30 +384,30 @@ function HomePage({ user }) {
           <div className="container mx-auto px-4">
             {/* Category Banner - Mobile Optimized */}
             <div 
-              className="relative rounded-2xl md:rounded-3xl overflow-hidden mb-6 p-5 md:p-12"
+              className="relative rounded-xl md:rounded-3xl overflow-hidden mb-6 p-4 md:p-12"
               style={{
                 background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
               }}
             >
               <div className="relative z-10">
                 {/* Text Content */}
-                <div className="mb-3 md:mb-0">
-                  <h2 className="text-xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-1.5 md:mb-2">
+                <div>
+                  <h2 className="text-base md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-1 md:mb-2">
                     {category.name}
                   </h2>
-                  <p className="text-xs md:text-lg text-white/90 font-inter max-w-md">
+                  <p className="text-xs md:text-lg text-white/90 font-inter max-w-md leading-tight">
                     {category.description}
                   </p>
                 </div>
                 
                 {/* View All Button - Separate Row on Mobile */}
-                <div className="mt-4 md:absolute md:top-1/2 md:right-8 md:-translate-y-1/2">
+                <div className="mt-3 md:absolute md:top-1/2 md:right-8 md:-translate-y-1/2">
                   <Link
                     to={`/products?category=${category.id}`}
-                    className="inline-flex items-center justify-center bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg font-inter text-xs md:text-base"
+                    className="inline-flex items-center justify-center bg-white text-gray-900 px-3 py-1.5 md:px-6 md:py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-md font-inter text-xs md:text-base"
                   >
-                    View All
-                    <ArrowRight size={14} className="ml-1.5 md:hidden" />
+                    <span className="text-xs md:text-base">View All</span>
+                    <ArrowRight size={12} className="ml-1 md:hidden" />
                     <ArrowRight size={20} className="ml-2 hidden md:inline" />
                   </Link>
                 </div>
