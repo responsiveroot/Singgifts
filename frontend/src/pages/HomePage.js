@@ -406,7 +406,7 @@ function HomePage({ user }) {
                 {/* Line 3: Button + Arrow - 10px on mobile */}
                 <Link
                   to={`/products?category=${category.id}`}
-                  className="category-banner-button inline-flex items-center bg-white text-gray-900 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter mt-0 md:mt-0 md:ml-4"
+                  className="category-banner-button inline-flex items-center bg-white text-gray-900 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter self-start md:ml-4"
                 >
                   View All
                   <ArrowRight size={10} className="ml-1 md:hidden" />
