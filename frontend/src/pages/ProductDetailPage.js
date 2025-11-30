@@ -43,9 +43,20 @@ function ProductDetailPage({ user, updateCartCount }) {
       setProduct(productRes.data);
       setReviews(reviewsRes.data);
 
-      // Fetch related products
-      const relatedRes = await axios.get(`${API}/products?category_id=${productRes.data.category_id}&limit=4`);
-      setRelatedProducts(relatedRes.data.filter(p => p.id !== productId));
+      // Fetch related products based on collection type
+      if (productRes.data.category_id) {
+        // General product - fetch from same category
+        const relatedRes = await axios.get(`${API}/products?category_id=${productRes.data.category_id}&limit=4`);
+        setRelatedProducts(relatedRes.data.filter(p => p.id !== productId));
+      } else if (productRes.data.landmark_id) {
+        // Explore Singapore product - fetch from same landmark
+        const relatedRes = await axios.get(`${API}/explore-singapore-products?landmark_id=${productRes.data.landmark_id}`);
+        setRelatedProducts(relatedRes.data.filter(p => p.id !== productId).slice(0, 4));
+      } else {
+        // Batik product - fetch other Batik products
+        const relatedRes = await axios.get(`${API}/batik-products`);
+        setRelatedProducts(relatedRes.data.filter(p => p.id !== productId).slice(0, 4));
+      }
     } catch (error) {
       console.error('Failed to fetch product:', error);
       toast.error('Failed to load product');
