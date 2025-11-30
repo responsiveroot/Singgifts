@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useCurrency } from '../context/CurrencyContext';
 import SEO from '../components/SEO';
 import { websiteSchema, organizationSchema } from '../components/StructuredData';
+import './CategoryBanner.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
