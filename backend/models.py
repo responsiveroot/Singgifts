@@ -58,6 +58,9 @@ class Product(BaseModel):
     location: Optional[str] = None  # For Explore Singapore feature
     is_featured: bool = False
     is_bestseller: bool = False
+    is_batik_label: bool = False  # For BATIC Label products
+    is_on_deal: bool = False  # For ongoing deals
+    deal_percentage: Optional[float] = None  # Deal discount percentage
     rating: float = 0.0
     review_count: int = 0
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
