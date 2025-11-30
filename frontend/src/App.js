@@ -136,6 +136,7 @@ function App() {
   return (
     <BrowserRouter>
       <CurrencyProvider>
+        <ScrollToTop />
         <Analytics />
         <div className="App min-h-screen flex flex-col bg-white">
           <Header user={user} cartCount={cartCount} logout={logout} />
