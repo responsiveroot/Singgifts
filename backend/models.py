@@ -55,6 +55,7 @@ class Product(BaseModel):
     stock: int = 0
     sku: str
     tags: List[str] = []
+    location: Optional[str] = None  # For Explore Singapore feature
     is_featured: bool = False
     is_bestseller: bool = False
     rating: float = 0.0
