@@ -302,6 +302,23 @@ function AdminProducts() {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Singapore Landmark (Optional)</label>
+                <select
+                  value={formData.location}
+                  onChange={(e) => setFormData({...formData, location: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                >
+                  <option value="">No specific location</option>
+                  <option value="Marina Bay Sands">Marina Bay Sands</option>
+                  <option value="Gardens by the Bay">Gardens by the Bay</option>
+                  <option value="Sentosa Island">Sentosa Island</option>
+                  <option value="Merlion Park">Merlion Park</option>
+                  <option value="Chinatown">Chinatown</option>
+                  <option value="Little India">Little India</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1 font-inter">Assign this product to a landmark for "Explore Singapore" feature</p>
+              </div>
               <div className="flex justify-end space-x-4 mt-6">
                 <button
                   type="button"
