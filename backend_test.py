@@ -12,7 +12,7 @@ import io
 from datetime import datetime, timezone
 
 # Get backend URL from frontend .env
-BACKEND_URL = "https://ecom-refinement.preview.emergentagent.com/api"
+BACKEND_URL = "https://batik-store.preview.emergentagent.com/api"
 
 # Test data
 TEST_USER = {
@@ -266,7 +266,7 @@ class BackendTester:
                         "country": "Singapore"
                     },
                     "currency": "sgd",
-                    "frontend_origin": "https://ecom-refinement.preview.emergentagent.com",
+                    "frontend_origin": "https://batik-store.preview.emergentagent.com",
                     "coupon_code": scenario["coupon"]
                 }
                 
@@ -317,7 +317,7 @@ class BackendTester:
                     "country": "Singapore"
                 },
                 "currency": "sgd",
-                "frontend_origin": "https://ecom-refinement.preview.emergentagent.com",
+                "frontend_origin": "https://batik-store.preview.emergentagent.com",
                 "coupon_code": "INVALID123"
             }
             
@@ -371,7 +371,7 @@ class BackendTester:
                     "country": "Singapore"
                 },
                 "currency": "sgd",
-                "frontend_origin": "https://ecom-refinement.preview.emergentagent.com"
+                "frontend_origin": "https://batik-store.preview.emergentagent.com"
             }
             
             # Make request WITHOUT authentication headers
@@ -433,7 +433,7 @@ class BackendTester:
                     "country": "Singapore"
                 },
                 "currency": "sgd",
-                "frontend_origin": "https://ecom-refinement.preview.emergentagent.com",
+                "frontend_origin": "https://batik-store.preview.emergentagent.com",
                 "coupon_code": "WELCOME10"
             }
             
@@ -491,7 +491,7 @@ class BackendTester:
                     "country": "Singapore"
                 },
                 "currency": "sgd",
-                "frontend_origin": "https://ecom-refinement.preview.emergentagent.com"
+                "frontend_origin": "https://batik-store.preview.emergentagent.com"
             }
             
             headers = {"Authorization": f"Bearer {self.session_token}"}
@@ -699,7 +699,7 @@ class BackendTester:
                     # Verify response structure
                     if 'url' in result and 'filename' in result:
                         # Verify URL format
-                        expected_base = "https://ecom-refinement.preview.emergentagent.com/uploads/"
+                        expected_base = "https://batik-store.preview.emergentagent.com/uploads/"
                         if result['url'].startswith(expected_base):
                             self.test_results.append("✅ Valid JPG upload: Correct response format and URL structure")
                             
