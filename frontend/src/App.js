@@ -13,6 +13,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
 import ExploreSingaporePage from './pages/ExploreSingaporePage';
+import LandmarkPage from './pages/LandmarkPage';
 import BatikLabelPage from './pages/BatikLabelPage';
 import NewArrivalsPage from './pages/NewArrivalsPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
