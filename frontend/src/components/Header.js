@@ -242,7 +242,7 @@ function Header({ user, cartCount, logout }) {
                 <img 
                   src="https://customer-assets.emergentagent.com/job_a518ec26-715d-489b-87fc-44c951b31297/artifacts/7thk371k_singgifts-logo.jpeg" 
                   alt="SingGifts" 
-                  className="h-10 w-auto"
+                  className="h-14 w-auto"
                 />
               </Link>
               <button 
