@@ -348,16 +348,64 @@ function AdminProducts() {
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Image URLs (comma-separated)</label>
-                <textarea
-                  value={formData.images}
-                  onChange={(e) => setFormData({...formData, images: e.target.value})}
-                  rows={2}
-                  placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
-                />
+              
+              {/* Image Upload Section */}
+              <div className="border-t pt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Product Images</label>
+                
+                {/* File Upload */}
+                <div className="mb-4">
+                  <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                    <div className="text-center">
+                      <Upload className="mx-auto text-gray-400 mb-2" size={32} />
+                      <span className="text-sm text-gray-600 font-inter">
+                        {uploading ? 'Uploading...' : 'Click to upload images'}
+                      </span>
+                      <p className="text-xs text-gray-500 mt-1 font-inter">PNG, JPG, GIF, WEBP up to 10MB</p>
+                    </div>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+
+                {/* Preview Uploaded Images */}
+                {uploadedImages.length > 0 && (
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    {uploadedImages.map((url, idx) => (
+                      <div key={idx} className="relative group">
+                        <img src={url} alt={`Upload ${idx + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                        <button
+                          type="button"
+                          onClick={() => removeUploadedImage(url)}
+                          className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Manual URL Entry (Optional) */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Or paste image URLs (comma-separated)</label>
+                  <textarea
+                    value={formData.images}
+                    onChange={(e) => setFormData({...formData, images: e.target.value})}
+                    rows={2}
+                    placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                  />
+                  <p className="text-xs text-gray-500 mt-1 font-inter">You can also manually paste external image URLs</p>
+                </div>
               </div>
+              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Singapore Landmark (Optional)</label>
                 <select
