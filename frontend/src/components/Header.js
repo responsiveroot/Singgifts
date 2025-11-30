@@ -334,6 +334,44 @@ function Header({ user, cartCount, logout }) {
           </div>
         </div>
       )}
+
+      {/* Search Modal */}
+      {showSearchModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
+          <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl mx-4">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold font-playfair">Search Products</h3>
+                <button
+                  onClick={() => setShowSearchModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <form onSubmit={handleSearch}>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search for products..."
+                    className="w-full py-3 pl-12 pr-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-inter text-lg"
+                    autoFocus
+                  />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={24} />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full mt-4 bg-primary text-white py-3 rounded-lg hover:bg-primary-dark font-inter font-semibold"
+                >
+                  Search
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
