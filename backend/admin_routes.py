@@ -509,3 +509,131 @@ async def toggle_coupon_status_admin(
     )
     
     return {"message": f"Coupon {'activated' if new_status else 'deactivated'} successfully", "active": new_status}
+
+
+# ============== CSV IMPORT ==============
+
+@admin_router.post("/import-csv")
+async def import_csv_data(
+    request: Request,
+    file: UploadFile = File(...),
+    session_token: Optional[str] = Cookie(None)
+):
+    """Import data from CSV file"""
+    await get_current_admin_user(request, db, session_token)
+    
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be a CSV")
+    
+    # Read CSV content
+    contents = await file.read()
+    decoded = contents.decode('utf-8')
+    csv_reader = csv.DictReader(io.StringIO(decoded))
+    
+    # Get import type from form data
+    form = await request.form()
+    import_type = form.get('import_type', 'products')
+    
+    imported_count = 0
+    errors = []
+    
+    try:
+        if import_type == 'products':
+            # Import general products
+            for row in csv_reader:
+                try:
+                    product_data = {
+                        "id": str(uuid.uuid4()),
+                        "name": row['name'],
+                        "description": row['description'],
+                        "price": float(row['price']),
+                        "sale_price": float(row['sale_price']) if row.get('sale_price') else None,
+                        "category_id": row['category_id'],
+                        "stock": int(row['stock']),
+                        "images": [img.strip() for img in row.get('images', '').split(',') if img.strip()],
+                        "sku": row.get('sku', f"SG-{str(uuid.uuid4())[:8].upper()}"),
+                        "slug": row['name'].lower().replace(' ', '-'),
+                        "created_at": datetime.now(timezone.utc).isoformat(),
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }
+                    await db.products.insert_one(product_data)
+                    imported_count += 1
+                except Exception as e:
+                    errors.append(f"Row {imported_count + 1}: {str(e)}")
+        
+        elif import_type == 'customers':
+            # Import customers for marketing
+            for row in csv_reader:
+                try:
+                    # Check if email already exists
+                    existing = await db.marketing_contacts.find_one({"email": row['email']})
+                    if not existing:
+                        contact_data = {
+                            "id": str(uuid.uuid4()),
+                            "name": row.get('name', ''),
+                            "email": row['email'],
+                            "phone": row.get('phone', ''),
+                            "created_at": datetime.now(timezone.utc).isoformat()
+                        }
+                        await db.marketing_contacts.insert_one(contact_data)
+                        imported_count += 1
+                except Exception as e:
+                    errors.append(f"Row {imported_count + 1}: {str(e)}")
+        
+        elif import_type == 'explore_singapore':
+            # Import Explore Singapore products
+            for row in csv_reader:
+                try:
+                    product_data = {
+                        "id": str(uuid.uuid4()),
+                        "name": row['name'],
+                        "description": row['description'],
+                        "price": float(row['price']),
+                        "sale_price": float(row['sale_price']) if row.get('sale_price') else None,
+                        "landmark_id": row['landmark_id'],
+                        "stock": int(row['stock']),
+                        "images": [img.strip() for img in row.get('images', '').split(',') if img.strip()],
+                        "sku": row.get('sku', f"ESP-{str(uuid.uuid4())[:8].upper()}"),
+                        "slug": row['name'].lower().replace(' ', '-'),
+                        "created_at": datetime.now(timezone.utc).isoformat(),
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }
+                    await db.explore_singapore_products.insert_one(product_data)
+                    imported_count += 1
+                except Exception as e:
+                    errors.append(f"Row {imported_count + 1}: {str(e)}")
+        
+        elif import_type == 'batik':
+            # Import Batik products
+            for row in csv_reader:
+                try:
+                    product_data = {
+                        "id": str(uuid.uuid4()),
+                        "name": row['name'],
+                        "description": row['description'],
+                        "price": float(row['price']),
+                        "sale_price": float(row['sale_price']) if row.get('sale_price') else None,
+                        "stock": int(row['stock']),
+                        "images": [img.strip() for img in row.get('images', '').split(',') if img.strip()],
+                        "sku": row.get('sku', f"BTK-{str(uuid.uuid4())[:8].upper()}"),
+                        "slug": row['name'].lower().replace(' ', '-'),
+                        "created_at": datetime.now(timezone.utc).isoformat(),
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }
+                    await db.batik_products.insert_one(product_data)
+                    imported_count += 1
+                except Exception as e:
+                    errors.append(f"Row {imported_count + 1}: {str(e)}")
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Import failed: {str(e)}")
+    
+    message = f"Successfully imported {imported_count} records"
+    if errors:
+        message += f". {len(errors)} errors occurred"
+    
+    return {
+        "message": message,
+        "imported_count": imported_count,
+        "errors": errors[:10]  # Return first 10 errors
+    }
