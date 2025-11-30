@@ -80,25 +80,14 @@ function Header({ user, cartCount, logout }) {
             />
           </Link>
 
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xl mx-8">
-            <div className="relative w-full">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for products..."
-                className="w-full px-4 py-2.5 pl-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-inter"
-              />
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-primary text-white px-4 py-1.5 rounded-md hover:bg-primary/90 transition-colors font-inter text-sm font-semibold"
-              >
-                Search
-              </button>
-            </div>
-          </form>
+          {/* Search Icon */}
+          <button
+            onClick={() => setShowSearchModal(true)}
+            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors"
+            title="Search"
+          >
+            <Search className="text-gray-700" size={22} />
+          </button>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6 font-inter font-medium">
