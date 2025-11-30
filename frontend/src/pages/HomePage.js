@@ -379,7 +379,7 @@ function HomePage({ user }) {
       </section>
 
       {/* Category-Specific Product Sections */}
-      {categories.slice(0, 4).map((category) => (
+      {categories.map((category) => (
         <section key={category.id} className="py-8 md:py-12 bg-gray-50">
           <div className="container mx-auto px-4">
             {/* Category Banner - Mobile Optimized */}
