@@ -382,31 +382,33 @@ function HomePage({ user }) {
       {categories.map((category) => (
         <section key={category.id} className="py-4 md:py-12 bg-gray-50">
           <div className="container mx-auto px-4">
-            {/* Category Banner - Everything in ONE LINE */}
+            {/* Category Banner - STACKED: Title, Subtitle, Button */}
             <div 
-              className="relative rounded-lg md:rounded-3xl overflow-hidden mb-4 p-2.5 md:p-12"
+              className="relative rounded-lg md:rounded-3xl overflow-hidden mb-4 p-3 md:p-12"
               style={{
                 background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
               }}
             >
-              <div className="relative z-10 flex items-center justify-between gap-2">
-                {/* Title */}
-                <h2 className="text-[11px] md:text-4xl lg:text-5xl font-semibold text-white font-inter whitespace-nowrap">
-                  {category.name}
-                </h2>
+              <div className="relative z-10 md:flex md:items-center md:justify-between">
+                <div className="md:flex-1">
+                  {/* Line 1: Title */}
+                  <h2 className="text-sm md:text-4xl lg:text-5xl font-semibold text-white font-inter mb-1">
+                    {category.name}
+                  </h2>
+                  
+                  {/* Line 2: Subtitle */}
+                  <p className="text-[10px] md:text-lg text-white/90 font-inter leading-snug mb-2 md:mb-0">
+                    {category.description}
+                  </p>
+                </div>
                 
-                {/* Description */}
-                <p className="text-[8px] md:text-lg text-white/85 font-inter leading-tight flex-1 truncate">
-                  {category.description}
-                </p>
-                
-                {/* View All Button */}
+                {/* Line 3: Button + Arrow */}
                 <Link
                   to={`/products?category=${category.id}`}
-                  className="inline-flex items-center bg-white text-gray-900 px-2 py-1 md:px-6 md:py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter text-[8px] md:text-base whitespace-nowrap"
+                  className="inline-flex items-center bg-white text-gray-900 px-3 py-1.5 md:px-6 md:py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter text-[10px] md:text-base mt-0 md:mt-0 md:ml-4"
                 >
                   View All
-                  <ArrowRight size={8} className="ml-0.5 md:hidden" />
+                  <ArrowRight size={10} className="ml-1 md:hidden" />
                   <ArrowRight size={20} className="ml-2 hidden md:inline" />
                 </Link>
               </div>
