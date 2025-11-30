@@ -76,7 +76,7 @@ function ExploreSingaporePage() {
         <h2 className="text-3xl font-playfair font-bold text-center mb-12">Must-Visit Attractions</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {attractions.map((attraction) => (
-            <div key={attraction.id} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+            <Link key={attraction.id} to={`/landmark/${attraction.slug}`} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
               <div className="h-48 overflow-hidden">
                 <img 
                   src={attraction.image} 
