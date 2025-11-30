@@ -152,7 +152,6 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage user={user} />} />
               <Route path="/order-success" element={<OrderSuccessPage />} />
               <Route path="/auth" element={<AuthPage />} />
-              <Route path="/dashboard" element={user ? <DashboardPage user={user} /> : <Navigate to="/auth" />} />
               <Route path="/explore-singapore" element={<ExploreSingaporePage />} />
               <Route path="/landmark/:landmarkId" element={<LandmarkPage />} />
               <Route path="/batik-label" element={<BatikLabelPage />} />
