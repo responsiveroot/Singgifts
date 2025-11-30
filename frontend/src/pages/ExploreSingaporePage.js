@@ -1,58 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Camera, Utensils, Building } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 function ExploreSingaporePage() {
-  const attractions = [
-    {
-      id: 1,
-      slug: 'marina-bay-sands',
-      name: 'Marina Bay Sands',
-      description: 'Iconic integrated resort with rooftop infinity pool',
-      image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&h=400&fit=crop',
-      category: 'Landmarks'
-    },
-    {
-      id: 2,
-      slug: 'gardens-by-the-bay',
-      name: 'Gardens by the Bay',
-      description: 'Futuristic garden with iconic Supertrees',
-      image: 'https://images.unsplash.com/photo-1562992191-913952e43bef?w=600&h=400&fit=crop',
-      category: 'Nature'
-    },
-    {
-      id: 3,
-      slug: 'chinatown',
-      name: 'Chinatown',
-      description: 'Historic ethnic neighborhood with heritage shophouses',
-      image: 'https://images.unsplash.com/photo-1564868526705-a846c8826b43?w=600&h=400&fit=crop',
-      category: 'Culture'
-    },
-    {
-      id: 4,
-      slug: 'sentosa-island',
-      name: 'Sentosa Island',
-      description: 'Island resort with beaches and attractions',
-      image: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600&h=400&fit=crop',
-      category: 'Recreation'
-    },
-    {
-      id: 5,
-      slug: 'merlion-park',
-      name: 'Merlion Park',
-      description: 'Home to Singapore\'s iconic Merlion statue',
-      image: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600&h=400&fit=crop',
-      category: 'Landmarks'
-    },
-    {
-      id: 6,
-      slug: 'little-india',
-      name: 'Little India',
-      description: 'Vibrant Indian quarter with colorful streets',
-      image: 'https://images.unsplash.com/photo-1620766182966-c6eb5f3b1fb6?w=600&h=400&fit=crop',
-      category: 'Culture'
+  const [landmarks, setLandmarks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLandmarks();
+  }, []);
+
+  const fetchLandmarks = async () => {
+    try {
+      const response = await axios.get(`${API}/landmarks`);
+      setLandmarks(response.data);
+    } catch (error) {
+      console.error('Failed to fetch landmarks:', error);
+      toast.error('Failed to load landmarks');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
