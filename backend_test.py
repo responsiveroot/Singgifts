@@ -882,26 +882,14 @@ class BackendTester:
     
     async def run_all_tests(self):
         """Run all backend tests"""
-        print("🚀 Starting SingGifts Backend Tests (Coupons + Guest Checkout)")
+        print("🚀 Starting SingGifts Backend Tests (Image Upload System)")
         print("=" * 70)
         
         try:
             await self.setup_session()
             
-            # Test coupon validation API first (no auth required)
-            await self.test_coupon_validation_api()
-            
-            # Test guest checkout functionality (no auth required)
-            await self.test_guest_checkout_flow()
-            await self.test_guest_checkout_with_coupon()
-            
-            # Try to login for authenticated tests
-            try:
-                await self.login_user()
-                await self.test_checkout_with_coupons()
-                await self.test_authenticated_checkout_still_works()
-            except Exception as login_error:
-                self.test_results.append(f"⚠️  Login failed, skipping authenticated tests: {str(login_error)}")
+            # Focus on Image Upload System Testing as requested
+            await self.run_image_upload_tests()
             
         except Exception as e:
             self.test_results.append(f"❌ Critical error: {str(e)}")
