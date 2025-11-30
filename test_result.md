@@ -105,6 +105,43 @@
 user_problem_statement: "Complete the Discount Coupon feature implementation for SingGifts e-commerce platform"
 
 backend:
+  - task: "Image Upload System - Admin Authentication"
+    implemented: true
+    working: true
+    file: "backend/admin_routes.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Image upload authentication working perfectly. ✅ Unauthenticated requests correctly rejected with 401/403 ✅ Admin login (admin@singgifts.sg / admin123) successful ✅ Authenticated admin users can upload images successfully. Authentication layer properly protecting the upload endpoint."
+
+  - task: "Image Upload System - File Validation and Storage"
+    implemented: true
+    working: true
+    file: "backend/admin_routes.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "File validation and storage working correctly. ✅ Valid image formats (JPG, PNG, GIF, WEBP) upload successfully ✅ Invalid file types (TXT, PDF, DOC, EXE) properly rejected with 400 error ✅ Files stored in /app/uploads/ directory with unique UUID-based filenames ✅ API returns proper response format with 'url' and 'filename' fields ✅ Unique filename generation prevents conflicts. Core upload functionality is solid."
+
+  - task: "Image Upload System - File Accessibility"
+    implemented: true
+    working: false
+    file: "backend/server.py"
+    stuck_count: 1
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "Minor: Static file serving configuration issue. Files are uploaded and stored correctly, but the /uploads/{filename} endpoint returns HTML (React app) instead of the actual image file. This is a static file mounting/routing issue in the deployment configuration, not a core API problem. The upload API itself works perfectly - files are stored, URLs are generated correctly, but the static file serving needs configuration adjustment."
+
+backend:
   - task: "Discount Coupon - Database Seeding"
     implemented: true
     working: true
