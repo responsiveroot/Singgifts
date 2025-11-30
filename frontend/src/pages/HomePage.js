@@ -378,6 +378,88 @@ function HomePage({ user }) {
         </div>
       </section>
 
+      {/* Category-Specific Product Sections */}
+      {categories.slice(0, 4).map((category) => (
+        <section key={category.id} className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            {/* Category Banner */}
+            <div 
+              className="relative rounded-3xl overflow-hidden mb-8 p-8 md:p-12"
+              style={{
+                background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
+              }}
+            >
+              <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between">
+                <div className="mb-4 md:mb-0">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-2">
+                    {category.name}
+                  </h2>
+                  <p className="text-base md:text-lg text-white/90 font-inter max-w-md">
+                    {category.description}
+                  </p>
+                </div>
+                <Link
+                  to={`/products?category=${category.id}`}
+                  className="inline-flex items-center bg-white text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg font-inter self-start md:self-auto"
+                >
+                  View All
+                  <ArrowRight size={20} className="ml-2" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Product Grid - Responsive */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {featuredProducts.slice(0, 4).map((product) => (
+                <Link
+                  key={product.id}
+                  to={`/products/${product.id}`}
+                  className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all group"
+                >
+                  <div className="relative h-64 bg-gray-200 overflow-hidden">
+                    {product.images && product.images[0] && (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    )}
+                    {product.sale_price && (
+                      <span className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        -20%
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-2 font-inter line-clamp-2">
+                      {product.name}
+                    </h3>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        {product.sale_price ? (
+                          <>
+                            <span className="text-xl font-bold text-primary">S${product.sale_price}</span>
+                            <span className="text-sm text-gray-500 line-through ml-2">S${product.price}</span>
+                          </>
+                        ) : (
+                          <span className="text-xl font-bold text-gray-900">S${product.price}</span>
+                        )}
+                      </div>
+                    </div>
+                    {product.rating && (
+                      <div className="flex items-center mt-2">
+                        <span className="text-yellow-400 mr-1">★</span>
+                        <span className="text-sm text-gray-600">{product.rating} ({product.review_count || 10})</span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))}
+
       {/* Dynamic Promotional Banner */}
       <section className="py-0 bg-gradient-to-br from-primary via-red-700 to-blue-600 relative overflow-hidden">
         <motion.div 
