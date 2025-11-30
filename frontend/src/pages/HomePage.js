@@ -382,29 +382,35 @@ function HomePage({ user }) {
       {categories.slice(0, 4).map((category) => (
         <section key={category.id} className="py-8 md:py-12 bg-gray-50">
           <div className="container mx-auto px-4">
-            {/* Category Banner - Optimized for Mobile */}
+            {/* Category Banner - Mobile Optimized */}
             <div 
-              className="relative rounded-2xl md:rounded-3xl overflow-hidden mb-6 p-6 md:p-12"
+              className="relative rounded-2xl md:rounded-3xl overflow-hidden mb-6 p-5 md:p-12"
               style={{
                 background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
               }}
             >
-              <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex-1">
-                  <h2 className="text-2xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-2 leading-tight">
+              <div className="relative z-10">
+                {/* Text Content */}
+                <div className="mb-3 md:mb-0">
+                  <h2 className="text-xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-1.5 md:mb-2">
                     {category.name}
                   </h2>
-                  <p className="text-sm md:text-lg text-white/90 font-inter max-w-md leading-snug">
+                  <p className="text-xs md:text-lg text-white/90 font-inter max-w-md">
                     {category.description}
                   </p>
                 </div>
-                <Link
-                  to={`/products?category=${category.id}`}
-                  className="inline-flex items-center justify-center bg-white text-gray-900 px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg font-inter text-sm md:text-base whitespace-nowrap"
-                >
-                  View All
-                  <ArrowRight size={16} className="ml-2 md:ml-2" />
-                </Link>
+                
+                {/* View All Button - Separate Row on Mobile */}
+                <div className="mt-4 md:absolute md:top-1/2 md:right-8 md:-translate-y-1/2">
+                  <Link
+                    to={`/products?category=${category.id}`}
+                    className="inline-flex items-center justify-center bg-white text-gray-900 px-4 py-2 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg font-inter text-xs md:text-base"
+                  >
+                    View All
+                    <ArrowRight size={14} className="ml-1.5 md:hidden" />
+                    <ArrowRight size={20} className="ml-2 hidden md:inline" />
+                  </Link>
+                </div>
               </div>
             </div>
 
