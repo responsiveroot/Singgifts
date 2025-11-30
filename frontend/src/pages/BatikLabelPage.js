@@ -18,14 +18,9 @@ function BatikLabelPage() {
 
   const fetchBatikProducts = async () => {
     try {
-      const categoriesRes = await axios.get(`${API}/categories`);
-      const batikCategory = categoriesRes.data.find(cat => cat.slug === 'batik');
-      
-      if (batikCategory) {
-        const productsRes = await axios.get(`${API}/products`);
-        const batikProds = productsRes.data.filter(p => p.category_id === batikCategory.id);
-        setBatikProducts(batikProds);
-      }
+      // Fetch products marked as BATIC Label
+      const response = await axios.get(`${API}/products/batik-label`);
+      setBatikProducts(response.data);
     } catch (error) {
       console.error('Failed to fetch Batik products:', error);
     } finally {
