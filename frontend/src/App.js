@@ -164,6 +164,7 @@ function App() {
               <Route path="/shipping-returns" element={<ShippingReturnsPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/wishlist" element={<WishlistPage user={user} updateCartCount={updateCartCount} />} />
+              <Route path="/dashboard" element={<UserDashboard user={user} setUser={setUser} />} />
               
               {/* Admin Login Route */}
               <Route path="/admin-login" element={<AdminLoginPage setUser={setUser} />} />
