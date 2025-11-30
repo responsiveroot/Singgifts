@@ -32,6 +32,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminCategories from './pages/admin/AdminCategories';
+import AdminLandmarks from './pages/admin/AdminLandmarks';
+import AdminExploreSingapore from './pages/admin/AdminExploreSingapore';
+import AdminBatikLabel from './pages/admin/AdminBatikLabel';
 import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminCoupons from './pages/admin/AdminCoupons';
 
