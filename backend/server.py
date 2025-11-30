@@ -276,6 +276,12 @@ async def get_me(request: Request, session_token: Optional[str] = Cookie(None)):
     user = await get_current_user(request, db, session_token)
     return user
 
+@api_router.get("/users/me")
+async def get_current_user_info(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get current user information"""
+    user = await get_current_user(request, db, session_token)
+    return user
+
 @api_router.put("/users/profile")
 async def update_user_profile(request: Request, session_token: Optional[str] = Cookie(None)):
     """Update user profile"""
