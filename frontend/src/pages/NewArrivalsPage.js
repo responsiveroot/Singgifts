@@ -18,12 +18,8 @@ function NewArrivalsPage() {
 
   const fetchNewArrivals = async () => {
     try {
-      const response = await axios.get(`${API}/products?limit=50`);
-      // Sort by created_at to show newest first
-      const sortedProducts = response.data.sort((a, b) => 
-        new Date(b.created_at) - new Date(a.created_at)
-      );
-      setProducts(sortedProducts.slice(0, 24)); // Show top 24 newest products
+      const response = await axios.get(`${API}/products/new-arrivals`);
+      setProducts(response.data); // Backend returns products from last 30 days
     } catch (error) {
       console.error('Failed to fetch new arrivals:', error);
     } finally {
