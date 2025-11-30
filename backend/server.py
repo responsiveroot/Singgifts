@@ -456,13 +456,28 @@ async def get_products(
     
     return products
 
-@api_router.get("/products/{product_id}", response_model=Product)
+@api_router.get("/products/{product_id}")
 async def get_product(product_id: str):
-    """Get single product"""
+    """Get single product from any collection"""
+    # Try general products first
     product = await db.products.find_one({"id": product_id}, {"_id": 0})
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-    return product
+    if product:
+        product['collection_type'] = 'general'
+        return product
+    
+    # Try Explore Singapore products
+    product = await db.explore_singapore_products.find_one({"id": product_id}, {"_id": 0})
+    if product:
+        product['collection_type'] = 'explore_singapore'
+        return product
+    
+    # Try Batik products
+    product = await db.batik_products.find_one({"id": product_id}, {"_id": 0})
+    if product:
+        product['collection_type'] = 'batik'
+        return product
+    
+    raise HTTPException(status_code=404, detail="Product not found")
 
 @api_router.post("/products", response_model=Product)
 async def create_product(product_data: ProductCreate, request: Request, session_token: Optional[str] = Cookie(None)):
