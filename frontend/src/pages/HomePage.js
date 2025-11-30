@@ -380,30 +380,30 @@ function HomePage({ user }) {
 
       {/* Category-Specific Product Sections */}
       {categories.slice(0, 4).map((category) => (
-        <section key={category.id} className="py-12 bg-gray-50">
+        <section key={category.id} className="py-8 md:py-12 bg-gray-50">
           <div className="container mx-auto px-4">
-            {/* Category Banner */}
+            {/* Category Banner - Optimized for Mobile */}
             <div 
-              className="relative rounded-3xl overflow-hidden mb-8 p-8 md:p-12"
+              className="relative rounded-2xl md:rounded-3xl overflow-hidden mb-6 p-6 md:p-12"
               style={{
                 background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
               }}
             >
-              <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between">
-                <div className="mb-4 md:mb-0">
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-2">
+              <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="flex-1">
+                  <h2 className="text-2xl md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-2 leading-tight">
                     {category.name}
                   </h2>
-                  <p className="text-base md:text-lg text-white/90 font-inter max-w-md">
+                  <p className="text-sm md:text-lg text-white/90 font-inter max-w-md leading-snug">
                     {category.description}
                   </p>
                 </div>
                 <Link
                   to={`/products?category=${category.id}`}
-                  className="inline-flex items-center bg-white text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg font-inter self-start md:self-auto"
+                  className="inline-flex items-center justify-center bg-white text-gray-900 px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg font-inter text-sm md:text-base whitespace-nowrap"
                 >
                   View All
-                  <ArrowRight size={20} className="ml-2" />
+                  <ArrowRight size={16} className="ml-2 md:ml-2" />
                 </Link>
               </div>
             </div>
