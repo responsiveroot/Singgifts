@@ -392,31 +392,25 @@ function HomePage({ user }) {
             >
               <div className="relative z-10 md:flex md:items-center md:justify-between">
                 <div className="md:flex-1">
-                  {/* Line 1: Title - FORCED 14px */}
-                  <h2 
-                    className="font-semibold text-white font-inter mb-1"
-                    style={{ fontSize: window.innerWidth < 768 ? '14px' : '2.25rem' }}
-                  >
+                  {/* Line 1: Title - 14px on mobile */}
+                  <h2 className="category-banner-title font-semibold text-white font-inter mb-1">
                     {category.name}
                   </h2>
                   
-                  {/* Line 2: Subtitle - FORCED 10px */}
-                  <p 
-                    className="text-white font-inter leading-snug mb-2 md:mb-0"
-                    style={{ fontSize: window.innerWidth < 768 ? '10px' : '1.125rem', opacity: 0.9 }}
-                  >
+                  {/* Line 2: Subtitle - 10px on mobile */}
+                  <p className="category-banner-subtitle text-white font-inter leading-snug mb-2 md:mb-0" style={{ opacity: 0.9 }}>
                     {category.description}
                   </p>
                 </div>
                 
-                {/* Line 3: Button + Arrow - FORCED 10px */}
+                {/* Line 3: Button + Arrow - 10px on mobile */}
                 <Link
                   to={`/products?category=${category.id}`}
-                  className="inline-flex items-center bg-white text-gray-900 px-3 py-1.5 md:px-6 md:py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter mt-0 md:mt-0 md:ml-4"
-                  style={{ fontSize: window.innerWidth < 768 ? '10px' : '1rem' }}
+                  className="category-banner-button inline-flex items-center bg-white text-gray-900 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter mt-0 md:mt-0 md:ml-4"
                 >
                   View All
-                  <ArrowRight size={window.innerWidth < 768 ? 10 : 20} className="ml-1 md:ml-2" />
+                  <ArrowRight size={10} className="ml-1 md:hidden" />
+                  <ArrowRight size={20} className="ml-2 hidden md:inline" />
                 </Link>
               </div>
             </div>
