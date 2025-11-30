@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException, Request, Cookie
+from fastapi import APIRouter, HTTPException, Request, Cookie, UploadFile, File
 from typing import Optional
 from datetime import datetime, timezone
 import uuid
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import shutil
+from pathlib import Path
 from auth import get_current_admin_user
 
 # Get DB connection
