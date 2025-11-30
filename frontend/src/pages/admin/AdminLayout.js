@@ -32,6 +32,7 @@ function AdminLayout({ user, setUser }) {
     { icon: Tag, label: 'Batik Label', path: '/admin/batik-label' },
     { icon: Users, label: 'Customers', path: '/admin/customers' },
     { icon: Tag, label: 'Coupons', path: '/admin/coupons' },
+    { icon: Upload, label: 'Import CSV', path: '/admin/import' },
   ];
 
   return (
