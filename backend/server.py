@@ -276,6 +276,21 @@ async def get_me(request: Request, session_token: Optional[str] = Cookie(None)):
     user = await get_current_user(request, db, session_token)
     return user
 
+@api_router.put("/users/profile")
+async def update_user_profile(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Update user profile"""
+    user = await get_current_user(request, db, session_token)
+    data = await request.json()
+    
+    # Update only name (email cannot be changed)
+    await db.users.update_one(
+        {"id": user['id']},
+        {"$set": {"name": data.get('name', user['name'])}}
+    )
+    
+    updated_user = await db.users.find_one({"id": user['id']}, {"_id": 0})
+    return updated_user
+
 @api_router.post("/auth/logout")
 async def logout(request: Request, response: Response, session_token: Optional[str] = Cookie(None)):
     """Logout user"""
