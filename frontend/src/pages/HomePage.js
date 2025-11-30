@@ -382,35 +382,33 @@ function HomePage({ user }) {
       {categories.map((category) => (
         <section key={category.id} className="py-4 md:py-12 bg-gray-50">
           <div className="container mx-auto px-4">
-            {/* Category Banner - Mobile Optimized */}
+            {/* Category Banner - Everything in ONE LINE */}
             <div 
-              className="relative rounded-lg md:rounded-3xl overflow-hidden mb-4 p-3 md:p-12"
+              className="relative rounded-lg md:rounded-3xl overflow-hidden mb-4 p-2.5 md:p-12"
               style={{
                 background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
               }}
             >
-              <div className="relative z-10 md:flex md:items-center md:justify-between">
-                {/* Text Content - Stacked on Mobile */}
-                <div className="mb-2 md:mb-0">
-                  <h2 className="text-xs md:text-4xl lg:text-5xl font-semibold text-white mb-1 md:mb-2 font-inter">
-                    {category.name}
-                  </h2>
-                  <p className="text-[9px] md:text-lg text-white/85 font-inter max-w-md leading-tight mb-2 md:mb-0">
-                    {category.description}
-                  </p>
-                </div>
+              <div className="relative z-10 flex items-center justify-between gap-2">
+                {/* Title */}
+                <h2 className="text-[11px] md:text-4xl lg:text-5xl font-semibold text-white font-inter whitespace-nowrap">
+                  {category.name}
+                </h2>
                 
-                {/* View All Button - Separate Line on Mobile */}
-                <div className="md:ml-auto">
-                  <Link
-                    to={`/products?category=${category.id}`}
-                    className="inline-flex items-center bg-white text-gray-900 px-2 py-0.5 md:px-6 md:py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter text-[9px] md:text-base"
-                  >
-                    View All
-                    <ArrowRight size={8} className="ml-0.5 md:hidden" />
-                    <ArrowRight size={20} className="ml-2 hidden md:inline" />
-                  </Link>
-                </div>
+                {/* Description */}
+                <p className="text-[8px] md:text-lg text-white/85 font-inter leading-tight flex-1 truncate">
+                  {category.description}
+                </p>
+                
+                {/* View All Button */}
+                <Link
+                  to={`/products?category=${category.id}`}
+                  className="inline-flex items-center bg-white text-gray-900 px-2 py-1 md:px-6 md:py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter text-[8px] md:text-base whitespace-nowrap"
+                >
+                  View All
+                  <ArrowRight size={8} className="ml-0.5 md:hidden" />
+                  <ArrowRight size={20} className="ml-2 hidden md:inline" />
+                </Link>
               </div>
             </div>
 
