@@ -322,6 +322,20 @@ async def create_category(category_data: CategoryCreate, request: Request, sessi
 
 # ============== PRODUCT ROUTES ==============
 
+@api_router.get("/products/new-arrivals")
+async def get_new_arrivals(limit: int = 24):
+    """Get new arrivals (products from last 30 days)"""
+    # Calculate date 30 days ago
+    thirty_days_ago = datetime.now(timezone.utc) - timedelta(days=30)
+    
+    # Find products created in last 30 days
+    products = await db.products.find(
+        {"created_at": {"$gte": thirty_days_ago.isoformat()}},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(length=limit)
+    
+    return products
+
 @api_router.get("/products", response_model=List[Product])
 async def get_products(
     limit: int = 100, 
