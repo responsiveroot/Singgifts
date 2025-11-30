@@ -390,7 +390,7 @@ function HomePage({ user }) {
                 background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
               }}
             >
-              <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between">
+              <div className="category-banner-container relative z-10 flex flex-col md:flex-row md:items-center md:justify-between">
                 <div className="md:flex-1">
                   {/* Line 1: Title - 14px on mobile */}
                   <h2 className="category-banner-title font-semibold text-white font-inter mb-1">
