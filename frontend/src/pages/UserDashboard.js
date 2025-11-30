@@ -141,6 +141,12 @@ function UserDashboard({ user, setUser }) {
 
             {/* Main Content */}
             <div className="lg:col-span-3">
+              {/* Welcome Message */}
+              <div className="bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl p-6 mb-6">
+                <h2 className="text-2xl font-playfair font-bold mb-2">Welcome back, {user?.name}! 👋</h2>
+                <p className="font-inter">Manage your orders, wishlist, and profile all in one place.</p>
+              </div>
+
               {/* Orders Tab */}
               {activeTab === 'orders' && (
                 <div className="bg-white rounded-xl shadow-md p-6">
