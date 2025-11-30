@@ -71,7 +71,7 @@ function BatikLabelPage() {
         {/* Products Grid */}
         <div className="mb-8">
           <h3 className="text-2xl font-playfair font-bold mb-6">Our Batik Collection</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {batikProducts.map((product) => (
               <Link
                 key={product.id}
