@@ -112,7 +112,8 @@ function AdminProducts() {
       sale_price: '',
       category_id: '',
       stock: '',
-      images: ''
+      images: '',
+      location: ''
     });
   };
 
