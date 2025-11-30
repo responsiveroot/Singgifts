@@ -26,6 +26,7 @@ function UserDashboard({ user, setUser }) {
       navigate('/auth');
       return;
     }
+    setLoading(true);
     fetchData();
   }, [user, activeTab]);
 
