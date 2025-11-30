@@ -139,6 +139,7 @@ function AdminProducts() {
 
   const handleEdit = (product) => {
     setEditingProduct(product);
+    setUploadedImages(product.images || []);
     setFormData({
       name: product.name,
       description: product.description,
@@ -157,6 +158,7 @@ function AdminProducts() {
 
   const resetForm = () => {
     setEditingProduct(null);
+    setUploadedImages([]);
     setFormData({
       name: '',
       description: '',
