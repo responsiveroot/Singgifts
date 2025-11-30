@@ -186,13 +186,13 @@ function Header({ user, cartCount, logout }) {
 
             {user ? (
               <>
-                <Link to="/dashboard" className="hidden md:flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors" data-testid="nav-dashboard">
+                <Link to="/dashboard" className="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors" data-testid="nav-dashboard">
                   <User size={20} />
                   <span className="font-inter font-medium">{user.name}</span>
                 </Link>
                 <button 
                   onClick={logout} 
-                  className="hidden md:block text-sm text-gray-600 hover:text-primary transition-colors font-inter"
+                  className="text-sm text-gray-600 hover:text-primary transition-colors font-inter"
                   data-testid="logout-btn"
                 >
                   Logout
