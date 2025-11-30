@@ -117,7 +117,10 @@ function AdminProducts() {
       category_id: '',
       stock: '',
       images: '',
-      location: ''
+      location: '',
+      is_batik_label: false,
+      is_on_deal: false,
+      deal_percentage: ''
     });
   };
 
