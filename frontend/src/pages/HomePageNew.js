@@ -337,9 +337,9 @@ function HomePageNew({ user }) {
 
           return (
             <section key={category.id} className="mb-10" data-testid={`category-section-${category.slug}`}>
-              {/* Vibrant Horizontal Category Banner */}
+              {/* Category Banner - Responsive */}
               <div 
-                className={`relative h-52 rounded-2xl overflow-hidden shadow-xl mb-6 bg-gradient-to-r ${gradientClass}`}
+                className={`relative rounded-lg md:rounded-2xl overflow-hidden shadow-xl mb-6 p-3 md:p-12 bg-gradient-to-r ${gradientClass}`}
               >
                 {/* Background Image with Overlay */}
                 <div 
@@ -347,22 +347,23 @@ function HomePageNew({ user }) {
                   style={{ backgroundImage: `url(${category.image_url})` }}
                 ></div>
                 
-                {/* Content */}
-                <div className="absolute inset-0 flex items-center justify-between px-12">
-                  <div className="text-white max-w-2xl z-10">
-                    <h2 className="text-6xl font-playfair font-black mb-3 tracking-tight drop-shadow-lg">
+                {/* Content - Stacked on mobile, horizontal on desktop */}
+                <div className="category-banner-container relative z-10 flex flex-col md:flex-row md:items-center md:justify-between w-full">
+                  <div className="w-full md:flex-1">
+                    <h2 className="category-banner-title text-white font-playfair font-bold mb-1 md:mb-3 tracking-tight drop-shadow-lg">
                       {category.name}
                     </h2>
-                    <p className="text-2xl font-inter drop-shadow">
+                    <p className="category-banner-subtitle text-white font-inter drop-shadow mb-2 md:mb-0">
                       {category.description}
                     </p>
                   </div>
                   <Link 
                     to={`/products?category=${category.id}`}
-                    className="bg-white text-gray-900 px-10 py-4 rounded-xl font-bold hover:scale-105 transition-all shadow-2xl font-inter text-lg flex items-center z-10"
+                    className="category-banner-button bg-white text-gray-900 rounded-full font-bold hover:scale-105 transition-all shadow-xl font-inter inline-flex items-center mt-2 md:mt-0 md:ml-4"
                   >
                     View All
-                    <ArrowRight size={22} className="ml-2" />
+                    <ArrowRight size={10} className="ml-1 md:hidden" />
+                    <ArrowRight size={22} className="ml-2 hidden md:inline" />
                   </Link>
                 </div>
 
