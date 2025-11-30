@@ -24,6 +24,7 @@ import TermsConditionsPage from './pages/TermsConditionsPage';
 import ShippingReturnsPage from './pages/ShippingReturnsPage';
 import FAQPage from './pages/FAQPage';
 import WishlistPage from './pages/WishlistPage';
+import UserDashboard from './pages/UserDashboard';
 
 // Admin Pages
 import AdminLoginPage from './pages/AdminLoginPage';
