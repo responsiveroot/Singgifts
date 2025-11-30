@@ -98,7 +98,8 @@ function AdminProducts() {
       sale_price: product.sale_price || '',
       category_id: product.category_id,
       stock: product.stock,
-      images: product.images.join(', ')
+      images: product.images.join(', '),
+      location: product.location || ''
     });
     setShowModal(true);
   };
