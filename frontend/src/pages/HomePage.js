@@ -496,7 +496,7 @@ function HomePage({ user }) {
             <p className="text-xl text-gray-600 font-inter max-w-2xl mx-auto">Customer favorites from our collection</p>
           </motion.div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {bestsellers.map((product, index) => (
               <motion.div
                 key={product.id}
