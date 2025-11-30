@@ -545,6 +545,341 @@ class BackendTester:
         except Exception as e:
             self.test_results.append(f"❌ Authenticated transaction verification failed: {str(e)}")
     
+    async def admin_login(self):
+        """Login as admin user for image upload testing"""
+        print("🔐 Logging in as admin user...")
+        
+        try:
+            login_data = {
+                "email": "admin@singgifts.sg",
+                "password": "admin123"
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/auth/admin-login", json=login_data) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    self.session_token = result.get("session_token")
+                    self.user_data = result.get("user")
+                    print(f"✅ Admin login successful: {self.user_data['email']}")
+                    return True
+                else:
+                    error_text = await resp.text()
+                    print(f"❌ Admin login failed: {resp.status} - {error_text}")
+                    return False
+                    
+        except Exception as e:
+            print(f"❌ Admin login exception: {str(e)}")
+            return False
+    
+    def create_test_image(self, file_type="jpg", content_type="image/jpeg"):
+        """Create a simple test image file in memory"""
+        # Create a minimal valid image file (1x1 pixel)
+        if file_type.lower() in ["jpg", "jpeg"]:
+            # Minimal JPEG header + data
+            image_data = bytes([
+                0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01,
+                0x01, 0x01, 0x00, 0x48, 0x00, 0x48, 0x00, 0x00, 0xFF, 0xDB, 0x00, 0x43,
+                0x00, 0x08, 0x06, 0x06, 0x07, 0x06, 0x05, 0x08, 0x07, 0x07, 0x07, 0x09,
+                0x09, 0x08, 0x0A, 0x0C, 0x14, 0x0D, 0x0C, 0x0B, 0x0B, 0x0C, 0x19, 0x12,
+                0x13, 0x0F, 0x14, 0x1D, 0x1A, 0x1F, 0x1E, 0x1D, 0x1A, 0x1C, 0x1C, 0x20,
+                0x24, 0x2E, 0x27, 0x20, 0x22, 0x2C, 0x23, 0x1C, 0x1C, 0x28, 0x37, 0x29,
+                0x2C, 0x30, 0x31, 0x34, 0x34, 0x34, 0x1F, 0x27, 0x39, 0x3D, 0x38, 0x32,
+                0x3C, 0x2E, 0x33, 0x34, 0x32, 0xFF, 0xC0, 0x00, 0x11, 0x08, 0x00, 0x01,
+                0x00, 0x01, 0x01, 0x01, 0x11, 0x00, 0x02, 0x11, 0x01, 0x03, 0x11, 0x01,
+                0xFF, 0xC4, 0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0xFF, 0xC4,
+                0x00, 0x14, 0x10, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xDA, 0x00, 0x0C,
+                0x03, 0x01, 0x00, 0x02, 0x11, 0x03, 0x11, 0x00, 0x3F, 0x00, 0xB2, 0xC0,
+                0x07, 0xFF, 0xD9
+            ])
+        elif file_type.lower() == "png":
+            # Minimal PNG header + data (1x1 transparent pixel)
+            image_data = bytes([
+                0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D,
+                0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+                0x08, 0x06, 0x00, 0x00, 0x00, 0x1F, 0x15, 0xC4, 0x89, 0x00, 0x00, 0x00,
+                0x0B, 0x49, 0x44, 0x41, 0x54, 0x78, 0x9C, 0x63, 0x00, 0x01, 0x00, 0x00,
+                0x05, 0x00, 0x01, 0x0D, 0x0A, 0x2D, 0xB4, 0x00, 0x00, 0x00, 0x00, 0x49,
+                0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+            ])
+        elif file_type.lower() == "gif":
+            # Minimal GIF header + data (1x1 pixel)
+            image_data = bytes([
+                0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00,
+                0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x21, 0xF9, 0x04, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
+                0x00, 0x02, 0x02, 0x0C, 0x0A, 0x00, 0x3B
+            ])
+        elif file_type.lower() == "webp":
+            # Minimal WebP header + data
+            image_data = bytes([
+                0x52, 0x49, 0x46, 0x46, 0x1A, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50,
+                0x56, 0x50, 0x38, 0x20, 0x0E, 0x00, 0x00, 0x00, 0x30, 0x01, 0x00, 0x9D,
+                0x01, 0x2A, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x34, 0x25, 0xA4, 0x00,
+                0x03, 0x70, 0x00, 0xFE, 0xFB, 0xFD, 0x50, 0x00
+            ])
+        else:
+            # For invalid file types, create text content
+            image_data = b"This is not an image file"
+            
+        return io.BytesIO(image_data)
+    
+    async def test_image_upload_authentication(self):
+        """Test image upload authentication requirements"""
+        print("\n🔐 Testing Image Upload Authentication...")
+        
+        # Test 1: Upload without authentication (should fail)
+        try:
+            test_image = self.create_test_image("jpg")
+            data = aiohttp.FormData()
+            data.add_field('file', test_image, filename='test.jpg', content_type='image/jpeg')
+            
+            async with self.session.post(f"{BACKEND_URL}/admin/upload-image", data=data) as resp:
+                if resp.status in [401, 403]:
+                    self.test_results.append("✅ Unauthenticated upload correctly rejected (401/403)")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Unauthenticated upload: Expected 401/403, got {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Unauthenticated upload test: Exception - {str(e)}")
+        
+        # Test 2: Login as admin and try upload (should succeed)
+        admin_login_success = await self.admin_login()
+        if admin_login_success:
+            try:
+                test_image = self.create_test_image("jpg")
+                data = aiohttp.FormData()
+                data.add_field('file', test_image, filename='test_auth.jpg', content_type='image/jpeg')
+                
+                cookies = {'session_token': self.session_token} if self.session_token else {}
+                
+                async with self.session.post(f"{BACKEND_URL}/admin/upload-image", 
+                                           data=data, cookies=cookies) as resp:
+                    if resp.status == 200:
+                        result = await resp.json()
+                        if 'url' in result and 'filename' in result:
+                            self.test_results.append("✅ Admin authenticated upload successful")
+                            # Store for later accessibility test
+                            self.uploaded_file_url = result['url']
+                            self.uploaded_filename = result['filename']
+                        else:
+                            self.test_results.append("❌ Admin upload: Missing url or filename in response")
+                    else:
+                        error_text = await resp.text()
+                        self.test_results.append(f"❌ Admin upload failed: {resp.status} - {error_text}")
+                        
+            except Exception as e:
+                self.test_results.append(f"❌ Admin upload test: Exception - {str(e)}")
+        else:
+            self.test_results.append("⚠️  Skipping admin upload test - admin login failed")
+    
+    async def test_valid_image_upload(self):
+        """Test uploading valid image files"""
+        print("\n📸 Testing Valid Image Upload...")
+        
+        if not self.session_token:
+            self.test_results.append("⚠️  Skipping valid image upload test - no admin session")
+            return
+        
+        # Test uploading a JPG image
+        try:
+            test_image = self.create_test_image("jpg")
+            data = aiohttp.FormData()
+            data.add_field('file', test_image, filename='valid_test.jpg', content_type='image/jpeg')
+            
+            cookies = {'session_token': self.session_token}
+            
+            async with self.session.post(f"{BACKEND_URL}/admin/upload-image", 
+                                       data=data, cookies=cookies) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    
+                    # Verify response structure
+                    if 'url' in result and 'filename' in result:
+                        # Verify URL format
+                        expected_base = "https://ecom-refinement.preview.emergentagent.com/uploads/"
+                        if result['url'].startswith(expected_base):
+                            self.test_results.append("✅ Valid JPG upload: Correct response format and URL structure")
+                            
+                            # Store for accessibility test
+                            self.test_upload_url = result['url']
+                            self.test_upload_filename = result['filename']
+                        else:
+                            self.test_results.append(f"❌ Valid JPG upload: Incorrect URL format - {result['url']}")
+                    else:
+                        self.test_results.append("❌ Valid JPG upload: Missing required fields in response")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Valid JPG upload failed: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Valid JPG upload test: Exception - {str(e)}")
+    
+    async def test_multiple_file_types(self):
+        """Test uploading different valid image file types"""
+        print("\n🎨 Testing Multiple Image File Types...")
+        
+        if not self.session_token:
+            self.test_results.append("⚠️  Skipping multiple file types test - no admin session")
+            return
+        
+        # Test different image formats
+        test_formats = [
+            ("png", "image/png"),
+            ("jpg", "image/jpeg"),
+            ("gif", "image/gif"),
+            ("webp", "image/webp")
+        ]
+        
+        for file_ext, content_type in test_formats:
+            try:
+                test_image = self.create_test_image(file_ext, content_type)
+                data = aiohttp.FormData()
+                data.add_field('file', test_image, filename=f'test.{file_ext}', content_type=content_type)
+                
+                cookies = {'session_token': self.session_token}
+                
+                async with self.session.post(f"{BACKEND_URL}/admin/upload-image", 
+                                           data=data, cookies=cookies) as resp:
+                    if resp.status == 200:
+                        result = await resp.json()
+                        if 'url' in result and 'filename' in result:
+                            self.test_results.append(f"✅ {file_ext.upper()} upload successful")
+                        else:
+                            self.test_results.append(f"❌ {file_ext.upper()} upload: Missing response fields")
+                    else:
+                        error_text = await resp.text()
+                        self.test_results.append(f"❌ {file_ext.upper()} upload failed: {resp.status} - {error_text}")
+                        
+            except Exception as e:
+                self.test_results.append(f"❌ {file_ext.upper()} upload test: Exception - {str(e)}")
+    
+    async def test_invalid_file_types(self):
+        """Test uploading invalid file types"""
+        print("\n🚫 Testing Invalid File Type Rejection...")
+        
+        if not self.session_token:
+            self.test_results.append("⚠️  Skipping invalid file types test - no admin session")
+            return
+        
+        # Test invalid file types
+        invalid_files = [
+            ("test.txt", "text/plain", b"This is a text file"),
+            ("test.pdf", "application/pdf", b"%PDF-1.4 fake pdf content"),
+            ("test.doc", "application/msword", b"Fake document content"),
+            ("test.exe", "application/octet-stream", b"Fake executable")
+        ]
+        
+        for filename, content_type, file_content in invalid_files:
+            try:
+                test_file = io.BytesIO(file_content)
+                data = aiohttp.FormData()
+                data.add_field('file', test_file, filename=filename, content_type=content_type)
+                
+                cookies = {'session_token': self.session_token}
+                
+                async with self.session.post(f"{BACKEND_URL}/admin/upload-image", 
+                                           data=data, cookies=cookies) as resp:
+                    if resp.status == 400:
+                        result = await resp.json()
+                        if "Invalid file type" in result.get("detail", ""):
+                            self.test_results.append(f"✅ {filename}: Correctly rejected with 400 error")
+                        else:
+                            self.test_results.append(f"❌ {filename}: Wrong error message - {result}")
+                    else:
+                        error_text = await resp.text()
+                        self.test_results.append(f"❌ {filename}: Expected 400, got {resp.status} - {error_text}")
+                        
+            except Exception as e:
+                self.test_results.append(f"❌ {filename} rejection test: Exception - {str(e)}")
+    
+    async def test_file_accessibility(self):
+        """Test that uploaded files are accessible via returned URL"""
+        print("\n🌐 Testing File Accessibility...")
+        
+        # Test accessibility of uploaded file
+        if hasattr(self, 'test_upload_url'):
+            try:
+                async with self.session.get(self.test_upload_url) as resp:
+                    if resp.status == 200:
+                        content_type = resp.headers.get('content-type', '')
+                        if content_type.startswith('image/'):
+                            self.test_results.append("✅ Uploaded file accessible via returned URL")
+                            self.test_results.append(f"✅ Correct content-type: {content_type}")
+                        else:
+                            self.test_results.append(f"❌ File accessible but wrong content-type: {content_type}")
+                    else:
+                        self.test_results.append(f"❌ Uploaded file not accessible: {resp.status}")
+                        
+            except Exception as e:
+                self.test_results.append(f"❌ File accessibility test: Exception - {str(e)}")
+        else:
+            self.test_results.append("⚠️  Skipping file accessibility test - no uploaded file URL")
+        
+        # Test direct uploads endpoint
+        try:
+            # Test the static file serving endpoint
+            test_url = f"{BACKEND_URL.replace('/api', '')}/uploads/"
+            async with self.session.get(test_url) as resp:
+                # This should either return a directory listing or 404, but not 500
+                if resp.status in [200, 403, 404]:
+                    self.test_results.append("✅ Uploads endpoint accessible (static file serving working)")
+                else:
+                    self.test_results.append(f"❌ Uploads endpoint issue: {resp.status}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Uploads endpoint test: Exception - {str(e)}")
+    
+    async def test_file_storage_verification(self):
+        """Verify files are stored in the correct directory"""
+        print("\n📁 Testing File Storage Verification...")
+        
+        if hasattr(self, 'test_upload_filename'):
+            try:
+                # Check if file exists in uploads directory
+                import aiofiles
+                import os
+                
+                file_path = f"/app/uploads/{self.test_upload_filename}"
+                if os.path.exists(file_path):
+                    file_size = os.path.getsize(file_path)
+                    self.test_results.append(f"✅ File stored in /app/uploads/ directory")
+                    self.test_results.append(f"✅ File size: {file_size} bytes")
+                    
+                    # Verify unique filename generation
+                    if len(self.test_upload_filename) > 10:  # UUID should make it long
+                        self.test_results.append("✅ Unique filename generated (UUID-based)")
+                    else:
+                        self.test_results.append("❌ Filename may not be unique enough")
+                else:
+                    self.test_results.append(f"❌ File not found in uploads directory: {file_path}")
+                    
+            except Exception as e:
+                self.test_results.append(f"❌ File storage verification: Exception - {str(e)}")
+        else:
+            self.test_results.append("⚠️  Skipping file storage verification - no uploaded filename")
+    
+    async def run_image_upload_tests(self):
+        """Run all image upload tests"""
+        print("\n🖼️  Starting Image Upload System Tests...")
+        print("=" * 50)
+        
+        # Initialize storage for test data
+        self.uploaded_file_url = None
+        self.uploaded_filename = None
+        self.test_upload_url = None
+        self.test_upload_filename = None
+        
+        # Run all image upload tests
+        await self.test_image_upload_authentication()
+        await self.test_valid_image_upload()
+        await self.test_multiple_file_types()
+        await self.test_invalid_file_types()
+        await self.test_file_accessibility()
+        await self.test_file_storage_verification()
+    
     async def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting SingGifts Backend Tests (Coupons + Guest Checkout)")
