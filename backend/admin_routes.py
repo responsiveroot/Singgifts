@@ -46,9 +46,9 @@ async def upload_image(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
     
-    # Return the URL path
-    backend_url = "https://ecom-refinement.preview.emergentagent.com"
-    image_url = f"{backend_url}/uploads/{unique_filename}"
+    # Return the URL path (with /api prefix for Kubernetes routing)
+    backend_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
+    image_url = f"{backend_url}/api/uploads/{unique_filename}"
     
     return {"url": image_url, "filename": unique_filename}
 
