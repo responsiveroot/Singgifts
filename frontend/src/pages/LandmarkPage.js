@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MapPin, Star, ArrowLeft } from 'lucide-react';
+import { MapPin, Star, ArrowLeft, ShoppingCart } from 'lucide-react';
 import axios from 'axios';
+import { toast } from 'sonner';
 import { useCurrency } from '../context/CurrencyContext';
 import SEO from '../components/SEO';
 
