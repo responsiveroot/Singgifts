@@ -58,7 +58,7 @@ function AuthPage() {
       });
       
       toast.success('Registration successful!');
-      window.location.href = '/';
+      window.location.href = '/dashboard';
     } catch (error) {
       toast.error(error.response?.data?.detail || 'OTP verification failed');
     } finally {
