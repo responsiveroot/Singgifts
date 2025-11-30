@@ -164,25 +164,27 @@ function AdminLandmarks() {
             <h2 className="text-2xl font-playfair font-bold mb-6">{editingLandmark ? 'Edit Landmark' : 'Add New Landmark'}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Landmark Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Landmark Name * (displays in large font)</label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
-                  placeholder="e.g., Marina Bay Sands"
+                  className="w-full px-4 py-3 text-xl font-semibold border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-playfair"
+                  placeholder="e.g., The Merlion Story"
                 />
+                <p className="text-xs text-gray-500 mt-1 font-inter">This will appear as the main title in large font on the frontend</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Description</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
-                  placeholder="Brief description of the landmark"
+                  rows={8}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter text-base"
+                  placeholder="Write a detailed description of the landmark. You can copy and paste long text here."
                 />
+                <p className="text-xs text-gray-500 mt-1 font-inter">Supports plain text. For formatting, you can use line breaks.</p>
               </div>
               
               {/* Image Upload */}
