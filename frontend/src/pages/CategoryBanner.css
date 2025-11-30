@@ -1,5 +1,12 @@
 /* Category Banner Mobile Styles - FORCED SIZES AND LAYOUT */
 @media (max-width: 767px) {
+  /* Force the parent container to stack vertically */
+  .category-banner-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  
   /* Force vertical stacking on mobile */
   .category-banner-title {
     font-size: 14px !important;
@@ -20,12 +27,7 @@
     padding: 6px 12px !important;
     display: inline-flex !important;
     margin-top: 8px !important;
-  }
-  
-  /* Force the parent container to stack vertically */
-  .category-banner-title, .category-banner-subtitle, .category-banner-button {
     margin-left: 0 !important;
-    margin-right: 0 !important;
   }
 }
 
