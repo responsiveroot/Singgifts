@@ -593,7 +593,7 @@ function HomePage({ user }) {
             <p className="text-lg text-gray-600 font-inter">Handpicked favorites from Singapore</p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProducts.map((product) => (
               <Link
                 key={product.id}
