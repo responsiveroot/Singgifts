@@ -361,6 +361,26 @@ async def get_products_by_location(location: str, limit: int = 50):
     
     return products
 
+@api_router.get("/products/batik-label")
+async def get_batik_products(limit: int = 50):
+    """Get BATIC Label products"""
+    products = await db.products.find(
+        {"is_batik_label": True},
+        {"_id": 0}
+    ).limit(limit).to_list(length=limit)
+    
+    return products
+
+@api_router.get("/products/deals")
+async def get_deal_products(limit: int = 50):
+    """Get products on deal"""
+    products = await db.products.find(
+        {"is_on_deal": True},
+        {"_id": 0}
+    ).limit(limit).to_list(length=limit)
+    
+    return products
+
 @api_router.get("/products", response_model=List[Product])
 async def get_products(
     limit: int = 100, 
