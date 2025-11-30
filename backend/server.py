@@ -1066,7 +1066,7 @@ async def generate_sitemap():
     products = await db.products.find({}, {"_id": 0, "id": 1, "updated_at": 1}).to_list(length=1000)
     categories = await db.categories.find({}, {"_id": 0, "id": 1}).to_list(length=100)
     
-    base_url = "https://gift-mart-sg.preview.emergentagent.com"
+    base_url = "https://ecom-refinement.preview.emergentagent.com"
     
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n'
     sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -1102,7 +1102,7 @@ Disallow: /admin
 Disallow: /admin-login
 Disallow: /api/
 
-Sitemap: https://gift-mart-sg.preview.emergentagent.com/sitemap.xml
+Sitemap: https://ecom-refinement.preview.emergentagent.com/sitemap.xml
 """
     
     return Response(content=robots, media_type="text/plain")

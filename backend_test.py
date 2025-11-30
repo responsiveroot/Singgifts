@@ -11,7 +11,7 @@ import os
 from datetime import datetime, timezone
 
 # Get backend URL from frontend .env
-BACKEND_URL = "https://gift-mart-sg.preview.emergentagent.com/api"
+BACKEND_URL = "https://ecom-refinement.preview.emergentagent.com/api"
 
 # Test data
 TEST_USER = {
@@ -265,7 +265,7 @@ class BackendTester:
                         "country": "Singapore"
                     },
                     "currency": "sgd",
-                    "frontend_origin": "https://gift-mart-sg.preview.emergentagent.com",
+                    "frontend_origin": "https://ecom-refinement.preview.emergentagent.com",
                     "coupon_code": scenario["coupon"]
                 }
                 
@@ -316,7 +316,7 @@ class BackendTester:
                     "country": "Singapore"
                 },
                 "currency": "sgd",
-                "frontend_origin": "https://gift-mart-sg.preview.emergentagent.com",
+                "frontend_origin": "https://ecom-refinement.preview.emergentagent.com",
                 "coupon_code": "INVALID123"
             }
             
@@ -370,7 +370,7 @@ class BackendTester:
                     "country": "Singapore"
                 },
                 "currency": "sgd",
-                "frontend_origin": "https://gift-mart-sg.preview.emergentagent.com"
+                "frontend_origin": "https://ecom-refinement.preview.emergentagent.com"
             }
             
             # Make request WITHOUT authentication headers
@@ -432,7 +432,7 @@ class BackendTester:
                     "country": "Singapore"
                 },
                 "currency": "sgd",
-                "frontend_origin": "https://gift-mart-sg.preview.emergentagent.com",
+                "frontend_origin": "https://ecom-refinement.preview.emergentagent.com",
                 "coupon_code": "WELCOME10"
             }
             
@@ -490,7 +490,7 @@ class BackendTester:
                     "country": "Singapore"
                 },
                 "currency": "sgd",
-                "frontend_origin": "https://gift-mart-sg.preview.emergentagent.com"
+                "frontend_origin": "https://ecom-refinement.preview.emergentagent.com"
             }
             
             headers = {"Authorization": f"Bearer {self.session_token}"}
