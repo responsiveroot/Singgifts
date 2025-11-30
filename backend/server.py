@@ -879,9 +879,16 @@ async def create_checkout_session(checkout_req: CheckoutRequest, request: Reques
     user_email = user['email'] if user else checkout_req.shipping_address.get('email', '')
     
     # Calculate total from backend (SECURITY: Never trust frontend amounts)
+    # Search across all product collections
     subtotal = 0.0
     for item in checkout_req.cart_items:
+        # Try all collections
         product = await db.products.find_one({"id": item['product_id']}, {"_id": 0})
+        if not product:
+            product = await db.explore_singapore_products.find_one({"id": item['product_id']}, {"_id": 0})
+        if not product:
+            product = await db.batik_products.find_one({"id": item['product_id']}, {"_id": 0})
+        
         if product:
             price = float(product.get('sale_price') or product.get('price'))
             subtotal += price * item['quantity']
