@@ -1050,6 +1050,11 @@ async def stripe_webhook(request: Request):
         logger.error(f"Webhook error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
 
+# Mount static files for uploads (must be before routers)
+upload_dir = Path("/app/uploads")
+upload_dir.mkdir(exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="/app/uploads"), name="uploads")
+
 # Include the router in the main app
 app.include_router(api_router)
 
