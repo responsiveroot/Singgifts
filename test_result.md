@@ -360,9 +360,11 @@ test_plan:
 
 test_plan:
   current_focus:
-    - "Guest Checkout - Checkout Page"
-    - "Guest Checkout - Cart Page"
-  stuck_tasks: []
+    - "Customer Dashboard - Tabs Navigation (Orders/Wishlist/Profile)"
+    - "Customer Dashboard - Profile Edit Functionality"
+  stuck_tasks:
+    - "Customer Dashboard - Tabs Navigation (Orders/Wishlist/Profile)"
+    - "Customer Dashboard - Profile Edit Functionality"
   test_all: false
   test_priority: "high_first"
 
