@@ -6,6 +6,7 @@ function ExploreSingaporePage() {
   const attractions = [
     {
       id: 1,
+      slug: 'marina-bay-sands',
       name: 'Marina Bay Sands',
       description: 'Iconic integrated resort with rooftop infinity pool',
       image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&h=400&fit=crop',
@@ -13,36 +14,41 @@ function ExploreSingaporePage() {
     },
     {
       id: 2,
+      slug: 'gardens-by-the-bay',
       name: 'Gardens by the Bay',
-      description: 'Futuristic botanical garden with Supertree Grove',
-      image: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600&h=400&fit=crop',
+      description: 'Futuristic garden with iconic Supertrees',
+      image: 'https://images.unsplash.com/photo-1562992191-913952e43bef?w=600&h=400&fit=crop',
       category: 'Nature'
     },
     {
       id: 3,
+      slug: 'chinatown',
       name: 'Chinatown',
-      description: 'Historic district with traditional shophouses and temples',
+      description: 'Historic ethnic neighborhood with heritage shophouses',
       image: 'https://images.unsplash.com/photo-1564868526705-a846c8826b43?w=600&h=400&fit=crop',
       category: 'Culture'
     },
     {
       id: 4,
+      slug: 'sentosa-island',
       name: 'Sentosa Island',
-      description: 'Resort island with beaches, attractions, and entertainment',
+      description: 'Island resort with beaches and attractions',
       image: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600&h=400&fit=crop',
       category: 'Recreation'
     },
     {
       id: 5,
-      name: 'Hawker Centers',
-      description: 'Experience authentic local cuisine at affordable prices',
-      image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&h=400&fit=crop',
-      category: 'Food'
+      slug: 'merlion-park',
+      name: 'Merlion Park',
+      description: 'Home to Singapore\'s iconic Merlion statue',
+      image: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600&h=400&fit=crop',
+      category: 'Landmarks'
     },
     {
       id: 6,
+      slug: 'little-india',
       name: 'Little India',
-      description: 'Vibrant ethnic quarter with colorful streets and shops',
+      description: 'Vibrant Indian quarter with colorful streets',
       image: 'https://images.unsplash.com/photo-1620766182966-c6eb5f3b1fb6?w=600&h=400&fit=crop',
       category: 'Culture'
     }
