@@ -61,7 +61,7 @@ function ExploreSingaporePage() {
             <p className="text-gray-600 font-inter">No landmarks available yet. Check back soon!</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {landmarks.map((landmark) => (
               <Link key={landmark.id} to={`/landmark/${landmark.id}`} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                 <div className="h-48 overflow-hidden bg-gray-200 flex items-center justify-center">
