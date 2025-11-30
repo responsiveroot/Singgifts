@@ -89,7 +89,7 @@ function ExploreSingaporePage() {
                 <h3 className="text-xl font-playfair font-bold mb-2">{attraction.name}</h3>
                 <p className="text-gray-600 font-inter">{attraction.description}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
