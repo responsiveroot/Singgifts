@@ -102,7 +102,10 @@ function AdminProducts() {
       category_id: product.category_id,
       stock: product.stock,
       images: product.images.join(', '),
-      location: product.location || ''
+      location: product.location || '',
+      is_batik_label: product.is_batik_label || false,
+      is_on_deal: product.is_on_deal || false,
+      deal_percentage: product.deal_percentage || ''
     });
     setShowModal(true);
   };
