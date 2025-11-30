@@ -336,6 +336,16 @@ async def get_new_arrivals(limit: int = 24):
     
     return products
 
+@api_router.get("/products/by-location/{location}")
+async def get_products_by_location(location: str, limit: int = 50):
+    """Get products by Singapore landmark location"""
+    products = await db.products.find(
+        {"location": location},
+        {"_id": 0}
+    ).limit(limit).to_list(length=limit)
+    
+    return products
+
 @api_router.get("/products", response_model=List[Product])
 async def get_products(
     limit: int = 100, 
