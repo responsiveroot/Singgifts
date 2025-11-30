@@ -184,6 +184,7 @@ function App() {
                 <Route path="batik-label" element={<AdminBatikLabel />} />
                 <Route path="customers" element={<AdminCustomers />} />
                 <Route path="coupons" element={<AdminCoupons />} />
+                <Route path="import" element={<AdminImport />} />
               </Route>
             </Routes>
           </main>
