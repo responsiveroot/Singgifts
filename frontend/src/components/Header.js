@@ -201,7 +201,7 @@ function Header({ user, cartCount, logout }) {
             ) : (
               <Link 
                 to="/auth" 
-                className="hidden md:block text-gray-700 hover:text-primary transition-colors font-inter font-medium"
+                className="text-gray-700 hover:text-primary transition-colors font-inter font-medium"
                 data-testid="nav-login"
               >
                 Login / Sign Up
