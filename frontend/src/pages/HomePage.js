@@ -380,37 +380,35 @@ function HomePage({ user }) {
 
       {/* Category-Specific Product Sections */}
       {categories.map((category) => (
-        <section key={category.id} className="py-8 md:py-12 bg-gray-50">
+        <section key={category.id} className="py-6 md:py-12 bg-gray-50">
           <div className="container mx-auto px-4">
             {/* Category Banner - Mobile Optimized */}
             <div 
-              className="relative rounded-xl md:rounded-3xl overflow-hidden mb-6 p-4 md:p-12"
+              className="relative rounded-lg md:rounded-3xl overflow-hidden mb-4 p-3 md:p-12"
               style={{
                 background: `linear-gradient(135deg, ${getCategoryGradient(category.slug)})`
               }}
             >
-              <div className="relative z-10">
+              <div className="relative z-10 md:flex md:items-center md:justify-between">
                 {/* Text Content */}
-                <div>
-                  <h2 className="text-base md:text-4xl lg:text-5xl font-playfair font-bold text-white mb-1 md:mb-2">
+                <div className="mb-2 md:mb-0">
+                  <h2 className="text-sm md:text-4xl lg:text-5xl font-bold text-white mb-0.5 md:mb-2 font-inter">
                     {category.name}
                   </h2>
-                  <p className="text-xs md:text-lg text-white/90 font-inter max-w-md leading-tight">
+                  <p className="text-[10px] md:text-lg text-white/80 font-inter max-w-md leading-tight">
                     {category.description}
                   </p>
                 </div>
                 
-                {/* View All Button - Separate Row on Mobile */}
-                <div className="mt-3 md:absolute md:top-1/2 md:right-8 md:-translate-y-1/2">
-                  <Link
-                    to={`/products?category=${category.id}`}
-                    className="inline-flex items-center justify-center bg-white text-gray-900 px-3 py-1.5 md:px-6 md:py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-md font-inter text-xs md:text-base"
-                  >
-                    <span className="text-xs md:text-base">View All</span>
-                    <ArrowRight size={12} className="ml-1 md:hidden" />
-                    <ArrowRight size={20} className="ml-2 hidden md:inline" />
-                  </Link>
-                </div>
+                {/* View All Button */}
+                <Link
+                  to={`/products?category=${category.id}`}
+                  className="inline-flex items-center bg-white text-gray-900 px-2.5 py-1 md:px-6 md:py-3 rounded-full font-medium hover:bg-gray-100 transition-all shadow-sm font-inter text-[10px] md:text-base mt-2 md:mt-0"
+                >
+                  View All
+                  <ArrowRight size={10} className="ml-1 md:hidden" />
+                  <ArrowRight size={20} className="ml-2 hidden md:inline" />
+                </Link>
               </div>
             </div>
 
