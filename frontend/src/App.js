@@ -178,6 +178,9 @@ function App() {
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="orders" element={<AdminOrders />} />
                 <Route path="categories" element={<AdminCategories />} />
+                <Route path="landmarks" element={<AdminLandmarks />} />
+                <Route path="explore-singapore" element={<AdminExploreSingapore />} />
+                <Route path="batik-label" element={<AdminBatikLabel />} />
                 <Route path="customers" element={<AdminCustomers />} />
                 <Route path="coupons" element={<AdminCoupons />} />
               </Route>
