@@ -15,6 +15,43 @@ db = client[os.environ.get('DB_NAME', 'singgifts_db')]
 
 admin_router = APIRouter(prefix="/admin")
 
+# ============== IMAGE UPLOAD ==============
+
+@admin_router.post("/upload-image")
+async def upload_image(
+    request: Request,
+    file: UploadFile = File(...),
+    session_token: Optional[str] = Cookie(None)
+):
+    """Upload an image file and return the URL"""
+    await get_current_admin_user(request, db, session_token)
+    
+    # Validate file type
+    allowed_extensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"]
+    file_ext = Path(file.filename).suffix.lower()
+    
+    if file_ext not in allowed_extensions:
+        raise HTTPException(status_code=400, detail="Invalid file type. Allowed: jpg, jpeg, png, gif, webp")
+    
+    # Generate unique filename
+    unique_filename = f"{uuid.uuid4()}{file_ext}"
+    upload_dir = Path("/app/uploads")
+    upload_dir.mkdir(exist_ok=True)
+    file_path = upload_dir / unique_filename
+    
+    # Save file
+    try:
+        with file_path.open("wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
+    
+    # Return the URL path
+    backend_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
+    image_url = f"{backend_url}/uploads/{unique_filename}"
+    
+    return {"url": image_url, "filename": unique_filename}
+
 # ============== ADMIN DASHBOARD STATS ==============
 
 @admin_router.get("/dashboard/stats")
