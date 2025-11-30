@@ -1057,6 +1057,9 @@ app.include_router(api_router)
 # Include admin router
 app.include_router(admin_router, prefix="/api")
 
+# Include special collections router (Explore Singapore & Batik Label)
+app.include_router(special_router)
+
 # Mount static files for uploads (with /api prefix to route through backend)
 upload_dir = Path("/app/uploads")
 upload_dir.mkdir(exist_ok=True)
