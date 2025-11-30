@@ -568,11 +568,17 @@ async def remove_from_cart(cart_item_id: str, request: Request, session_token: O
 
 # ============== ORDER ROUTES ==============
 
-@api_router.get("/orders", response_model=List[Order])
-async def get_orders(request: Request, session_token: Optional[str] = Cookie(None)):
-    """Get user's orders"""
+@api_router.get("/orders")
+async def get_user_orders(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get current user's orders"""
     user = await get_current_user(request, db, session_token)
-    orders = await db.orders.find({"user_id": user['id']}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    
+    # Fetch user's orders
+    orders = await db.payment_transactions.find(
+        {"user_id": user['id'], "payment_status": "paid"},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(length=100)
+    
     return orders
 
 @api_router.post("/orders", response_model=Order)
