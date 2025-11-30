@@ -328,7 +328,7 @@ function HomePage({ user }) {
                   data-testid={`category-card-${category.slug}`}
                 >
                   <motion.div 
-                    className="relative h-56 rounded-2xl overflow-hidden shadow-lg"
+                    className="relative h-48 sm:h-56 rounded-2xl overflow-hidden shadow-lg"
                     whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
                     transition={{ duration: 0.3 }}
                   >
