@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Star, TrendingUp, Gift, Sparkles, Zap, Award, Package, Shield } from 'lucide-react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import './CategoryBanner.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
