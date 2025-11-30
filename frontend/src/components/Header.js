@@ -55,6 +55,7 @@ function Header({ user, cartCount, logout }) {
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
+      setShowSearchModal(false);
     }
   };
 
