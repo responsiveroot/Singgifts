@@ -21,7 +21,7 @@ async def create_sample_deals():
     # Get all products from all collections
     regular_products = await db.products.find({}).to_list(1000)
     explore_products = await db.explore_singapore_products.find({}).to_list(1000)
-    batik_products = await db.batik_label_products.find({}).to_list(1000)
+    batik_products = await db.batik_products.find({}).to_list(1000)
     
     all_products = []
     for p in regular_products:
