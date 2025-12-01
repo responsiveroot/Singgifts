@@ -174,14 +174,57 @@ function CheckoutPage({ user }) {
     // Show PayPal buttons
     setShowPayPal(true);
     toast.info('Please complete payment with PayPal');
-        window.location.href = response.data.url;
-      } else {
-        throw new Error('No checkout URL received');
+  };
+
+  // PayPal payment handlers
+  const createPayPalOrder = async () => {
+    try {
+      const total = calculateDiscountedTotal();
+      const orderItems = cartItems.map(item => ({
+        id: item.product.id,
+        name: item.product.name,
+        price: item.product.sale_price || item.product.price,
+        quantity: item.cart_item.quantity
+      }));
+
+      const response = await axios.post(`${API}/paypal/create-payment`, {
+        amount: total,
+        currency: 'SGD',
+        order_id: `ORDER-${Date.now()}`,
+        items: orderItems
+      }, { withCredentials: true });
+
+      // Redirect to PayPal
+      if (response.data.approvalUrl) {
+        setOrderId(response.data.paymentID);
+        window.location.href = response.data.approvalUrl;
       }
     } catch (error) {
-      console.error('Checkout error:', error);
-      toast.error(error.response?.data?.detail || 'Failed to initiate checkout');
-      setSubmitting(false);
+      toast.error('Failed to create PayPal payment');
+      console.error(error);
+    }
+  };
+
+  const onPayPalApprove = async (data) => {
+    try {
+      const response = await axios.post(`${API}/paypal/execute-payment`, {
+        paymentID: data.paymentID,
+        payerID: data.payerID,
+        order_id: orderId
+      }, { withCredentials: true });
+
+      if (response.data.success) {
+        // Clear cart
+        if (!user) {
+          localStorage.removeItem('guestCart');
+        }
+        
+        toast.success('Payment successful!');
+        navigate('/checkout/success');
+      }
+    } catch (error) {
+      toast.error('Payment failed');
+      console.error(error);
     }
   };
 
