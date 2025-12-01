@@ -45,7 +45,7 @@ async def create_sample_deals():
     print(f"   - Batik Label: {len(batik_products)}\n")
     
     # Select 10 random products for deals
-    deal_products = random.sample(products, min(10, len(products)))
+    deal_products = random.sample(all_products, min(10, len(all_products)))
     
     # Define deal types
     deals = [
