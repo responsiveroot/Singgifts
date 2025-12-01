@@ -129,7 +129,12 @@ function AuthPage() {
       });
       
       toast.success('Login successful!');
-      window.location.href = '/dashboard';
+      
+      // Merge guest cart if any
+      await mergeGuestCart();
+      
+      // Redirect to intended page or dashboard
+      window.location.href = redirectTo === 'checkout' ? '/checkout' : '/dashboard';
     } catch (error) {
       toast.error(error.response?.data?.detail || 'OTP verification failed');
     } finally {
