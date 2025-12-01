@@ -26,8 +26,11 @@ function CheckoutPage({ user }) {
     address: '',
     city: 'Singapore',
     postalCode: '',
-    country: 'Singapore'
+    country: 'Singapore',
+    paymentMethod: 'paypal'
   });
+  const [showPayPal, setShowPayPal] = useState(false);
+  const [orderId, setOrderId] = useState(null);
 
   useEffect(() => {
     fetchCart();
