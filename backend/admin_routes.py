@@ -186,6 +186,12 @@ async def update_product_admin(
         "images": product.get("images", existing_product["images"]),
         "stock": int(product.get("stock", existing_product["stock"])),
         "tags": product.get("tags", existing_product.get("tags", [])),
+        "location": product.get("location", existing_product.get("location")),
+        "is_batik_label": product.get("is_batik_label", existing_product.get("is_batik_label", False)),
+        "is_on_deal": product.get("is_on_deal", existing_product.get("is_on_deal", False)),
+        "deal_percentage": float(product.get("deal_percentage", 0)) if product.get("deal_percentage") else existing_product.get("deal_percentage"),
+        "deal_start_date": product.get("deal_start_date", existing_product.get("deal_start_date")),
+        "deal_end_date": product.get("deal_end_date", existing_product.get("deal_end_date")),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
