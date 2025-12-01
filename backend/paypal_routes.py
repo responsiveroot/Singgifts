@@ -51,50 +51,47 @@ class PayPalOrderCapture(BaseModel):
 
 @paypal_router.post("/paypal/create-payment")
 async def create_paypal_payment(order_data: PayPalOrderCreate):
-    """Create PayPal payment"""
+    """Create PayPal payment using Express Checkout"""
     try:
-        # Create payment object
-        payment = paypalrestsdk.Payment({
-            "intent": "sale",
-            "payer": {
-                "payment_method": "paypal"
-            },
-            "redirect_urls": {
-                "return_url": f"{os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:3000')}/checkout/success",
-                "cancel_url": f"{os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:3000')}/checkout/cancel"
-            },
-            "transactions": [{
-                "item_list": {
-                    "items": [
-                        {
-                            "name": item.get("name", "Product"),
-                            "sku": item.get("id", ""),
-                            "price": str(item.get("price", 0)),
-                            "currency": order_data.currency,
-                            "quantity": item.get("quantity", 1)
-                        }
-                        for item in order_data.items
-                    ]
-                },
-                "amount": {
-                    "total": str(order_data.amount),
-                    "currency": order_data.currency
-                },
-                "description": f"Order #{order_data.order_id}"
-            }]
-        })
-
-        if payment.create():
-            # Get approval URL
-            for link in payment.links:
-                if link.rel == "approval_url":
-                    return {
-                        "paymentID": payment.id,
-                        "approvalUrl": str(link.href)
-                    }
+        frontend_url = os.environ.get('REACT_APP_BACKEND_URL', 'https://batik-store.preview.emergentagent.com')
+        
+        # Build item details for PayPal
+        item_params = {}
+        for idx, item in enumerate(order_data.items):
+            item_params[f'L_PAYMENTREQUEST_0_NAME{idx}'] = item.get("name", "Product")
+            item_params[f'L_PAYMENTREQUEST_0_AMT{idx}'] = f"{item.get('price', 0):.2f}"
+            item_params[f'L_PAYMENTREQUEST_0_QTY{idx}'] = str(item.get("quantity", 1))
+        
+        params = {
+            'PAYMENTREQUEST_0_AMT': f"{order_data.amount:.2f}",
+            'PAYMENTREQUEST_0_CURRENCYCODE': order_data.currency,
+            'PAYMENTREQUEST_0_PAYMENTACTION': 'Sale',
+            'RETURNURL': f"{frontend_url}/checkout/success",
+            'CANCELURL': f"{frontend_url}/checkout/cancel",
+            'PAYMENTREQUEST_0_DESC': f"Order #{order_data.order_id}",
+            **item_params
+        }
+        
+        response = paypal_nvp_call('SetExpressCheckout', params)
+        
+        if response.get('ACK') in ['Success', 'SuccessWithWarning']:
+            token = response.get('TOKEN')
+            
+            # Build PayPal redirect URL
+            paypal_url = "https://www.paypal.com/cgi-bin/webscr" if PAYPAL_MODE == "live" else "https://www.sandbox.paypal.com/cgi-bin/webscr"
+            approval_url = f"{paypal_url}?cmd=_express-checkout&token={token}"
+            
+            return {
+                "paymentID": token,
+                "approvalUrl": approval_url,
+                "token": token
+            }
         else:
-            raise HTTPException(status_code=400, detail=str(payment.error))
+            error_msg = response.get('L_LONGMESSAGE0', response.get('L_SHORTMESSAGE0', 'Unknown error'))
+            raise HTTPException(status_code=400, detail=f"PayPal error: {error_msg}")
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PayPal payment creation failed: {str(e)}")
 
