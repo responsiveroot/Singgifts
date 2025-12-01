@@ -120,6 +120,8 @@ function AdminCategories() {
   const resetForm = () => {
     setEditingCategory(null);
     setFormData({ name: '', description: '', image_url: '', order: '' });
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   if (loading) {
