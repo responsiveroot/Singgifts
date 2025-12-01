@@ -97,74 +97,59 @@ function DealsPage({ user }) {
               key={product.id}
               to={`/products/${product.id}`}
               className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group" data-testid={`deal-product-${product.id}`}>
-              {/* Deal Header */}
-              <div className="relative">
+              {/* Product Image */}
+              <div className="relative h-64 bg-gray-100 overflow-hidden">
                 <img
-                  src={deal.banner_image}
-                  alt={deal.title}
-                  className="w-full h-64 object-cover"
+                  src={product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/300x300?text=No+Image'}
+                  alt={product.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                  <div className="max-w-4xl">
-                    <div className="inline-block bg-red-600 px-4 py-2 rounded-full text-sm font-bold mb-4">
-                      {deal.discount_percentage}% OFF
+                
+                {/* Deal Badge */}
+                <div className="absolute top-4 right-4">
+                  <div className="bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg">
+                    {product.deal_percentage}% OFF
+                  </div>
+                </div>
+                
+                {/* Countdown Timer */}
+                {product.deal_end_date && (
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <div className="bg-black/70 backdrop-blur-sm text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-center">
+                      <Clock size={14} className="mr-2" />
+                      {calculateTimeLeft(product.deal_end_date)}
                     </div>
-                    <h2 className="text-3xl sm:text-4xl font-playfair font-bold mb-2">{deal.title}</h2>
-                    <p className="text-lg opacity-90 font-inter mb-4">{deal.description}</p>
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                        <Clock size={18} className="mr-2" />
-                        <span className="font-semibold font-inter">{calculateTimeLeft(deal.end_date)}</span>
-                      </div>
-                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Product Info */}
+              <div className="p-5">
+                <div className="flex items-center mb-2">
+                  <Star className="text-yellow-400 fill-current" size={16} />
+                  <span className="text-sm font-semibold text-gray-700 ml-1 font-inter">{product.rating || '0.0'}</span>
+                  <span className="text-xs text-gray-500 ml-1 font-inter">({product.review_count || 0})</span>
+                </div>
+                
+                <h3 className="font-semibold text-gray-900 mb-3 font-inter line-clamp-2 h-12">
+                  {product.name}
+                </h3>
+                
+                <div className="flex items-baseline justify-between">
+                  <div>
+                    <span className="text-2xl font-bold text-red-600 font-inter">
+                      S${(product.price * (1 - product.deal_percentage / 100)).toFixed(2)}
+                    </span>
+                    <span className="text-sm text-gray-500 line-through ml-2 font-inter">
+                      S${product.price}
+                    </span>
+                  </div>
+                  <div className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded font-inter">
+                    Save S${(product.price * product.deal_percentage / 100).toFixed(2)}
                   </div>
                 </div>
               </div>
-
-              {/* Deal Products */}
-              <div className="p-8">
-                {dealProducts[deal.id] && dealProducts[deal.id].length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {dealProducts[deal.id].map((product) => (
-                      <Link
-                        key={product.id}
-                        to={`/products/${product.id}`}
-                        className="bg-gray-50 rounded-xl overflow-hidden shadow-md card-hover group"
-                      >
-                        <div className="product-image h-48 bg-gray-100 relative">
-                          <img
-                            src={product.images[0]}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                            {deal.discount_percentage}% OFF
-                          </div>
-                        </div>
-                        <div className="p-5">
-                          <div className="flex items-center mb-2">
-                            <Star className="text-yellow-400 fill-current" size={14} />
-                            <span className="text-sm font-semibold text-gray-700 ml-1 font-inter">{product.rating}</span>
-                          </div>
-                          <h3 className="font-semibold text-gray-900 mb-2 font-inter line-clamp-2">{product.name}</h3>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <span className="text-xl font-bold text-primary font-inter">
-                                SGD {(product.price * (1 - deal.discount_percentage / 100)).toFixed(2)}
-                              </span>
-                              <span className="text-sm text-gray-500 line-through ml-2 font-inter">SGD {product.price}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-center text-gray-500 py-8 font-inter">Loading products...</p>
-                )}
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
