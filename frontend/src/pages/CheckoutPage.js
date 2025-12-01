@@ -171,53 +171,9 @@ function CheckoutPage({ user }) {
       return;
     }
     
-    setSubmitting(true);
-
-    try {
-      // Prepare cart items for checkout
-      const checkoutItems = cartItems.map(item => ({
-        product_id: item.product.id,
-        product_name: item.product.name,
-        quantity: item.cart_item.quantity,
-        price: item.product.sale_price || item.product.price
-      }));
-
-      // Prepare shipping address
-      const shippingAddress = {
-        fullName: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        city: formData.city,
-        postalCode: formData.postalCode,
-        country: formData.country
-      };
-
-      // Get frontend origin
-      const frontendOrigin = window.location.origin;
-
-      // Prepare checkout data with coupon if applied
-      const checkoutData = {
-        cart_items: checkoutItems,
-        shipping_address: shippingAddress,
-        currency: currency.toLowerCase(),
-        frontend_origin: frontendOrigin
-      };
-
-      // Add coupon code if applied
-      if (appliedCoupon) {
-        checkoutData.coupon_code = appliedCoupon.code;
-      }
-
-      // Create Stripe checkout session
-      const response = await axios.post(`${API}/checkout/create-session`, checkoutData, { withCredentials: true });
-
-      // Redirect to Stripe checkout
-      if (response.data.url) {
-        // Clear guest cart if guest user
-        if (!user) {
-          localStorage.removeItem('guestCart');
-        }
+    // Show PayPal buttons
+    setShowPayPal(true);
+    toast.info('Please complete payment with PayPal');
         window.location.href = response.data.url;
       } else {
         throw new Error('No checkout URL received');
