@@ -144,13 +144,25 @@ async def execute_paypal_payment(payment_data: PayPalOrderCapture):
 async def get_payment_details(payment_id: str):
     """Get PayPal payment details"""
     try:
-        payment = paypalrestsdk.Payment.find(payment_id)
-        return {
-            "id": payment.id,
-            "state": payment.state,
-            "amount": payment.transactions[0].amount.total,
-            "currency": payment.transactions[0].amount.currency,
-            "payer_email": payment.payer.payer_info.email if hasattr(payment.payer, 'payer_info') else None
+        params = {
+            'TOKEN': payment_id
         }
+        
+        response = paypal_nvp_call('GetExpressCheckoutDetails', params)
+        
+        if response.get('ACK') in ['Success', 'SuccessWithWarning']:
+            return {
+                "id": payment_id,
+                "state": response.get('CHECKOUTSTATUS'),
+                "amount": response.get('PAYMENTREQUEST_0_AMT'),
+                "currency": response.get('PAYMENTREQUEST_0_CURRENCYCODE'),
+                "payer_email": response.get('EMAIL')
+            }
+        else:
+            error_msg = response.get('L_LONGMESSAGE0', 'Payment not found')
+            raise HTTPException(status_code=404, detail=error_msg)
+            
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Payment not found: {str(e)}")
