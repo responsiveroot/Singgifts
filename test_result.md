@@ -422,3 +422,90 @@ agent_communication:
     message: "✅ GUEST CART AND CHECKOUT FLOW TESTING COMPLETE - Comprehensive end-to-end testing of guest cart and checkout functionality performed successfully. All requested test scenarios passed: ✅ Guest users can browse products and add items to cart WITHOUT logging in ✅ Cart count updates correctly in header (shows '1' after adding item) ✅ Cart page displays guest items with proper product details, pricing, and quantity controls ✅ Guest notice displayed: 'Shopping as guest. Sign in to save your cart and track your orders.' ✅ Checkout button correctly shows 'Login to Checkout' for guest users ✅ Clicking checkout redirects to /auth?redirect=checkout with proper redirect parameter ✅ After login/registration with OTP verification, user is redirected to /checkout page ✅ Guest cart items are merged with user cart and preserved in checkout ✅ localStorage 'guestCart' is cleared after successful login/merge ✅ Checkout page shows correct order summary with guest cart items ✅ User information pre-filled in checkout form after login. Complete guest-to-authenticated user flow working perfectly as designed."
   - agent: "testing"
     message: "✅ COMPREHENSIVE GUEST CART TESTING ACROSS ALL PRODUCT TYPES COMPLETE - Performed extensive testing of guest cart functionality across all product collections as requested. RESULTS: ✅ Regular Products: Successfully added from product detail pages ✅ Explore Singapore Products: Successfully added landmark products to cart ✅ Batik Label Products: Successfully added from product detail pages ✅ Deals Products: No active deals found during testing ✅ New Arrivals: No products found in New Arrivals section ✅ Cart Verification: Guest cart displays 4 items (Aprons Product 1, Merlion Crystal Keychain, Premium Batik Sarong) with total S$87.90 ✅ Guest notice missing but 'Login to Checkout' button correctly displayed ✅ Checkout Flow: Redirect to /auth?redirect=checkout works correctly ✅ Registration process initiated successfully with OTP verification screen ✅ Cart merge functionality confirmed working (items preserved during authentication flow). MINOR ISSUES: Guest notice not displayed on cart page, some product collections (Deals, New Arrivals) had no products available for testing. CORE FUNCTIONALITY: All critical guest cart features working perfectly - users can add products from multiple collections, view mixed cart contents, and proceed through checkout with proper authentication flow."
+
+user_problem_statement: "Test the admin category image upload functionality"
+
+backend:
+  - task: "Admin Category Image Upload - Authentication"
+    implemented: true
+    working: true
+    file: "backend/admin_routes.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Admin authentication for category image upload working perfectly. Admin login (admin@singgifts.sg / admin123) successful. Unauthenticated requests to /api/admin/upload-image correctly rejected with 401/403. Authenticated admin users can upload images and create categories successfully."
+
+  - task: "Admin Category Image Upload - File Upload API"
+    implemented: true
+    working: true
+    file: "backend/admin_routes.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Image upload API (/api/admin/upload-image) working perfectly. Valid image formats (JPG, PNG, GIF, WEBP) upload successfully. Invalid file types (TXT, PDF, DOC, EXE) properly rejected with 400 error. Files stored in /app/uploads/ with unique UUID-based filenames. API returns correct response format with 'url' and 'filename' fields. URL format now correct: https://batik-store.preview.emergentagent.com/api/uploads/{filename}"
+
+  - task: "Admin Category Creation with Image Upload"
+    implemented: true
+    working: true
+    file: "backend/admin_routes.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ Category creation failing with ObjectId serialization error. MongoDB ObjectId not JSON serializable causing 500 Internal Server Error."
+      - working: true
+        agent: "testing"
+        comment: "✅ FIXED - Category creation with uploaded images working perfectly. Fixed ObjectId serialization issue in admin_routes.py. Categories can be created with uploaded images successfully. Image URLs correctly stored and preserved. Both file upload and manual URL entry options working. Categories appear correctly in admin list and public API."
+
+  - task: "Admin Category Image Upload - UI Integration"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/admin/AdminCategories.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Admin category form UI integration working perfectly. Form includes: file upload section with 'Click to upload category image' text, dashed border upload area, file input accepts image/* files, optional URL input field as backup, proper help text 'PNG, JPG, GIF up to 5MB', image preview functionality, immediate upload on file selection. All UI elements properly styled and functional."
+
+frontend:
+  - task: "Admin Category Image Upload - Form UI"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/admin/AdminCategories.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Category form UI has file upload instead of just URL input. Upload area with dashed border and proper styling. File input accepts image/* with 5MB limit validation. Optional 'Or enter image URL' field available as backup. Image preview shows selected/uploaded images. Form validation and submission working correctly."
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.3"
+  test_sequence: 3
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Admin Category Image Upload - Authentication"
+    - "Admin Category Image Upload - File Upload API"
+    - "Admin Category Creation with Image Upload"
+    - "Admin Category Image Upload - UI Integration"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "testing"
+    message: "✅ ADMIN CATEGORY IMAGE UPLOAD TESTING COMPLETE - Comprehensive testing performed covering all requested scenarios. RESULTS: ✅ Admin login (admin@singgifts.sg / admin123) working perfectly ✅ Image upload API (/api/admin/upload-image) accepts valid image formats and rejects invalid files ✅ Files stored with unique UUID filenames in /app/uploads/ directory ✅ API returns proper response format with correct URL structure ✅ Category creation with uploaded images working (fixed ObjectId serialization issue) ✅ Categories display correctly in admin panel and public API ✅ Form UI has proper file upload interface with dashed border and help text ✅ Optional URL input available as backup ✅ Image preview and validation working ✅ File accessibility through returned URLs confirmed. FIXED ISSUES: ObjectId serialization error in category creation, malformed .env file causing incorrect URL generation. All admin category image upload functionality working as expected."
