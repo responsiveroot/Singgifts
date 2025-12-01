@@ -22,6 +22,30 @@ function AuthPage() {
   const [otpSent, setOtpSent] = useState(false);
   const [displayedOtp, setDisplayedOtp] = useState('');
 
+  // Merge guest cart with user cart after login
+  const mergeGuestCart = async () => {
+    try {
+      const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+      
+      if (guestCart.length > 0) {
+        // Add each guest cart item to user's cart
+        for (const item of guestCart) {
+          await axios.post(
+            `${API}/cart`,
+            { product_id: item.product_id, quantity: item.quantity },
+            { withCredentials: true }
+          );
+        }
+        
+        // Clear guest cart after merging
+        localStorage.removeItem('guestCart');
+        toast.success('Your cart items have been saved!');
+      }
+    } catch (error) {
+      console.error('Failed to merge guest cart:', error);
+    }
+  };
+
   const handleGoogleLogin = () => {
     const redirectUrl = encodeURIComponent(`${window.location.origin}/`);
     window.location.href = `https://auth.emergentagent.com/?redirect=${redirectUrl}`;
