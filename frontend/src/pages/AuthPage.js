@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, User, LogIn } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -9,6 +9,8 @@ const API = `${BACKEND_URL}/api`;
 
 function AuthPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || 'dashboard';
   const [mode, setMode] = useState('login'); // 'login', 'register', 'otp'
   const [formData, setFormData] = useState({
     email: '',
