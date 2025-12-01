@@ -1065,6 +1065,396 @@ class BackendTester:
         await self.test_category_image_display()
         await self.cleanup_test_categories()
 
+    async def test_paypal_nvp_api_configuration(self):
+        """Test PayPal NVP API Configuration and Create Payment Endpoint"""
+        print("\n💳 Testing PayPal NVP API Configuration...")
+        
+        # Test 1: Verify PayPal create-payment endpoint exists and responds
+        try:
+            sample_payment_data = {
+                "amount": 25.50,
+                "currency": "SGD",
+                "order_id": "TEST001",
+                "items": [
+                    {
+                        "id": "test-product-1",
+                        "name": "Test Product",
+                        "price": 25.50,
+                        "quantity": 1
+                    }
+                ]
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/paypal/create-payment", json=sample_payment_data) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    
+                    # Verify response contains required fields
+                    required_fields = ["paymentID", "approvalUrl", "token"]
+                    missing_fields = [field for field in required_fields if field not in result]
+                    
+                    if not missing_fields:
+                        self.test_results.append("✅ PayPal create-payment endpoint: All required fields present")
+                        
+                        # Verify approval URL format
+                        approval_url = result["approvalUrl"]
+                        token = result["token"]
+                        
+                        if "paypal.com" in approval_url and token in approval_url:
+                            self.test_results.append("✅ PayPal approval URL: Correct format with paypal.com and token")
+                            self.paypal_test_token = token
+                        else:
+                            self.test_results.append(f"❌ PayPal approval URL: Incorrect format - {approval_url}")
+                        
+                        # Verify paymentID matches token
+                        if result["paymentID"] == token:
+                            self.test_results.append("✅ PayPal response: paymentID matches token")
+                        else:
+                            self.test_results.append("❌ PayPal response: paymentID does not match token")
+                            
+                    else:
+                        self.test_results.append(f"❌ PayPal create-payment: Missing required fields {missing_fields}")
+                        
+                elif resp.status == 401:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ PayPal credentials authentication failed: {error_text}")
+                    
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ PayPal create-payment failed: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal create-payment test: Exception - {str(e)}")
+    
+    async def test_paypal_credentials_validation(self):
+        """Test PayPal Credentials Validation"""
+        print("\n🔐 Testing PayPal Credentials Validation...")
+        
+        # Check environment variables
+        try:
+            import os
+            
+            # Load backend .env file to check credentials
+            env_path = "/app/backend/.env"
+            env_vars = {}
+            
+            with open(env_path, 'r') as f:
+                for line in f:
+                    if '=' in line and not line.startswith('#'):
+                        key, value = line.strip().split('=', 1)
+                        env_vars[key] = value.strip('"')
+            
+            # Verify required PayPal credentials exist
+            required_creds = ["PAYPAL_CLIENT_ID", "PAYPAL_MODE", "PAYPAL_SIGNATURE"]
+            missing_creds = [cred for cred in required_creds if cred not in env_vars]
+            
+            if not missing_creds:
+                self.test_results.append("✅ PayPal credentials: All required environment variables present")
+                
+                # Verify specific credential values
+                if env_vars["PAYPAL_CLIENT_ID"] == "ars.richard_api1.hotmail.com":
+                    self.test_results.append("✅ PayPal CLIENT_ID: Matches expected live credentials")
+                else:
+                    self.test_results.append(f"❌ PayPal CLIENT_ID: Unexpected value - {env_vars['PAYPAL_CLIENT_ID']}")
+                
+                if env_vars["PAYPAL_MODE"] == "live":
+                    self.test_results.append("✅ PayPal MODE: Set to live")
+                else:
+                    self.test_results.append(f"❌ PayPal MODE: Expected 'live', got '{env_vars['PAYPAL_MODE']}'")
+                
+                if env_vars.get("PAYPAL_SIGNATURE"):
+                    self.test_results.append("✅ PayPal SIGNATURE: Present")
+                else:
+                    self.test_results.append("❌ PayPal SIGNATURE: Missing or empty")
+                    
+            else:
+                self.test_results.append(f"❌ PayPal credentials: Missing environment variables {missing_creds}")
+                
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal credentials check: Exception - {str(e)}")
+        
+        # Test credentials authentication with PayPal API
+        try:
+            # Use a minimal payment to test authentication
+            test_payment_data = {
+                "amount": 1.00,
+                "currency": "SGD", 
+                "order_id": "AUTH_TEST",
+                "items": [{"id": "test", "name": "Auth Test", "price": 1.00, "quantity": 1}]
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/paypal/create-payment", json=test_payment_data) as resp:
+                if resp.status == 200:
+                    self.test_results.append("✅ PayPal credentials: Authentication successful with PayPal API")
+                elif resp.status == 401:
+                    error_text = await resp.text()
+                    if "Client Authentication failed" in error_text:
+                        self.test_results.append("❌ PayPal credentials: Authentication failed - Invalid credentials for live mode")
+                    else:
+                        self.test_results.append(f"❌ PayPal credentials: Authentication failed - {error_text}")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ PayPal credentials: API error {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal credentials authentication test: Exception - {str(e)}")
+    
+    async def test_paypal_error_handling(self):
+        """Test PayPal Error Handling"""
+        print("\n🚫 Testing PayPal Error Handling...")
+        
+        # Test 1: Invalid amount (negative)
+        try:
+            invalid_amount_data = {
+                "amount": -10.00,
+                "currency": "SGD",
+                "order_id": "INVALID_AMOUNT",
+                "items": [{"id": "test", "name": "Invalid Amount Test", "price": -10.00, "quantity": 1}]
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/paypal/create-payment", json=invalid_amount_data) as resp:
+                if resp.status == 400:
+                    self.test_results.append("✅ PayPal error handling: Negative amount properly rejected")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ PayPal error handling: Negative amount not rejected - {resp.status}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal negative amount test: Exception - {str(e)}")
+        
+        # Test 2: Zero amount
+        try:
+            zero_amount_data = {
+                "amount": 0.00,
+                "currency": "SGD",
+                "order_id": "ZERO_AMOUNT",
+                "items": [{"id": "test", "name": "Zero Amount Test", "price": 0.00, "quantity": 1}]
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/paypal/create-payment", json=zero_amount_data) as resp:
+                if resp.status == 400:
+                    self.test_results.append("✅ PayPal error handling: Zero amount properly rejected")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ PayPal error handling: Zero amount not rejected - {resp.status}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal zero amount test: Exception - {str(e)}")
+        
+        # Test 3: Missing required fields
+        try:
+            incomplete_data = {
+                "amount": 10.00,
+                # Missing currency, order_id, items
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/paypal/create-payment", json=incomplete_data) as resp:
+                if resp.status == 422:  # FastAPI validation error
+                    self.test_results.append("✅ PayPal error handling: Missing fields properly rejected")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ PayPal error handling: Missing fields not rejected - {resp.status}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal missing fields test: Exception - {str(e)}")
+        
+        # Test 4: Empty cart/items
+        try:
+            empty_cart_data = {
+                "amount": 10.00,
+                "currency": "SGD",
+                "order_id": "EMPTY_CART",
+                "items": []
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/paypal/create-payment", json=empty_cart_data) as resp:
+                if resp.status == 400:
+                    self.test_results.append("✅ PayPal error handling: Empty cart properly rejected")
+                else:
+                    # Some implementations might allow empty items, check response
+                    result = await resp.json()
+                    if "paymentID" in result:
+                        self.test_results.append("⚠️  PayPal error handling: Empty cart allowed (may be valid)")
+                    else:
+                        self.test_results.append(f"❌ PayPal error handling: Empty cart handling unclear - {resp.status}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal empty cart test: Exception - {str(e)}")
+    
+    async def test_paypal_approval_url_accessibility(self):
+        """Test PayPal Approval URL Accessibility"""
+        print("\n🌐 Testing PayPal Approval URL Accessibility...")
+        
+        if not hasattr(self, 'paypal_test_token') or not self.paypal_test_token:
+            self.test_results.append("⚠️  Skipping PayPal URL test - no test token available")
+            return
+        
+        # Test if approval URL redirects to PayPal
+        try:
+            # Create a test payment to get approval URL
+            test_payment_data = {
+                "amount": 5.00,
+                "currency": "SGD",
+                "order_id": "URL_TEST",
+                "items": [{"id": "test", "name": "URL Test", "price": 5.00, "quantity": 1}]
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/paypal/create-payment", json=test_payment_data) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    approval_url = result["approvalUrl"]
+                    token = result["token"]
+                    
+                    # Test URL accessibility (should redirect to PayPal)
+                    async with self.session.get(approval_url, allow_redirects=False) as url_resp:
+                        if url_resp.status in [200, 302, 301]:
+                            self.test_results.append("✅ PayPal approval URL: Accessible and responds correctly")
+                            
+                            # Check if URL contains token parameter
+                            if token in approval_url:
+                                self.test_results.append("✅ PayPal approval URL: Contains token parameter")
+                            else:
+                                self.test_results.append("❌ PayPal approval URL: Missing token parameter")
+                                
+                            # Verify URL structure
+                            if "paypal.com" in approval_url and "cmd=_express-checkout" in approval_url:
+                                self.test_results.append("✅ PayPal approval URL: Correct PayPal Express Checkout format")
+                            else:
+                                self.test_results.append("❌ PayPal approval URL: Incorrect format or structure")
+                                
+                        else:
+                            self.test_results.append(f"❌ PayPal approval URL: Not accessible - {url_resp.status}")
+                            
+                else:
+                    self.test_results.append("❌ PayPal approval URL test: Could not create test payment")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal approval URL test: Exception - {str(e)}")
+    
+    async def test_frontend_checkout_flow(self):
+        """Test Frontend Checkout Flow - PayPal Only"""
+        print("\n🛒 Testing Frontend Checkout Flow...")
+        
+        # Test 1: Access checkout page
+        try:
+            checkout_url = f"{BACKEND_URL.replace('/api', '')}/checkout"
+            async with self.session.get(checkout_url) as resp:
+                if resp.status == 200:
+                    page_content = await resp.text()
+                    
+                    # Check for PayPal payment option
+                    if 'PayPal' in page_content and 'paypal' in page_content.lower():
+                        self.test_results.append("✅ Frontend checkout: PayPal payment option present")
+                    else:
+                        self.test_results.append("❌ Frontend checkout: PayPal payment option not found")
+                    
+                    # Check that COD is removed
+                    if 'Cash on Delivery' not in page_content and 'COD' not in page_content:
+                        self.test_results.append("✅ Frontend checkout: COD payment option removed")
+                    else:
+                        self.test_results.append("❌ Frontend checkout: COD payment option still present")
+                    
+                    # Check that Stripe is removed
+                    if 'Credit Card' not in page_content and 'Stripe' not in page_content:
+                        self.test_results.append("✅ Frontend checkout: Stripe/Credit Card option removed")
+                    else:
+                        self.test_results.append("❌ Frontend checkout: Stripe/Credit Card option still present")
+                    
+                    # Check for PayPal button text
+                    if 'Continue to PayPal' in page_content:
+                        self.test_results.append("✅ Frontend checkout: 'Continue to PayPal' button present")
+                    else:
+                        self.test_results.append("❌ Frontend checkout: 'Continue to PayPal' button not found")
+                    
+                    # Check for Pay with PayPal button
+                    if 'Pay with PayPal' in page_content:
+                        self.test_results.append("✅ Frontend checkout: 'Pay with PayPal' button present")
+                    else:
+                        self.test_results.append("⚠️  Frontend checkout: 'Pay with PayPal' button not visible (may appear after form submission)")
+                        
+                else:
+                    self.test_results.append(f"❌ Frontend checkout: Page not accessible - {resp.status}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Frontend checkout test: Exception - {str(e)}")
+        
+        # Test 2: Verify removed endpoints return 404
+        removed_endpoints = [
+            "/checkout/cod",
+            "/payment/cod", 
+            "/orders/cod",
+            "/checkout/stripe",
+            "/payment/stripe"
+        ]
+        
+        for endpoint in removed_endpoints:
+            try:
+                async with self.session.get(f"{BACKEND_URL}{endpoint}") as resp:
+                    if resp.status == 404:
+                        self.test_results.append(f"✅ Removed endpoint: {endpoint} returns 404 as expected")
+                    else:
+                        self.test_results.append(f"❌ Removed endpoint: {endpoint} still accessible ({resp.status})")
+                        
+            except Exception as e:
+                self.test_results.append(f"❌ Endpoint check {endpoint}: Exception - {str(e)}")
+    
+    async def test_paypal_payment_details_api(self):
+        """Test PayPal Payment Details API"""
+        print("\n📋 Testing PayPal Payment Details API...")
+        
+        # Test 1: Valid payment ID (if we have one from previous tests)
+        if hasattr(self, 'paypal_test_token') and self.paypal_test_token:
+            try:
+                async with self.session.get(f"{BACKEND_URL}/paypal/payment/{self.paypal_test_token}") as resp:
+                    if resp.status == 200:
+                        result = await resp.json()
+                        
+                        # Verify response structure
+                        required_fields = ["id", "state", "amount", "currency"]
+                        missing_fields = [field for field in required_fields if field not in result]
+                        
+                        if not missing_fields:
+                            self.test_results.append("✅ PayPal payment details: Valid response structure")
+                        else:
+                            self.test_results.append(f"❌ PayPal payment details: Missing fields {missing_fields}")
+                            
+                    elif resp.status == 404:
+                        self.test_results.append("⚠️  PayPal payment details: Token not found (may be expected for test tokens)")
+                    else:
+                        error_text = await resp.text()
+                        self.test_results.append(f"❌ PayPal payment details: Error {resp.status} - {error_text}")
+                        
+            except Exception as e:
+                self.test_results.append(f"❌ PayPal payment details test: Exception - {str(e)}")
+        
+        # Test 2: Invalid payment ID
+        try:
+            async with self.session.get(f"{BACKEND_URL}/paypal/payment/INVALID_PAYMENT_ID") as resp:
+                if resp.status == 404:
+                    self.test_results.append("✅ PayPal payment details: Invalid payment ID properly returns 404")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ PayPal payment details: Invalid ID handling - {resp.status}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ PayPal invalid payment ID test: Exception - {str(e)}")
+    
+    async def run_paypal_tests(self):
+        """Run all PayPal integration tests"""
+        print("\n💳 Starting PayPal Classic NVP API Integration Tests...")
+        print("=" * 60)
+        
+        # Initialize storage for test data
+        self.paypal_test_token = None
+        
+        # Run all PayPal tests in sequence
+        await self.test_paypal_credentials_validation()
+        await self.test_paypal_nvp_api_configuration()
+        await self.test_paypal_error_handling()
+        await self.test_paypal_approval_url_accessibility()
+        await self.test_paypal_payment_details_api()
+        await self.test_frontend_checkout_flow()
+
     async def test_deals_management_system(self):
         """Test complete deals management system implementation"""
         print("\n🎯 Testing Deals Management System...")
