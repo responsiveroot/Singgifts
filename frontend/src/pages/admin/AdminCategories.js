@@ -114,6 +114,7 @@ function AdminCategories() {
       image_url: category.image_url || '',
       order: category.order
     });
+    setImagePreview(category.image_url || null);
     setShowModal(true);
   };
 
