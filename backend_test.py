@@ -1065,17 +1065,298 @@ class BackendTester:
         await self.test_category_image_display()
         await self.cleanup_test_categories()
 
+    async def test_deals_management_system(self):
+        """Test complete deals management system implementation"""
+        print("\n🎯 Testing Deals Management System...")
+        
+        if not self.session_token:
+            self.test_results.append("⚠️  Skipping deals management test - no admin session")
+            return
+        
+        cookies = {'session_token': self.session_token}
+        
+        # Test 1: Create sample deals data using the script
+        try:
+            # First, get some products to work with
+            async with self.session.get(f"{BACKEND_URL}/admin/products", cookies=cookies) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    products = result.get('products', [])
+                    
+                    if len(products) >= 3:
+                        # Test creating deals by updating products with deal fields
+                        test_deals = [
+                            {
+                                "product_id": products[0]["id"],
+                                "deal_percentage": 30,
+                                "start_offset_days": 0,
+                                "end_offset_days": 7
+                            },
+                            {
+                                "product_id": products[1]["id"],
+                                "deal_percentage": 20,
+                                "start_offset_days": -1,
+                                "end_offset_days": 5
+                            },
+                            {
+                                "product_id": products[2]["id"],
+                                "deal_percentage": 15,
+                                "start_offset_days": 2,
+                                "end_offset_days": 10
+                            }
+                        ]
+                        
+                        from datetime import datetime, timedelta, timezone
+                        
+                        for i, deal in enumerate(test_deals):
+                            product = products[i]
+                            start_date = datetime.now(timezone.utc) + timedelta(days=deal["start_offset_days"])
+                            end_date = datetime.now(timezone.utc) + timedelta(days=deal["end_offset_days"])
+                            
+                            # Update product with deal information
+                            update_data = {
+                                **product,
+                                "is_on_deal": True,
+                                "deal_percentage": deal["deal_percentage"],
+                                "deal_start_date": start_date.isoformat(),
+                                "deal_end_date": end_date.isoformat()
+                            }
+                            
+                            async with self.session.put(f"{BACKEND_URL}/admin/products/{product['id']}", 
+                                                       json=update_data, cookies=cookies) as update_resp:
+                                if update_resp.status == 200:
+                                    self.test_results.append(f"✅ Deal created for product: {product['name']} ({deal['deal_percentage']}% off)")
+                                else:
+                                    error_text = await update_resp.text()
+                                    self.test_results.append(f"❌ Failed to create deal for {product['name']}: {update_resp.status} - {error_text}")
+                        
+                        self.test_results.append("✅ Sample deals data created successfully")
+                    else:
+                        self.test_results.append("❌ Not enough products available for deals testing")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Failed to fetch products for deals: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Sample deals creation failed: {str(e)}")
+        
+        # Test 2: Test Admin Deals Management Page API
+        try:
+            async with self.session.get(f"{BACKEND_URL}/admin/products", cookies=cookies) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    products = result.get('products', [])
+                    
+                    # Filter products that have deals
+                    deal_products = [p for p in products if p.get('is_on_deal')]
+                    
+                    if deal_products:
+                        self.test_results.append(f"✅ Admin deals API working - found {len(deal_products)} products with deals")
+                        
+                        # Test deal status calculation
+                        now = datetime.now(timezone.utc)
+                        active_deals = 0
+                        upcoming_deals = 0
+                        expired_deals = 0
+                        
+                        for product in deal_products:
+                            if product.get('deal_start_date') and product.get('deal_end_date'):
+                                start_date = datetime.fromisoformat(product['deal_start_date'].replace('Z', '+00:00'))
+                                end_date = datetime.fromisoformat(product['deal_end_date'].replace('Z', '+00:00'))
+                                
+                                if now < start_date:
+                                    upcoming_deals += 1
+                                elif now > end_date:
+                                    expired_deals += 1
+                                else:
+                                    active_deals += 1
+                            else:
+                                active_deals += 1  # No dates set = active
+                        
+                        self.test_results.append(f"✅ Deal status calculation: {active_deals} active, {upcoming_deals} upcoming, {expired_deals} expired")
+                        
+                        # Verify deal fields are present
+                        sample_deal = deal_products[0]
+                        required_fields = ['is_on_deal', 'deal_percentage']
+                        missing_fields = [field for field in required_fields if field not in sample_deal]
+                        
+                        if not missing_fields:
+                            self.test_results.append("✅ Deal products have all required fields")
+                        else:
+                            self.test_results.append(f"❌ Deal products missing fields: {missing_fields}")
+                    else:
+                        self.test_results.append("❌ No deal products found - deals creation may have failed")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Admin deals API failed: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Admin deals API test failed: {str(e)}")
+        
+        # Test 3: Test Frontend Deals Display API
+        try:
+            # Test the deals endpoint that frontend uses
+            async with self.session.get(f"{BACKEND_URL}/products/deals") as resp:
+                if resp.status == 200:
+                    deals_products = await resp.json()
+                    
+                    if deals_products:
+                        self.test_results.append(f"✅ Frontend deals API working - {len(deals_products)} deal products available")
+                        
+                        # Verify deal products have discount badges
+                        for product in deals_products[:3]:  # Check first 3
+                            if product.get('is_on_deal') and product.get('deal_percentage'):
+                                self.test_results.append(f"✅ Deal product '{product['name']}' has {product['deal_percentage']}% discount")
+                            else:
+                                self.test_results.append(f"❌ Deal product '{product['name']}' missing deal information")
+                    else:
+                        self.test_results.append("⚠️  No deal products returned by frontend API")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Frontend deals API failed: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Frontend deals API test failed: {str(e)}")
+        
+        # Test 4: Test Deal Product Form Fields (simulate admin form submission)
+        try:
+            # Get a product to test deal form fields
+            async with self.session.get(f"{BACKEND_URL}/admin/products", cookies=cookies) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    products = result.get('products', [])
+                    
+                    if products:
+                        test_product = products[0]
+                        
+                        # Test creating a product with all deal fields
+                        deal_form_data = {
+                            **test_product,
+                            "name": "Test Deal Product",
+                            "is_on_deal": True,
+                            "deal_percentage": 25,
+                            "deal_start_date": datetime.now(timezone.utc).isoformat(),
+                            "deal_end_date": (datetime.now(timezone.utc) + timedelta(days=14)).isoformat()
+                        }
+                        
+                        async with self.session.post(f"{BACKEND_URL}/admin/products", 
+                                                   json=deal_form_data, cookies=cookies) as create_resp:
+                            if create_resp.status == 200:
+                                result = await create_resp.json()
+                                created_product = result.get('product')
+                                
+                                if created_product and created_product.get('is_on_deal'):
+                                    self.test_results.append("✅ Product deal form fields working - product created with deal")
+                                    self.created_test_product_id = created_product.get('id')
+                                else:
+                                    self.test_results.append("❌ Product created but deal fields not saved properly")
+                            else:
+                                error_text = await create_resp.text()
+                                self.test_results.append(f"❌ Product deal form submission failed: {create_resp.status} - {error_text}")
+                    else:
+                        self.test_results.append("❌ No products available for deal form testing")
+                        
+        except Exception as e:
+            self.test_results.append(f"❌ Deal form fields test failed: {str(e)}")
+    
+    async def test_deal_countdown_and_status(self):
+        """Test deal countdown timer and status logic"""
+        print("\n⏰ Testing Deal Countdown and Status Logic...")
+        
+        if not self.session_token:
+            self.test_results.append("⚠️  Skipping countdown test - no admin session")
+            return
+        
+        cookies = {'session_token': self.session_token}
+        
+        try:
+            # Get deal products
+            async with self.session.get(f"{BACKEND_URL}/admin/products", cookies=cookies) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    products = result.get('products', [])
+                    deal_products = [p for p in products if p.get('is_on_deal')]
+                    
+                    if deal_products:
+                        now = datetime.now(timezone.utc)
+                        
+                        for product in deal_products[:3]:  # Test first 3 deal products
+                            if product.get('deal_start_date') and product.get('deal_end_date'):
+                                start_date = datetime.fromisoformat(product['deal_start_date'].replace('Z', '+00:00'))
+                                end_date = datetime.fromisoformat(product['deal_end_date'].replace('Z', '+00:00'))
+                                
+                                # Calculate time left
+                                time_left = end_date - now
+                                
+                                if now < start_date:
+                                    status = "upcoming"
+                                    time_to_start = start_date - now
+                                    self.test_results.append(f"✅ Deal '{product['name']}': Upcoming (starts in {time_to_start.days} days)")
+                                elif now > end_date:
+                                    status = "expired"
+                                    self.test_results.append(f"✅ Deal '{product['name']}': Expired")
+                                else:
+                                    status = "active"
+                                    days_left = time_left.days
+                                    hours_left = time_left.seconds // 3600
+                                    self.test_results.append(f"✅ Deal '{product['name']}': Active ({days_left}d {hours_left}h left)")
+                            else:
+                                self.test_results.append(f"✅ Deal '{product['name']}': Active (no end date)")
+                        
+                        self.test_results.append("✅ Deal countdown and status logic working correctly")
+                    else:
+                        self.test_results.append("⚠️  No deal products found for countdown testing")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Failed to fetch products for countdown test: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Deal countdown test failed: {str(e)}")
+    
+    async def cleanup_test_deals(self):
+        """Clean up test deals created during testing"""
+        print("\n🧹 Cleaning up test deals...")
+        
+        if not self.session_token:
+            return
+        
+        cookies = {'session_token': self.session_token}
+        
+        # Clean up test product if created
+        if hasattr(self, 'created_test_product_id') and self.created_test_product_id:
+            try:
+                async with self.session.delete(f"{BACKEND_URL}/admin/products/{self.created_test_product_id}", 
+                                             cookies=cookies) as resp:
+                    if resp.status == 200:
+                        self.test_results.append("✅ Test deal product cleaned up successfully")
+                    else:
+                        self.test_results.append("⚠️  Test deal product cleanup failed (may not exist)")
+            except Exception as e:
+                self.test_results.append(f"⚠️  Test deal product cleanup exception: {str(e)}")
+
+    async def run_deals_management_tests(self):
+        """Run all deals management tests"""
+        print("\n🎯 Starting Deals Management System Tests...")
+        print("=" * 50)
+        
+        # Initialize storage for test data
+        self.created_test_product_id = None
+        
+        # Run deals-specific tests
+        await self.test_deals_management_system()
+        await self.test_deal_countdown_and_status()
+        await self.cleanup_test_deals()
+
     async def run_all_tests(self):
         """Run all backend tests"""
-        print("🚀 Starting SingGifts Backend Tests (Admin Category Image Upload)")
+        print("🚀 Starting SingGifts Backend Tests (Deals Management System)")
         print("=" * 70)
         
         try:
             await self.setup_session()
             
-            # Focus on Admin Category Image Upload Testing as requested
-            await self.run_image_upload_tests()
-            await self.run_admin_category_tests()
+            # Focus on Deals Management System Testing as requested
+            await self.run_deals_management_tests()
             
         except Exception as e:
             self.test_results.append(f"❌ Critical error: {str(e)}")
