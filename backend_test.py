@@ -1342,6 +1342,12 @@ class BackendTester:
         # Initialize storage for test data
         self.created_test_product_id = None
         
+        # Try to login as admin first
+        admin_login_success = await self.admin_login()
+        if not admin_login_success:
+            # Try regular user registration if admin login fails
+            await self.register_and_login_user()
+        
         # Run deals-specific tests
         await self.test_deals_management_system()
         await self.test_deal_countdown_and_status()
