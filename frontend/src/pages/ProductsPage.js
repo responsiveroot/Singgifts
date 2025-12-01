@@ -111,19 +111,39 @@ function ProductsPage({ user, updateCartCount }) {
     e.preventDefault();
     e.stopPropagation();
     
-    if (!user) {
-      toast.error('Please login to add items to cart');
-      return;
-    }
-
     try {
-      await axios.post(
-        `${API}/cart`,
-        { product_id: productId, quantity: 1 },
-        { withCredentials: true }
-      );
+      if (user) {
+        // Logged-in user: add to server cart
+        await axios.post(
+          `${API}/cart`,
+          { product_id: productId, quantity: 1 },
+          { withCredentials: true }
+        );
+        updateCartCount();
+      } else {
+        // Guest user: add to localStorage
+        const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+        
+        // Check if item already exists
+        const existingItemIndex = guestCart.findIndex(item => item.product_id === productId);
+        
+        if (existingItemIndex > -1) {
+          // Update quantity
+          guestCart[existingItemIndex].quantity += 1;
+        } else {
+          // Add new item
+          guestCart.push({
+            id: `guest-${Date.now()}-${productId}`,
+            product_id: productId,
+            quantity: 1
+          });
+        }
+        
+        localStorage.setItem('guestCart', JSON.stringify(guestCart));
+        updateCartCount();
+      }
+      
       toast.success('Added to cart!');
-      updateCartCount();
     } catch (error) {
       toast.error('Failed to add to cart');
     }
