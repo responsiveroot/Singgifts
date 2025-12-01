@@ -250,13 +250,23 @@ function CartPage({ user, updateCartCount }) {
                 </div>
               </div>
 
-              <Link
-                to="/checkout"
-                className="w-full btn-primary block text-center"
-                data-testid="proceed-to-checkout-btn"
-              >
-                Proceed to Checkout
-              </Link>
+              {user ? (
+                <Link
+                  to="/checkout"
+                  className="w-full btn-primary block text-center"
+                  data-testid="proceed-to-checkout-btn"
+                >
+                  Proceed to Checkout
+                </Link>
+              ) : (
+                <Link
+                  to="/auth?redirect=checkout"
+                  className="w-full btn-primary block text-center"
+                  data-testid="proceed-to-checkout-btn"
+                >
+                  Login to Checkout
+                </Link>
+              )}
 
               <Link
                 to="/products"
