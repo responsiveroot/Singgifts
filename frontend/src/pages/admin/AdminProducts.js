@@ -461,18 +461,46 @@ function AdminProducts() {
                 </div>
 
                 {formData.is_on_deal && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Deal Discount %</label>
-                    <input
-                      type="number"
-                      step="1"
-                      min="0"
-                      max="100"
-                      value={formData.deal_percentage}
-                      onChange={(e) => setFormData({...formData, deal_percentage: e.target.value})}
-                      placeholder="e.g., 20 for 20% off"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
-                    />
+                  <div className="space-y-4 pl-6 border-l-2 border-primary">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Deal Discount %</label>
+                      <input
+                        type="number"
+                        step="1"
+                        min="0"
+                        max="100"
+                        value={formData.deal_percentage}
+                        onChange={(e) => setFormData({...formData, deal_percentage: e.target.value})}
+                        placeholder="e.g., 20 for 20% off"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Deal Start Date</label>
+                        <input
+                          type="date"
+                          value={formData.deal_start_date}
+                          onChange={(e) => setFormData({...formData, deal_start_date: e.target.value})}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Deal End Date</label>
+                        <input
+                          type="date"
+                          value={formData.deal_end_date}
+                          onChange={(e) => setFormData({...formData, deal_end_date: e.target.value})}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter"
+                        />
+                      </div>
+                    </div>
+                    
+                    <p className="text-xs text-gray-500 font-inter">
+                      Deal will be automatically active between start and end dates
+                    </p>
                   </div>
                 )}
               </div>
