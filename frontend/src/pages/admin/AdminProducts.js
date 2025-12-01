@@ -153,7 +153,9 @@ function AdminProducts() {
       location: product.location || '',
       is_batik_label: product.is_batik_label || false,
       is_on_deal: product.is_on_deal || false,
-      deal_percentage: product.deal_percentage || ''
+      deal_percentage: product.deal_percentage || '',
+      deal_start_date: product.deal_start_date ? product.deal_start_date.split('T')[0] : '',
+      deal_end_date: product.deal_end_date ? product.deal_end_date.split('T')[0] : ''
     });
     setShowModal(true);
   };
