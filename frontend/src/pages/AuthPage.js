@@ -30,9 +30,19 @@ function AuthPage() {
       if (guestCart.length > 0) {
         // Add each guest cart item to user's cart
         for (const item of guestCart) {
+          const cartData = {
+            product_id: item.product_id,
+            quantity: item.quantity
+          };
+          
+          // Include collection_type if present
+          if (item.collection_type) {
+            cartData.collection_type = item.collection_type;
+          }
+          
           await axios.post(
             `${API}/cart`,
-            { product_id: item.product_id, quantity: item.quantity },
+            cartData,
             { withCredentials: true }
           );
         }
