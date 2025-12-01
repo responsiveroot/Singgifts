@@ -8,8 +8,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 function DealsPage({ user }) {
-  const [deals, setDeals] = useState([]);
-  const [dealProducts, setDealProducts] = useState({});
+  const [dealProducts, setDealProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,25 +17,24 @@ function DealsPage({ user }) {
 
   const fetchDeals = async () => {
     try {
-      const response = await axios.get(`${API}/deals`);
-      setDeals(response.data);
-
-      // Fetch products for each deal
-      const productsPromises = response.data.map(async (deal) => {
-        const products = await Promise.all(
-          deal.product_ids.slice(0, 6).map(id => 
-            axios.get(`${API}/products/${id}`).catch(() => null)
-          )
-        );
-        return { dealId: deal.id, products: products.filter(p => p !== null).map(p => p.data) };
+      // Fetch products that are on deal
+      const response = await axios.get(`${API}/products/deals`);
+      
+      // Filter only active deals (within date range)
+      const now = new Date();
+      const activeDeals = response.data.filter(product => {
+        if (!product.deal_start_date || !product.deal_end_date) {
+          // If no dates set, consider it active
+          return product.is_on_deal;
+        }
+        
+        const startDate = new Date(product.deal_start_date);
+        const endDate = new Date(product.deal_end_date);
+        
+        return product.is_on_deal && now >= startDate && now <= endDate;
       });
-
-      const productsData = await Promise.all(productsPromises);
-      const productsMap = {};
-      productsData.forEach(({ dealId, products }) => {
-        productsMap[dealId] = products;
-      });
-      setDealProducts(productsMap);
+      
+      setDealProducts(activeDeals);
     } catch (error) {
       console.error('Failed to fetch deals:', error);
       toast.error('Failed to load deals');
