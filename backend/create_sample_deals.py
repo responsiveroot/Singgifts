@@ -89,7 +89,9 @@ async def create_sample_deals():
         start_date = datetime.now(timezone.utc) + timedelta(days=deal["start_offset_days"])
         end_date = datetime.now(timezone.utc) + timedelta(days=deal["end_offset_days"])
         
-        await db.products.update_one(
+        # Update in the correct collection
+        collection_name = product.get('collection', 'products')
+        await db[collection_name].update_one(
             {"id": product["id"]},
             {
                 "$set": {
