@@ -27,7 +27,9 @@ function AdminProducts() {
     location: '',
     is_batik_label: false,
     is_on_deal: false,
-    deal_percentage: ''
+    deal_percentage: '',
+    deal_start_date: '',
+    deal_end_date: ''
   });
 
   useEffect(() => {
