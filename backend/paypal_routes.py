@@ -100,21 +100,42 @@ async def create_paypal_payment(order_data: PayPalOrderCreate):
 async def execute_paypal_payment(payment_data: PayPalOrderCapture):
     """Execute/capture PayPal payment after user approval"""
     try:
-        payment = paypalrestsdk.Payment.find(payment_data.paymentID)
+        # First get checkout details
+        details_params = {
+            'TOKEN': payment_data.paymentID
+        }
+        details_response = paypal_nvp_call('GetExpressCheckoutDetails', details_params)
         
-        if payment.execute({"payer_id": payment_data.payerID}):
-            # Payment successful
+        if details_response.get('ACK') not in ['Success', 'SuccessWithWarning']:
+            error_msg = details_response.get('L_LONGMESSAGE0', 'Failed to get payment details')
+            raise HTTPException(status_code=400, detail=error_msg)
+        
+        # Execute payment
+        execute_params = {
+            'TOKEN': payment_data.paymentID,
+            'PAYERID': payment_data.payerID,
+            'PAYMENTREQUEST_0_PAYMENTACTION': 'Sale',
+            'PAYMENTREQUEST_0_AMT': details_response.get('PAYMENTREQUEST_0_AMT', '0.00'),
+            'PAYMENTREQUEST_0_CURRENCYCODE': details_response.get('PAYMENTREQUEST_0_CURRENCYCODE', 'SGD')
+        }
+        
+        execute_response = paypal_nvp_call('DoExpressCheckoutPayment', execute_params)
+        
+        if execute_response.get('ACK') in ['Success', 'SuccessWithWarning']:
             return {
                 "success": True,
-                "payment_id": payment.id,
-                "state": payment.state,
-                "payer_email": payment.payer.payer_info.email if hasattr(payment.payer, 'payer_info') else None,
-                "amount": payment.transactions[0].amount.total,
-                "currency": payment.transactions[0].amount.currency
+                "payment_id": execute_response.get('PAYMENTINFO_0_TRANSACTIONID'),
+                "state": execute_response.get('PAYMENTINFO_0_PAYMENTSTATUS'),
+                "payer_email": details_response.get('EMAIL'),
+                "amount": execute_response.get('PAYMENTINFO_0_AMT'),
+                "currency": execute_response.get('PAYMENTINFO_0_CURRENCYCODE')
             }
         else:
-            raise HTTPException(status_code=400, detail=str(payment.error))
+            error_msg = execute_response.get('L_LONGMESSAGE0', execute_response.get('L_SHORTMESSAGE0', 'Payment execution failed'))
+            raise HTTPException(status_code=400, detail=error_msg)
             
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PayPal payment execution failed: {str(e)}")
 
