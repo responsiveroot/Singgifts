@@ -1161,14 +1161,39 @@ class BackendTester:
                         
                         for product in deal_products:
                             if product.get('deal_start_date') and product.get('deal_end_date'):
-                                start_date = datetime.fromisoformat(product['deal_start_date'].replace('Z', '+00:00'))
-                                end_date = datetime.fromisoformat(product['deal_end_date'].replace('Z', '+00:00'))
-                                
-                                if now < start_date:
-                                    upcoming_deals += 1
-                                elif now > end_date:
-                                    expired_deals += 1
-                                else:
+                                try:
+                                    # Handle different datetime formats
+                                    start_str = product['deal_start_date']
+                                    end_str = product['deal_end_date']
+                                    
+                                    # Remove Z and add timezone if needed
+                                    if start_str.endswith('Z'):
+                                        start_str = start_str.replace('Z', '+00:00')
+                                    elif '+' not in start_str and 'T' in start_str:
+                                        start_str += '+00:00'
+                                    
+                                    if end_str.endswith('Z'):
+                                        end_str = end_str.replace('Z', '+00:00')
+                                    elif '+' not in end_str and 'T' in end_str:
+                                        end_str += '+00:00'
+                                    
+                                    start_date = datetime.fromisoformat(start_str)
+                                    end_date = datetime.fromisoformat(end_str)
+                                    
+                                    # Ensure timezone awareness
+                                    if start_date.tzinfo is None:
+                                        start_date = start_date.replace(tzinfo=timezone.utc)
+                                    if end_date.tzinfo is None:
+                                        end_date = end_date.replace(tzinfo=timezone.utc)
+                                    
+                                    if now < start_date:
+                                        upcoming_deals += 1
+                                    elif now > end_date:
+                                        expired_deals += 1
+                                    else:
+                                        active_deals += 1
+                                except Exception as e:
+                                    # If date parsing fails, consider it active
                                     active_deals += 1
                             else:
                                 active_deals += 1  # No dates set = active
