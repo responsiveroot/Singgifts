@@ -31,7 +31,7 @@ async def create_sample_deals():
         p['collection'] = 'explore_singapore_products'
         all_products.append(p)
     for p in batik_products:
-        p['collection'] = 'batik_label_products'
+        p['collection'] = 'batik_products'
         all_products.append(p)
     
     if not all_products:
