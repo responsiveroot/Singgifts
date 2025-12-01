@@ -506,6 +506,115 @@ test_plan:
   test_all: false
   test_priority: "high_first"
 
+user_problem_statement: "Test the complete deals management system implementation"
+
+backend:
+  - task: "Product Deals Fields - Backend Support"
+    implemented: true
+    working: true
+    file: "backend/admin_routes.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Product deals fields fully supported in backend. Admin routes updated to handle: is_on_deal (checkbox), deal_percentage (discount %), deal_start_date (date picker), deal_end_date (date picker). Product creation and update APIs properly save and retrieve deal information. Fixed ObjectId serialization issue in product creation response."
+
+  - task: "Sample Deals Data Creation"
+    implemented: true
+    working: true
+    file: "backend/create_sample_deals.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Sample deals creation working perfectly. Script creates 10 sample deals with various discount percentages (15%, 20%, 25%, 30%, 40%) and different date ranges (active, upcoming, expired). Successfully updated products across all collections (products, explore_singapore_products, batik_products) with deal information."
+
+  - task: "Admin Deals Management API"
+    implemented: true
+    working: true
+    file: "backend/admin_routes.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Admin deals management API working perfectly. /api/admin/products endpoint returns products with deal fields. Deal status calculation logic working correctly: identifies active (current date within range), upcoming (start date in future), expired (end date in past) deals. All required deal fields present in API responses."
+
+  - task: "Frontend Deals Display API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Frontend deals display API (/api/products/deals) working perfectly. Returns 13+ deal products with proper discount information. Deal products include is_on_deal flag and deal_percentage for discount badges. API supports frontend deals page display requirements."
+
+frontend:
+  - task: "Admin Product Form - Deal Fields"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/admin/AdminProducts.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Admin product form includes all deal fields: Deal checkbox (is_on_deal), Deal Discount % field (appears when deal is checked), Deal Start Date field (date picker), Deal End Date field (date picker), Help text: 'Deal will be automatically active between start and end dates'. Form properly saves deal information to backend."
+
+  - task: "Admin Deals Management Page"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/admin/AdminDeals.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Admin deals management page (/admin/deals) fully implemented. Shows: Stats cards (Total, Active, Upcoming, Expired deals), Filter buttons (All, Active, Upcoming, Expired), Deals table with columns (Product with image, Price, Discount badge, Period start/end dates, Status badge, Time Left, Actions). Status badges correctly colored (green/blue/red). Countdown timer shows remaining time."
+
+  - task: "Frontend Deals Display Page"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/DealsPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Frontend deals page (/deals) working correctly. Displays active deals with discount badges, countdown timers, and proper deal product information. Deal products show discount percentages and calculated discounted prices. Page handles empty state when no deals available."
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.4"
+  test_sequence: 4
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Product Deals Fields - Backend Support"
+    - "Sample Deals Data Creation"
+    - "Admin Deals Management API"
+    - "Frontend Deals Display API"
+    - "Admin Product Form - Deal Fields"
+    - "Admin Deals Management Page"
+    - "Frontend Deals Display Page"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
 agent_communication:
   - agent: "testing"
     message: "✅ ADMIN CATEGORY IMAGE UPLOAD TESTING COMPLETE - Comprehensive testing performed covering all requested scenarios. RESULTS: ✅ Admin login (admin@singgifts.sg / admin123) working perfectly ✅ Image upload API (/api/admin/upload-image) accepts valid image formats and rejects invalid files ✅ Files stored with unique UUID filenames in /app/uploads/ directory ✅ API returns proper response format with correct URL structure ✅ Category creation with uploaded images working (fixed ObjectId serialization issue) ✅ Categories display correctly in admin panel and public API ✅ Form UI has proper file upload interface with dashed border and help text ✅ Optional URL input available as backup ✅ Image preview and validation working ✅ File accessibility through returned URLs confirmed. FIXED ISSUES: ObjectId serialization error in category creation, malformed .env file causing incorrect URL generation. All admin category image upload functionality working as expected."
+  - agent: "testing"
+    message: "✅ DEALS MANAGEMENT SYSTEM TESTING COMPLETE - Comprehensive testing performed covering all requested scenarios from the review request. RESULTS: ✅ Product deals fields fully implemented in admin form (is_on_deal checkbox, deal_percentage, deal_start_date, deal_end_date) ✅ Backend admin routes support all deal fields in product creation/update ✅ Sample deals data created successfully (10 deals with various percentages and date ranges) ✅ Admin deals management page (/admin/deals) working with stats cards, filters, and deals table ✅ Deal status calculation logic working (active/upcoming/expired) ✅ Countdown timers and time left calculations accurate ✅ Frontend deals display API returning 13+ deal products ✅ Deal products show proper discount badges and percentages ✅ All deal form fields save and retrieve correctly. FIXED ISSUES: ObjectId serialization in product creation, datetime timezone comparison issues. All 17 test scenarios passed successfully. Complete deals management system is fully functional."
