@@ -64,7 +64,7 @@ function DealsPage({ user }) {
     );
   }
 
-  if (deals.length === 0) {
+  if (dealProducts.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 py-20">
         <div className="container mx-auto px-4 text-center">
@@ -90,10 +90,13 @@ function DealsPage({ user }) {
           <p className="text-lg text-gray-600 font-inter">Limited time offers on Singapore's finest gifts</p>
         </div>
 
-        {/* Deals */}
-        <div className="space-y-12">
-          {deals.map((deal) => (
-            <div key={deal.id} className="bg-white rounded-2xl shadow-xl overflow-hidden" data-testid={`deal-${deal.id}`}>
+        {/* Deal Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {dealProducts.map((product) => (
+            <Link
+              key={product.id}
+              to={`/products/${product.id}`}
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group" data-testid={`deal-product-${product.id}`}>
               {/* Deal Header */}
               <div className="relative">
                 <img
