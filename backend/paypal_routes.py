@@ -5,11 +5,12 @@ import os
 from datetime import datetime, timezone
 from typing import Optional
 
-# PayPal Configuration
+# PayPal Classic API Configuration
 paypalrestsdk.configure({
-    "mode": os.environ.get("PAYPAL_MODE", "sandbox"),
-    "client_id": os.environ.get("PAYPAL_CLIENT_ID"),
-    "client_secret": os.environ.get("PAYPAL_CLIENT_SECRET")
+    "mode": os.environ.get("PAYPAL_MODE", "live"),
+    "client_id": os.environ.get("PAYPAL_CLIENT_ID"),  # API Username
+    "client_secret": os.environ.get("PAYPAL_CLIENT_SECRET"),  # API Password
+    "signature": os.environ.get("PAYPAL_SIGNATURE")  # API Signature
 })
 
 paypal_router = APIRouter()
