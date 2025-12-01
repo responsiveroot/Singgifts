@@ -889,16 +889,193 @@ class BackendTester:
         await self.test_file_accessibility()
         await self.test_file_storage_verification()
     
+    async def test_admin_category_image_upload_flow(self):
+        """Test complete admin category image upload functionality as requested"""
+        print("\n📂 Testing Admin Category Image Upload Flow...")
+        
+        if not self.session_token:
+            self.test_results.append("⚠️  Skipping category image upload test - no admin session")
+            return
+        
+        # Test 1: Create category with uploaded image
+        try:
+            # First upload an image
+            test_image = self.create_test_image("jpg")
+            data = aiohttp.FormData()
+            data.add_field('file', test_image, filename='category_test.jpg', content_type='image/jpeg')
+            
+            cookies = {'session_token': self.session_token}
+            
+            async with self.session.post(f"{BACKEND_URL}/admin/upload-image", 
+                                       data=data, cookies=cookies) as resp:
+                if resp.status == 200:
+                    upload_result = await resp.json()
+                    image_url = upload_result['url']
+                    self.test_results.append("✅ Category image upload successful")
+                    
+                    # Now create category with uploaded image
+                    category_data = {
+                        "name": "Test Category with Image",
+                        "description": "Test category created with uploaded image",
+                        "image_url": image_url,
+                        "order": 100
+                    }
+                    
+                    async with self.session.post(f"{BACKEND_URL}/admin/categories", 
+                                               json=category_data, cookies=cookies) as cat_resp:
+                        if cat_resp.status == 200:
+                            cat_result = await cat_resp.json()
+                            self.test_category_id = cat_result['category']['id']
+                            self.test_results.append("✅ Category created with uploaded image successfully")
+                            
+                            # Verify category has correct image URL
+                            if cat_result['category']['image_url'] == image_url:
+                                self.test_results.append("✅ Category image URL correctly stored")
+                            else:
+                                self.test_results.append("❌ Category image URL mismatch")
+                        else:
+                            error_text = await cat_resp.text()
+                            self.test_results.append(f"❌ Category creation failed: {cat_resp.status} - {error_text}")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Category image upload failed: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Category image upload flow test: Exception - {str(e)}")
+        
+        # Test 2: Create category with manual URL (fallback option)
+        try:
+            category_data = {
+                "name": "Test Category with URL",
+                "description": "Test category created with manual URL",
+                "image_url": "https://example.com/test-image.jpg",
+                "order": 101
+            }
+            
+            async with self.session.post(f"{BACKEND_URL}/admin/categories", 
+                                       json=category_data, cookies=cookies) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    self.test_category_url_id = result['category']['id']
+                    self.test_results.append("✅ Category created with manual URL successfully")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Category creation with URL failed: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Category URL creation test: Exception - {str(e)}")
+        
+        # Test 3: Verify categories appear in admin list
+        try:
+            async with self.session.get(f"{BACKEND_URL}/admin/categories", cookies=cookies) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    categories = result.get('categories', [])
+                    
+                    # Check if our test categories are in the list
+                    test_cat_found = any(cat['name'] == 'Test Category with Image' for cat in categories)
+                    url_cat_found = any(cat['name'] == 'Test Category with URL' for cat in categories)
+                    
+                    if test_cat_found and url_cat_found:
+                        self.test_results.append("✅ Test categories appear in admin categories list")
+                    else:
+                        self.test_results.append("❌ Test categories not found in admin list")
+                        
+                    # Verify image URLs are preserved
+                    for cat in categories:
+                        if cat['name'] == 'Test Category with Image' and cat.get('image_url'):
+                            if 'uploads/' in cat['image_url']:
+                                self.test_results.append("✅ Uploaded image URL preserved in category list")
+                            else:
+                                self.test_results.append("❌ Uploaded image URL format incorrect")
+                        elif cat['name'] == 'Test Category with URL' and cat.get('image_url'):
+                            if cat['image_url'] == "https://example.com/test-image.jpg":
+                                self.test_results.append("✅ Manual image URL preserved in category list")
+                            else:
+                                self.test_results.append("❌ Manual image URL not preserved correctly")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Failed to fetch admin categories: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Admin categories list test: Exception - {str(e)}")
+    
+    async def test_category_image_display(self):
+        """Test that category images display correctly in public API"""
+        print("\n🖼️  Testing Category Image Display...")
+        
+        # Test public categories endpoint (no auth required)
+        try:
+            async with self.session.get(f"{BACKEND_URL}/categories") as resp:
+                if resp.status == 200:
+                    categories = await resp.json()
+                    
+                    # Look for our test categories
+                    test_categories = [cat for cat in categories if cat['name'].startswith('Test Category')]
+                    
+                    if test_categories:
+                        self.test_results.append(f"✅ Found {len(test_categories)} test categories in public API")
+                        
+                        for cat in test_categories:
+                            if cat.get('image_url'):
+                                self.test_results.append(f"✅ Category '{cat['name']}' has image URL: {cat['image_url']}")
+                            else:
+                                self.test_results.append(f"❌ Category '{cat['name']}' missing image URL")
+                    else:
+                        self.test_results.append("⚠️  No test categories found in public API (may have been cleaned up)")
+                else:
+                    error_text = await resp.text()
+                    self.test_results.append(f"❌ Failed to fetch public categories: {resp.status} - {error_text}")
+                    
+        except Exception as e:
+            self.test_results.append(f"❌ Category image display test: Exception - {str(e)}")
+    
+    async def cleanup_test_categories(self):
+        """Clean up test categories created during testing"""
+        print("\n🧹 Cleaning up test categories...")
+        
+        if not self.session_token:
+            return
+        
+        cookies = {'session_token': self.session_token}
+        
+        # Delete test categories if they exist
+        for cat_id in [getattr(self, 'test_category_id', None), getattr(self, 'test_category_url_id', None)]:
+            if cat_id:
+                try:
+                    async with self.session.delete(f"{BACKEND_URL}/admin/categories/{cat_id}", cookies=cookies) as resp:
+                        if resp.status == 200:
+                            self.test_results.append("✅ Test category cleaned up successfully")
+                        else:
+                            self.test_results.append("⚠️  Test category cleanup failed (may not exist)")
+                except Exception as e:
+                    self.test_results.append(f"⚠️  Test category cleanup exception: {str(e)}")
+
+    async def run_admin_category_tests(self):
+        """Run all admin category image upload tests"""
+        print("\n📂 Starting Admin Category Image Upload Tests...")
+        print("=" * 50)
+        
+        # Initialize storage for test data
+        self.test_category_id = None
+        self.test_category_url_id = None
+        
+        # Run category-specific tests
+        await self.test_admin_category_image_upload_flow()
+        await self.test_category_image_display()
+        await self.cleanup_test_categories()
+
     async def run_all_tests(self):
         """Run all backend tests"""
-        print("🚀 Starting SingGifts Backend Tests (Image Upload System)")
+        print("🚀 Starting SingGifts Backend Tests (Admin Category Image Upload)")
         print("=" * 70)
         
         try:
             await self.setup_session()
             
-            # Focus on Image Upload System Testing as requested
+            # Focus on Admin Category Image Upload Testing as requested
             await self.run_image_upload_tests()
+            await self.run_admin_category_tests()
             
         except Exception as e:
             self.test_results.append(f"❌ Critical error: {str(e)}")
