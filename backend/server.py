@@ -17,6 +17,7 @@ from auth import get_current_user, get_current_user_optional, get_current_admin_
 from utils import slugify, generate_sku, generate_otp
 from admin_routes import admin_router
 from special_collections_routes import special_router
+from paypal_routes import paypal_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
