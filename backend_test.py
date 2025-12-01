@@ -1794,14 +1794,14 @@ class BackendTester:
 
     async def run_all_tests(self):
         """Run all backend tests"""
-        print("🚀 Starting SingGifts Backend Tests (Deals Management System)")
+        print("🚀 Starting SingGifts Backend Tests (PayPal Classic NVP API Integration)")
         print("=" * 70)
         
         try:
             await self.setup_session()
             
-            # Focus on Deals Management System Testing as requested
-            await self.run_deals_management_tests()
+            # Focus on PayPal Integration Testing as requested
+            await self.run_paypal_tests()
             
         except Exception as e:
             self.test_results.append(f"❌ Critical error: {str(e)}")
