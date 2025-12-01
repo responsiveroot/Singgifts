@@ -291,21 +291,36 @@ async def create_category_admin(
     """Create new category"""
     await get_current_admin_user(request, db, session_token)
     
-    category = await request.json()
+    category_json = await request.json()
     
+    # Create category using proper data structure
     category_data = {
         "id": str(uuid.uuid4()),
-        "name": category["name"],
-        "slug": category.get("slug", category["name"].lower().replace(" ", "-")),
-        "description": category.get("description", ""),
-        "image_url": category.get("image_url", ""),
-        "subcategories": category.get("subcategories", []),
-        "order": category.get("order", 100),
+        "name": category_json["name"],
+        "slug": category_json.get("slug", category_json["name"].lower().replace(" ", "-")),
+        "description": category_json.get("description", ""),
+        "image_url": category_json.get("image_url", ""),
+        "subcategories": category_json.get("subcategories", []),
+        "order": int(category_json.get("order", 100)),
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.categories.insert_one(category_data)
-    return {"message": "Category created successfully", "category": category_data}
+    # Insert into database
+    result = await db.categories.insert_one(category_data)
+    
+    # Return clean response without MongoDB ObjectId
+    response_category = {
+        "id": category_data["id"],
+        "name": category_data["name"],
+        "slug": category_data["slug"],
+        "description": category_data["description"],
+        "image_url": category_data["image_url"],
+        "subcategories": category_data["subcategories"],
+        "order": category_data["order"],
+        "created_at": category_data["created_at"]
+    }
+    
+    return {"message": "Category created successfully", "category": response_category}
 
 @admin_router.put("/categories/{category_id}")
 async def update_category_admin(
