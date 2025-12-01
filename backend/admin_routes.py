@@ -158,8 +158,12 @@ async def create_product_admin(
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.products.insert_one(product_data)
-    return {"message": "Product created successfully", "product": product_data}
+    result = await db.products.insert_one(product_data)
+    
+    # Return clean response without MongoDB ObjectId
+    response_product = {k: v for k, v in product_data.items() if k != '_id'}
+    
+    return {"message": "Product created successfully", "product": response_product}
 
 @admin_router.put("/products/{product_id}")
 async def update_product_admin(
