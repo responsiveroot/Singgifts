@@ -18,12 +18,31 @@ async def create_sample_deals():
     
     print("🎯 Creating sample deals...")
     
-    # Get all products
-    products = await db.products.find({}).to_list(1000)
+    # Get all products from all collections
+    regular_products = await db.products.find({}).to_list(1000)
+    explore_products = await db.explore_singapore_products.find({}).to_list(1000)
+    batik_products = await db.batik_label_products.find({}).to_list(1000)
     
-    if not products:
-        print("❌ No products found. Please add products first.")
+    all_products = []
+    for p in regular_products:
+        p['collection'] = 'products'
+        all_products.append(p)
+    for p in explore_products:
+        p['collection'] = 'explore_singapore_products'
+        all_products.append(p)
+    for p in batik_products:
+        p['collection'] = 'batik_label_products'
+        all_products.append(p)
+    
+    if not all_products:
+        print("❌ No products found in any collection. Please add products first.")
+        print("   Collections checked: products, explore_singapore_products, batik_label_products")
         return
+    
+    print(f"📦 Found {len(all_products)} products across all collections")
+    print(f"   - Regular: {len(regular_products)}")
+    print(f"   - Explore Singapore: {len(explore_products)}")
+    print(f"   - Batik Label: {len(batik_products)}\n")
     
     # Select 10 random products for deals
     deal_products = random.sample(products, min(10, len(products)))
