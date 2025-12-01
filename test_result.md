@@ -620,25 +620,31 @@ backend:
     implemented: true
     working: false
     file: "backend/.env"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
       - working: false
         agent: "testing"
         comment: "❌ PAYPAL CREDENTIALS AUTHENTICATION ISSUE - PayPal configuration detected but credentials failing authentication. Environment variables properly configured (PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE=live) but getting 401 Unauthorized errors from PayPal API. Root cause: Credentials appear to be test/demo credentials (ars.richard_api1.hotmail.com) but mode is set to 'live'. This mismatch causes authentication failures. PayPal SDK (paypalrestsdk 1.13.3) is properly installed."
+      - working: false
+        agent: "testing"
+        comment: "❌ PAYPAL CREDENTIALS AUTHENTICATION CONFIRMED FAILING - Comprehensive testing shows PayPal Classic NVP API returning 'Security header is not valid' error (code 10002). All required environment variables present (PAYPAL_CLIENT_ID=ars.richard_api1.hotmail.com, PAYPAL_MODE=live, PAYPAL_SIGNATURE exists). Root cause: Invalid API credentials for live mode. The credentials appear to be test/demo credentials but PAYPAL_MODE is set to 'live'. Solution needed: Either obtain valid live PayPal Business/Premier account credentials or switch to sandbox mode with proper test credentials."
 
   - task: "PayPal Create Payment API Endpoint"
     implemented: true
     working: false
     file: "backend/paypal_routes.py"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: false
     status_history:
       - working: false
         agent: "testing"
         comment: "❌ PAYPAL PAYMENT CREATION FAILING - /api/paypal/create-payment endpoint implemented correctly but failing due to credential authentication issues. API properly validates request data (rejects invalid amounts, incomplete data, malformed requests) and handles different currencies. Response structure correct (paymentID, approvalUrl) when credentials work. Error: 'Client Authentication failed' - need valid PayPal credentials for live mode or switch to sandbox mode with test credentials."
+      - working: false
+        agent: "testing"
+        comment: "❌ PAYPAL PAYMENT CREATION FAILING DUE TO CREDENTIALS - Endpoint exists and properly structured but returns 400 Bad Request with 'PayPal error: Security header is not valid'. API correctly handles error scenarios (rejects negative amounts, zero amounts, missing fields, empty carts). Response structure would include paymentID, approvalUrl, token when credentials are valid. All validation logic working correctly - only credential authentication preventing success."
 
   - task: "PayPal Payment Details API"
     implemented: true
@@ -663,6 +669,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ PayPal error handling working correctly. Empty cart requests properly rejected, invalid currency handled appropriately, malformed requests return proper error responses. Input validation and error responses functioning as expected."
+      - working: true
+        agent: "testing"
+        comment: "✅ PayPal error handling comprehensive testing completed. Negative amounts properly rejected, zero amounts rejected, missing required fields return 422 validation errors, empty cart handled appropriately. All error scenarios working as expected - only credential authentication preventing successful payment creation."
 
 frontend:
   - task: "Checkout Page - COD Removal"
