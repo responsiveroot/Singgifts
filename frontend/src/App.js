@@ -118,13 +118,15 @@ function App() {
       } catch (error) {
         console.error('Failed to fetch cart count');
       }
+    } else {
+      // Guest user: count items in localStorage
+      const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+      setCartCount(guestCart.length);
     }
   };
 
   useEffect(() => {
-    if (user) {
-      updateCartCount();
-    }
+    updateCartCount();
   }, [user]);
 
   if (loading) {
