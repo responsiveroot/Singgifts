@@ -331,56 +331,52 @@ function CheckoutPage({ user }) {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                  <label className="flex items-center p-4 border-2 border-primary rounded-lg bg-blue-50">
                     <input
                       type="radio"
                       name="payment"
-                      value="credit_card"
-                      checked={formData.paymentMethod === 'credit_card'}
+                      value="paypal"
+                      checked={formData.paymentMethod === 'paypal'}
                       onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
                       className="mr-3"
-                      data-testid="payment-credit-card"
+                      data-testid="payment-paypal"
+                      readOnly
                     />
-                    <span className="font-inter">Credit / Debit Card</span>
+                    <div className="flex items-center">
+                      <span className="font-inter font-semibold">PayPal</span>
+                      <span className="ml-2 text-xs bg-blue-600 text-white px-2 py-1 rounded">Secure</span>
+                    </div>
                   </label>
-                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="paynow"
-                      checked={formData.paymentMethod === 'paynow'}
-                      onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-                      className="mr-3"
-                      data-testid="payment-paynow"
-                    />
-                    <span className="font-inter">PayNow</span>
-                  </label>
-                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="cash_on_delivery"
-                      checked={formData.paymentMethod === 'cash_on_delivery'}
-                      onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-                      className="mr-3"
-                      data-testid="payment-cod"
-                    />
-                    <span className="font-inter">Cash on Delivery</span>
-                  </label>
+                  <p className="text-sm text-gray-600 font-inter ml-4">
+                    You will be redirected to PayPal to complete your payment securely.
+                  </p>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full btn-primary text-lg py-4 disabled:opacity-50 flex items-center justify-center space-x-2"
-                data-testid="place-order-btn"
-              >
-                <Lock size={20} />
-                <span>{submitting ? 'Redirecting to Stripe...' : 'Proceed to Payment'}</span>
-              </button>
+              {!showPayPal ? (
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full btn-primary text-lg py-4 disabled:opacity-50 flex items-center justify-center space-x-2"
+                  data-testid="place-order-btn"
+                >
+                  <Lock size={20} />
+                  <span>Continue to PayPal</span>
+                </button>
+              ) : (
+                <div className="bg-white rounded-xl p-6 shadow-md">
+                  <button
+                    onClick={createPayPalOrder}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg py-4 rounded-lg font-bold flex items-center justify-center space-x-2 transition-colors"
+                  >
+                    <Lock size={20} />
+                    <span>Pay with PayPal</span>
+                  </button>
+                </div>
+              )}
+              
               <p className="text-xs text-center text-gray-500 mt-2">
-                Secure payment powered by Stripe
+                Secure payment powered by PayPal
               </p>
             </form>
           </div>
