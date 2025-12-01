@@ -1088,6 +1088,7 @@ app.include_router(admin_router, prefix="/api")
 
 # Include special collections router (Explore Singapore & Batik Label)
 app.include_router(special_router)
+app.include_router(paypal_router, prefix="/api", tags=["paypal"])
 
 # Mount static files for uploads (with /api prefix to route through backend)
 upload_dir = Path("/app/uploads")
