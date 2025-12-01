@@ -1,19 +1,42 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-import paypalrestsdk
+import requests
 import os
 from datetime import datetime, timezone
 from typing import Optional
+from urllib.parse import urlencode, parse_qs
 
-# PayPal Classic API Configuration
-paypalrestsdk.configure({
-    "mode": os.environ.get("PAYPAL_MODE", "live"),
-    "client_id": os.environ.get("PAYPAL_CLIENT_ID"),  # API Username
-    "client_secret": os.environ.get("PAYPAL_CLIENT_SECRET"),  # API Password
-    "signature": os.environ.get("PAYPAL_SIGNATURE")  # API Signature
-})
+# PayPal Classic NVP API Configuration
+PAYPAL_MODE = os.environ.get("PAYPAL_MODE", "live")
+PAYPAL_API_ENDPOINT = "https://api-3t.paypal.com/nvp" if PAYPAL_MODE == "live" else "https://api-3t.sandbox.paypal.com/nvp"
+PAYPAL_USER = os.environ.get("PAYPAL_CLIENT_ID")  # API Username
+PAYPAL_PWD = os.environ.get("PAYPAL_CLIENT_SECRET")  # API Password
+PAYPAL_SIGNATURE = os.environ.get("PAYPAL_SIGNATURE")
+PAYPAL_VERSION = "204"
 
 paypal_router = APIRouter()
+
+def paypal_nvp_call(method: str, params: dict) -> dict:
+    """Make PayPal NVP API call"""
+    payload = {
+        'METHOD': method,
+        'USER': PAYPAL_USER,
+        'PWD': PAYPAL_PWD,
+        'SIGNATURE': PAYPAL_SIGNATURE,
+        'VERSION': PAYPAL_VERSION,
+    }
+    payload.update(params)
+    
+    response = requests.post(PAYPAL_API_ENDPOINT, data=payload)
+    
+    # Parse NVP response
+    response_dict = {}
+    for pair in response.text.split('&'):
+        if '=' in pair:
+            key, value = pair.split('=', 1)
+            response_dict[key] = requests.utils.unquote(value)
+    
+    return response_dict
 
 class PayPalOrderCreate(BaseModel):
     amount: float
