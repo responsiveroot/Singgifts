@@ -79,6 +79,14 @@ function ProductDetailPage({ user, updateCartCount }) {
         // Guest user: add to localStorage
         const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
         
+        // Determine collection type
+        let collectionType = null;
+        if (product.landmark_id) {
+          collectionType = 'explore_singapore';
+        } else if (!product.category_id && product.is_batik) {
+          collectionType = 'batik';
+        }
+        
         // Check if item already exists
         const existingItemIndex = guestCart.findIndex(item => item.product_id === productId);
         
@@ -87,11 +95,17 @@ function ProductDetailPage({ user, updateCartCount }) {
           guestCart[existingItemIndex].quantity += quantity;
         } else {
           // Add new item
-          guestCart.push({
+          const cartItem = {
             id: `guest-${Date.now()}-${productId}`,
             product_id: productId,
             quantity: quantity
-          });
+          };
+          
+          if (collectionType) {
+            cartItem.collection_type = collectionType;
+          }
+          
+          guestCart.push(cartItem);
         }
         
         localStorage.setItem('guestCart', JSON.stringify(guestCart));
