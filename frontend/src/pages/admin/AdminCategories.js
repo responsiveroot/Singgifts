@@ -180,8 +180,62 @@ function AdminCategories() {
                 <textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} rows={3} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Image URL</label>
-                <input type="url" value={formData.image_url} onChange={(e) => setFormData({...formData, image_url: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter" />
+                <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Category Image</label>
+                
+                {/* Image Preview */}
+                {imagePreview && (
+                  <div className="mb-4">
+                    <img 
+                      src={imagePreview} 
+                      alt="Category preview" 
+                      className="w-full h-48 object-cover rounded-lg border border-gray-300"
+                    />
+                  </div>
+                )}
+                
+                {/* File Upload */}
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                    id="category-image-upload"
+                    disabled={uploadingImage}
+                  />
+                  <label 
+                    htmlFor="category-image-upload" 
+                    className="cursor-pointer"
+                  >
+                    {uploadingImage ? (
+                      <div className="text-primary font-inter">Uploading...</div>
+                    ) : (
+                      <>
+                        <div className="text-gray-600 font-inter mb-2">
+                          {imagePreview ? 'Change Image' : 'Click to upload category image'}
+                        </div>
+                        <div className="text-sm text-gray-500 font-inter">
+                          PNG, JPG, GIF up to 5MB
+                        </div>
+                      </>
+                    )}
+                  </label>
+                </div>
+                
+                {/* Optional: Manual URL Entry */}
+                <div className="mt-4">
+                  <label className="block text-sm font-medium text-gray-500 mb-2 font-inter">Or enter image URL</label>
+                  <input 
+                    type="url" 
+                    value={formData.image_url} 
+                    onChange={(e) => {
+                      setFormData({...formData, image_url: e.target.value});
+                      setImagePreview(e.target.value);
+                    }} 
+                    placeholder="https://example.com/image.jpg"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary font-inter text-sm" 
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 font-inter">Order</label>
