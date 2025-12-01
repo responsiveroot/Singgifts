@@ -10,7 +10,7 @@ import random
 
 # MongoDB connection
 MONGO_URL = "mongodb://localhost:27017"
-DB_NAME = "singgifts"
+DB_NAME = "singgifts_db"
 
 async def create_sample_deals():
     client = AsyncIOMotorClient(MONGO_URL)
