@@ -38,6 +38,7 @@ import AdminBatikLabel from './pages/admin/AdminBatikLabel';
 import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminCoupons from './pages/admin/AdminCoupons';
 import AdminImport from './pages/admin/AdminImport';
+import AdminDeals from './pages/admin/AdminDeals';
 
 // Components
 import Header from './components/Header';
